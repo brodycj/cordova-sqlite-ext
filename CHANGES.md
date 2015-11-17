@@ -1,5 +1,9 @@
 # Changes
 
+## 0.8.1-extdev
+
+TBD
+
 ## 0.8.0
 
 - Support REGEXP on Android using PCRE (8.37)
