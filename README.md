@@ -214,6 +214,12 @@ db = sqlitePlugin.openDatabase({name: "my.db", location: 2, createFromLocation: 
 
 **Alternative:** You can also use [an-rahulpandey / cordova-plugin-dbcopy](https://github.com/an-rahulpandey/cordova-plugin-dbcopy) to install a pre-populated database
 
+**Samples and tutorials:**
+- http://redwanhilali.com/ionic-sqlite/
+- Example by [@jdnichollsc](https://github.com/jdnichollsc) using Ionic Framework, ngCordova and promises: https://gist.github.com/jdnichollsc/9ac79aaa3407e92677ba
+- Tutorial using *alternative solution at [an-rahulpandey / cordova-plugin-dbcopy](https://github.com/an-rahulpandey/cordova-plugin-dbcopy)* (Android/iOS): https://blog.nraboy.com/2015/01/deploy-ionic-framework-app-pre-filled-sqlite-db/
+- https://github.com/brodybits/Cordova-pre-populated-db-example-android (based on Cordova 2.7)
+
 ### Android sqlite implementation
 
 By default, this plugin uses [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector), which is lightweight  and should be more efficient than the built-in Android database classes. To use the built-in Android database classes instead:
@@ -702,7 +708,13 @@ Make a change like this to index.html (or use the sample code) verify proper ins
 
 # Support
 
-## Reporting issues
+## Policy
+
+Free support will be provided on a very limited basis due to some changing priorities. In addition, free support is only available in public forums. Please follow the steps below to be sure you have done your best before requesting help.
+
+Commercial support is available by contacting: <info@litehelpers.net>
+
+## Before asking for help
 
 If you have an issue with the plugin please check the following first:
 - You are using the latest version of the Plugin Javascript & platform-specific Java or Objective-C source from this repository.
@@ -717,6 +729,41 @@ If you continue to see the issue in a new, clean Cordova project:
   - it completely self-contained, i.e. it is using no extra libraries beyond cordova & SQLitePlugin.js;
   - if the issue is with *adding* data to a table, that the test program includes the statements you used to open the database and create the table;
   - if the issue is with *retrieving* data from a table, that the test program includes the statements you used to open the database, create the table, and enter the data you are trying to retrieve.
+
+## Before asking for help with a pre-populated database
+
+This plugin has been tested and successfully used with pre-populated databases. But you have to do it very carefully. If you are having any trouble, please start with a new, clean Cordova project, add this plugin, use the `sqlite3` tool to make a small test database, and try to read it.
+
+## What will be supported for free
+
+Please make a small, self-contained test program that can demonstrate your problem and post it. Please do not use any other plugins or frameworks than are absolutely necessary to demonstrate your problem.
+
+In case of a problem with a pre-populated database, please post your entire project.
+
+## Support for issues with Angular/"ngCordova"/Ionic
+
+Free support for issues with Angular/"ngCordova"/Ionic will only be provided if you can demonstrate that you can do the same thing without such a framework.
+- Make a fresh, clean ngCordova or Ionic project with a test program that demonstrates the issue and post it. Please do not use any other plugins or frameworks unless absolutely necessary to demonstrate your issue.
+- Make another project without any form of Angular including ngCordova or Ionic, with the same test program to show that it will work outside Angular/"ngCordova"/Ionic.
+
+## What information is needed for help
+
+Please include the following:
+- Which platform(s) Android/iOS/WP8/Windows 8.1/Windows Phone 8.1
+- Clear description of the issue
+- A small, complete, self-contained program that demonstrates the problem
+
+## Where to ask for help
+
+Once you have followed the directions above, you may request free support in the following location:
+- [litehelpers / cordova-sqlite-ext / issues](https://github.com/litehelpers/cordova-sqlite-ext/issues)
+- [litehelpers / Cordova-sqlite-help](https://github.com/litehelpers/Cordova-sqlite-help)
+
+Please include the information described above otherwise.
+
+## Professional support
+
+Professional support is available, please contact: <info@litehelpers.net>
 
 # Unit tests
 
