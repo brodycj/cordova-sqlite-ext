@@ -1,6 +1,6 @@
 # Changes
 
-## 0.8.0-xxx-ext-dev
+## 0.8.1-ext-dev
 
 - Separate SQLiteConnectorDatabase class for Android
 - Renamed SQLiteProxy.js to sqlite-proxy.js in Windows version

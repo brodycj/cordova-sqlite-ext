@@ -1,9 +1,9 @@
 {
   "name": "cordova-sqlite-xxx-ext-dev",
-  "version": "0.8.0-xxx-ext-dev",
+  "version": "0.8.1-ext-dev",
   "description": "Native interface to SQLite for PhoneGap/Cordova with extra feature(s)",
   "cordova": {
-    "id": "cordova-sqlite-xxx-ext-dev",
+    "id": "cordova-sqlite-ext-dev",
     "platforms": [
       "android",
       "ios",
