@@ -1,6 +1,6 @@
 # Changes
 
-## 0.8.1-ext-xxx
+## 0.8.1
 
 - Fix pre-populated database for Windows 8.1(+)/Windows Phone 8.1(+)
 - Separate SQLiteConnectorDatabase class for Android

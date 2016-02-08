@@ -26,4 +26,5 @@
 
 - SQLiteProxy.js by @vldmrrr (Vladimir Avdonin) and @brodybits (Chris Brody)
 - SQLite3-WinRT C++ classes and SQLite3JS (Javascript part) by @doo (doo GmbH)
-- SQLite3-Windows8.1.vcxproj to build SQLite3.winmd by @EionRobb
+- GONE: ~~SQLite3-Windows8.1.vcxproj to build SQLite3.winmd by @EionRobb~~
+- SQLite3.sln, SQLite3.Shared.vcxitems, SQLite3.Shared.vcxitems, SQLite3.Windows.vcxproj, and SQLite3.WindowsPhone.vcxproj by @brodybits with help from Visual Studio Express 2013

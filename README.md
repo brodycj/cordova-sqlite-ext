@@ -52,9 +52,6 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 - This version supports the use of two (2) possible Android sqlite database implementations:
   - default: lightweight [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector)
   - optional: built-in Android database classes (usage described below)
-- ~~The following features are moved to [litehelpers / cordova-sqlite-ext](https://github.com/litehelpers/cordova-sqlite-ext) and removed from this project:~~
-  - ~~REGEXP support~~
-  - ~~Pre-populated database~~
 - Windows 8.1(+)/Windows Phone 8.1(+) version is in an alpha state:
   - Native build for Windows 10 is still missing
   - Issue with UNICODE `\u0000` character (same as `\0`)
@@ -97,11 +94,7 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ## Some apps using this plugin
 
-- [Traiforks Mountain Bike Trail Map App](http://www.trailforks.com/apps/map/) with a couple of nice videos at: <http://www.pinkbike.com/news/trailforks-app-released.html>
-- [Get It Done app](http://getitdoneapp.com/) by [marcucio.com](http://marcucio.com/)
-- [KAAHE Health Encyclopedia](http://www.kaahe.org/en/index.php?option=com_content&view=article&id=817): Official health app of the Kingdom of Saudi Arabia.
-- [Larkwire](http://www.larkwire.com/) (iOS version): Learn bird songs the fun way
-- [Tangorin](https://play.google.com/store/apps/details?id=com.tangorin.app) (Android) Japanese Dictionary at [tangorin.com](http://tangorin.com/)
+TBD *your app here*
 
 ## Known issues
 
@@ -658,7 +651,7 @@ You can find more details at [this writeup](http://iphonedevlog.wordpress.com/20
 - `SQLitePlugin.coffee.md`: platform-independent (Literate coffee-script, can be read by recent coffee-script compiler)
 - `www`: `SQLitePlugin.js` platform-independent Javascript as generated from `SQLitePlugin.coffee.md` (and checked in!)
 - `src`: platform-specific source code:
-   - `external` - placeholder used to import `sqlite3.[hc]` in this version branch-needed to build Windows "Universal" (8.1) version
+   - `external` - placeholder for external dependencies - *not required in this version*
    - `android` - Java plugin code for Android
    - `android-classic` - Java plugin code for Amazon Fire-OS
    - `ios` - Objective-C plugin code for iOS;
@@ -673,7 +666,7 @@ You can find more details at [this writeup](http://iphonedevlog.wordpress.com/20
 plugman install --platform MYPLATFORM --project path.to.my.project.folder --plugin https://github.com/litehelpers/Cordova-sqlite-storage
 ```
 
-where MYPLATFORM is `android`, `ios`~~, or `windows`~~.
+where MYPLATFORM is `android`, `ios`, or `windows`.
 
 A posting how to get started developing on Windows host without the Cordova CLI tool (for Android target only) is available [here](http://brodybits.blogspot.com/2015/03/trying-cordova-for-android-on-windows-without-cordova-cli.html).
 
