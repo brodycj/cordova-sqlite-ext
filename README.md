@@ -6,7 +6,11 @@ License for Android and Windows 8.1(+)/Windows Phone 8.1(+) versions: MIT or Apa
 
 License for iOS version: MIT only
 
-NOTE (TBD): no Circle CI or Travis CI working in this version branch.
+This version contains the source code for the Android and iOS versions. This version does not contain any libraries or source code from www.sqlite.org. This version uses the built-in sqlite libraries on Android and iOS.
+
+|Android CI (limited suite)|iOS CI (limited suite)|
+|-----------------------|----------------------|
+|[![Circle CI](https://circleci.com/gh/litehelpers/cordova-sqlite-ext.svg?style=svg)](https://circleci.com/gh/litehelpers/cordova-sqlite-ext)|[![Build Status](https://travis-ci.org/litehelpers/cordova-sqlite-ext.svg?branch=ext-master)](https://travis-ci.org/litehelpers/cordova-sqlite-ext)|
 
 ## IMPORTANT: iCloud backup of SQLite database is NOT allowed
 
@@ -176,7 +180,7 @@ TBD *your app here*
 
 ### Other versions
 
-- [litehelpers / Cordova-sqlite-storage](https://github.com/litehelpers/Cordova-sqlite-storage) - Cordova sqlite storage plugin with support for WP(7/8).
+- [litehelpers / Cordova-sqlite-storage](https://github.com/litehelpers/Cordova-sqlite-storage) - core version for Android and iOS
 - [litehelpers / Cordova-sqlcipher-adapter](https://github.com/litehelpers/Cordova-sqlcipher-adapter) - supports [SQLCipher](https://www.zetetic.net/sqlcipher/) for Android, iOS, and Windows 8.1(+)/Windows Phone 8.1(+)
 - [litehelpers / Cordova-sqlite-legacy](https://github.com/litehelpers/Cordova-sqlite-legacy) - maintenance of WP(7/8) version-working with the other supported platforms Android/iOS/Windows 8.1(+)/Windows Phone 8.1(+)
 - [litehelpers / Cordova-sqlite-enterprise-free](https://github.com/litehelpers/Cordova-sqlite-enterprise-free) - internal memory improvements to support larger transactions (Android/iOS) and fix to support all Unicode characters (iOS) - with a different licensing scheme

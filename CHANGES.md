@@ -1,5 +1,13 @@
 # Changes
 
+## 0.8.3-rc
+
+### cordova-sqlite-storage 0.8.2
+
+- Workaround fix for empty readTransaction issue (litehelpers/Cordova-sqlite-storage#409)
+- Split spec/www/spec/legacy.js into db-open-close-delete-test.js & tx-extended.js
+
+
 ## 0.8.1
 
 - Fix pre-populated database for Windows 8.1(+)/Windows Phone 8.1(+)
