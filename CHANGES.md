@@ -1,6 +1,6 @@
 # Changes
 
-## 0.8.3-rc
+## 0.8.3
 
 ### cordova-sqlite-storage 0.8.2
 
