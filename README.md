@@ -33,15 +33,11 @@ As documented in the "**A User’s iCloud Storage Is Limited**" section of [iClo
 - <cite><a href="https://developer.apple.com/library/mac/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html">iCloudFundamentals in Mac Developer Library iCloud Design Guide</a>
 </blockquote>
 
-### More information about iCloud backup
+### How to disable iCloud backup
 
-There are two ways iCloud backup is configured:
-- For each app, iCloud backup is configured in `config.xml` and is *unfortunately* **enabled by default** as documented at: https://cordova.apache.org/docs/en/6.0.0/guide/platforms/ios/config.html
-- In this plugin, the database is stored in the `Documents` subdirectory by default, which is backed up to iCloud. You can use the `location` option in `sqlitePlugin.openDatabase()` to store the database in a subdirectory that is *NOT* backed up to iCloud.
+Use the `location` option in `sqlitePlugin.openDatabase()` to store the database in a subdirectory that is *NOT* backed up to iCloud, as described in the section below.
 
-Unless you want your app to use iCloud backup for some reason, it is recommended to turn it off as documented in: https://cordova.apache.org/docs/en/6.0.0/guide/platforms/ios/config.html
-
-[@brodybits](https://github.com/brodybits) reported [Cordova bug CB-9830](https://issues.apache.org/jira/browse/CB-9830) to disable iCloud backup by default in `config.xml`.
+**NOTE:** Changing `BackupWebStorage` in `config.xml` has no effect on a database created by this plugin. `BackupWebStorage` applies only to local storage and/or Web SQL storage created in the WebView (*not* using this plugin). Ref: [phonegap/build#338 (comment)](https://github.com/phonegap/build/issues/338#issuecomment-113328140)
 
 ## Support this project
 
@@ -73,6 +69,7 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ## Announcements
 
+- Ionic starter template with pre-populated SQLite database at: [jdnichollsc / Ionic-Starter-Template](https://github.com/jdnichollsc/Ionic-Starter-Template)
 - This version supports REGEXP on Android using PCRE 8.37
 - Added simple sql batch query function
 - Added echo test function to verify installation of this plugin
@@ -295,8 +292,9 @@ db = sqlitePlugin.openDatabase({name: "my.db", location: 2, createFromLocation: 
 **Alternative:** You can also use [an-rahulpandey / cordova-plugin-dbcopy](https://github.com/an-rahulpandey/cordova-plugin-dbcopy) to install a pre-populated database
 
 **Samples and tutorials:**
+
+- Ionic starter template with pre-populated SQLite database at: [jdnichollsc / Ionic-Starter-Template](https://github.com/jdnichollsc/Ionic-Starter-Template)
 - http://redwanhilali.com/ionic-sqlite/
-- Example by [@jdnichollsc](https://github.com/jdnichollsc) using Ionic Framework, ngCordova and promises: https://gist.github.com/jdnichollsc/9ac79aaa3407e92677ba
 - Tutorial using *alternative solution at [an-rahulpandey / cordova-plugin-dbcopy](https://github.com/an-rahulpandey/cordova-plugin-dbcopy)* (Android/iOS): https://blog.nraboy.com/2015/01/deploy-ionic-framework-app-pre-filled-sqlite-db/
 - https://github.com/brodybits/Cordova-pre-populated-db-example-android (based on Cordova 2.7)
 
