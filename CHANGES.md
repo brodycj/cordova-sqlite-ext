@@ -1,6 +1,6 @@
 # Changes
 
-## 0.8.x
+## 0.8.4
 
 - Introduce Windows 10 UWP build (Windows 8.1 and Windows Phone 8.1 build disabled)
 
