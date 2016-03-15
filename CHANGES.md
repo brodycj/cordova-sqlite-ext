@@ -1,5 +1,9 @@
 # Changes
 
+## 0.8.x
+
+- Introduce Windows 10 UWP build (Windows 8.1 and Windows Phone 8.1 build disabled)
+
 ## 0.8.3
 
 ### cordova-sqlite-storage 0.8.2
