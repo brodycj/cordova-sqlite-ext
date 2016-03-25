@@ -10,7 +10,11 @@ This version branch contains the source code for the Android, iOS, and Windows v
 
 NOTE (TBD): no Circle CI or Travis CI is setup for this version branch.
 
-## IMPORTANT: iCloud backup of SQLite database is NOT allowed
+## BREAKING CHANGE: Database location is now mandatory
+
+The `location` or `iosDatabaseLocation` *must* be specified in the `openDatabase` and `deleteDatabase` calls, as documented below.
+
+### IMPORTANT: iCloud backup of SQLite database is NOT allowed
 
 As documented in the "**A User’s iCloud Storage Is Limited**" section of [iCloudFundamentals in Mac Developer Library iCloud Design Guide](https://developer.apple.com/library/mac/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html) (near the beginning):
 
@@ -31,15 +35,11 @@ As documented in the "**A User’s iCloud Storage Is Limited**" section of [iClo
 - <cite><a href="https://developer.apple.com/library/mac/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html">iCloudFundamentals in Mac Developer Library iCloud Design Guide</a>
 </blockquote>
 
-### More information about iCloud backup
+### How to disable iCloud backup
 
-There are two ways iCloud backup is configured:
-- For each app, iCloud backup is configured in `config.xml` and is *unfortunately* **enabled by default** as documented at: https://cordova.apache.org/docs/en/6.0.0/guide/platforms/ios/config.html
-- In this plugin, the database is stored in the `Documents` subdirectory by default, which is backed up to iCloud. You can use the `location` option in `sqlitePlugin.openDatabase()` to store the database in a subdirectory that is *NOT* backed up to iCloud.
+Use the `location` or `iosDatabaseLocation` option in `sqlitePlugin.openDatabase()` to store the database in a subdirectory that is *NOT* backed up to iCloud, as described in the section below.
 
-Unless you want your app to use iCloud backup for some reason, it is recommended to turn it off as documented in: https://cordova.apache.org/docs/en/6.0.0/guide/platforms/ios/config.html
-
-[@brodybits](https://github.com/brodybits) reported [Cordova bug CB-9830](https://issues.apache.org/jira/browse/CB-9830) to disable iCloud backup by default in `config.xml`.
+**NOTE:** Changing `BackupWebStorage` in `config.xml` has no effect on a database created by this plugin. `BackupWebStorage` applies only to local storage and/or Web SQL storage created in the WebView (*not* using this plugin). Ref: [phonegap/build#338 (comment)](https://github.com/phonegap/build/issues/338#issuecomment-113328140)
 
 ## Support this project
 
@@ -47,6 +47,7 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ## Status
 
+- iOS database location is now mandatory, as documented below.
 - This version supports the use of two (2) possible Android sqlite database implementations:
   - default: lightweight [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector)
   - optional: built-in Android database classes (usage described below)
@@ -68,23 +69,23 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ## Announcements
 
+- More explicit `openDatabase` and `deleteDatabase` `iosDatabaseLocation` option
 - Windows 10 UWP is now supported by this version
 - Added simple sql batch query function
 - Added echo test function to verify installation of this plugin
-- Published [litehelpers / Cordova-sqlite-legacy](https://github.com/litehelpers/Cordova-sqlite-legacy) for maintenance of WP(7/8) version, working with the other supported platforms Android/iOS/Windows 8.1(+)/Windows Phone 8.1(+)
+- Published [litehelpers / Cordova-sqlite-legacy](https://github.com/litehelpers/Cordova-sqlite-legacy) for maintenance of WP(7/8) version along with Android/iOS/Windows 8.1(+)/Windows Phone 8.1(+)
 - All iOS operations are now using background processing (reported to resolve intermittent problems with cordova-ios@4.0.1)
 - Published [brodybits / Cordova-quick-start-checklist](https://github.com/brodybits/Cordova-quick-start-checklist) and [brodybits / Cordova-troubleshooting-guide](https://github.com/brodybits/Cordova-troubleshooting-guide)
 - A version with support for web workers is available (with a different licensing scheme) at: [litehelpers / cordova-sqlite-workers-evfree](https://github.com/litehelpers/cordova-sqlite-workers-evfree)
-- A version with pre-populated database support added for Windows and REGEXP support added for Android is available at: [litehelpers / cordova-sqlite-ext](https://github.com/litehelpers/cordova-sqlite-ext)
+- A version with pre-populated database support added for Windows (10) and REGEXP support added for Android is available at: [litehelpers / cordova-sqlite-ext](https://github.com/litehelpers/cordova-sqlite-ext)
 - PhoneGap Build is now supported through the npm package: http://phonegap.com/blog/2015/05/26/npm-plugins-available/
 - [MetaMemoryT / websql-promise](https://github.com/MetaMemoryT/websql-promise) now provides a Promises-based interface to both Web SQL and this plugin
 - iOS version is now fixed to override the correct pluginInitialize method and should work with recent versions of iOS
 - [SQLCipher](https://www.zetetic.net/sqlcipher/) for Windows 8.1(+)/Windows Phone 8.1(+) in addition to Android & iOS is now supported by [litehelpers / Cordova-sqlcipher-adapter](https://github.com/litehelpers/Cordova-sqlcipher-adapter)
-- New `openDatabase` and `deleteDatabase` `location` option to select database location (iOS *only*) and disable iCloud backup
 
 ## Highlights
 
-- Drop-in replacement for HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/), the only change should be `window.openDatabase()` --> `sqlitePlugin.openDatabase()`
+- Drop-in replacement for HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/), the only change should be `window.openDatabase()` --> `sqlitePlugin.openDatabase()` with parameters as documented below.
 - Failure-safe nested transactions with batch processing optimizations
 - As described in [this posting](http://brodyspark.blogspot.com/2012/12/cordovaphonegap-sqlite-plugins-offer.html):
   - Keeps sqlite database in a user data location that is known; can be reconfigured (iOS version); and synchronized to iCloud by default (iOS version; can be disabled as described below).
@@ -92,7 +93,7 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ## Some apps using this plugin
 
-- [Traiforks Mountain Bike Trail Map App](http://www.trailforks.com/apps/map/) with a couple of nice videos at: <http://www.pinkbike.com/news/trailforks-app-released.html>
+- [Trailforks Mountain Bike Trail Map App](http://www.trailforks.com/apps/map/) with a couple of nice videos at: <http://www.pinkbike.com/news/trailforks-app-released.html>
 - [Get It Done app](http://getitdoneapp.com/) by [marcucio.com](http://marcucio.com/)
 - [KAAHE Health Encyclopedia](http://www.kaahe.org/en/index.php?option=com_content&view=article&id=817): Official health app of the Kingdom of Saudi Arabia.
 - [Larkwire](http://www.larkwire.com/) (iOS version): Learn bird songs the fun way
@@ -108,7 +109,6 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 - If a sql statement fails for which there is no error handler or the error handler does not return `false` to signal transaction recovery, the plugin fires the remaining sql callbacks before aborting the transaction.
 - In case of an error, the error `code` member is bogus on Android and Windows (fixed for Android in [litehelpers / Cordova-sqlite-enterprise-free](https://github.com/litehelpers/Cordova-sqlite-enterprise-free)).
 - Possible crash on Android when using Unicode emoji characters due to [Android bug 81341](https://code.google.com/p/android/issues/detail?id=81341), which _should_ be fixed in Android 6.x
-- In-memory database `db=window.sqlitePlugin.openDatabase({name: ":memory:"})` is currently not supported.
 - Close database bugs described below.
 - When a database is opened and deleted without closing, the iOS version is known to leak resources.
 - It is NOT possible to open multiple databases with the same name but in different locations (iOS version).
@@ -119,6 +119,7 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 ## Other limitations
 
 - The db version, display name, and size parameter values are not supported and will be ignored.
+- _Absolute and relative subdirectory path(s) are not tested or supported._
 - This plugin will not work before the callback for the 'deviceready' event has been fired, as described in **Usage**. (This is consistent with the other Cordova plugins.)
 - This version will not work within a web worker (not properly supported by the Cordova framework).
 - In-memory database `db=window.sqlitePlugin.openDatabase({name: ":memory:"})` is currently not supported.
@@ -136,6 +137,7 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ## Further testing needed
 
+- _Integration with PhoneGap developer app_
 - Multi-page apps
 - Use within [InAppBrowser](http://docs.phonegap.com/en/edge/cordova_inappbrowser_inappbrowser.md.html)
 - Use within an iframe (see [litehelpers/Cordova-sqlite-storage#368 (comment)](https://github.com/litehelpers/Cordova-sqlite-storage/issues/368#issuecomment-154046367))
@@ -176,9 +178,9 @@ Unless you want your app to use iCloud backup for some reason, it is recommended
 
 ### Other versions
 
-- [litehelpers / cordova-sqlite-ext](https://github.com/litehelpers/cordova-sqlite-ext) - version with REGEXP support Android/iOS and pre-populated database support *added* for Windows XX ~~8.1(+)/Windows Phone 8.1(+)~~
+- [litehelpers / cordova-sqlite-ext](https://github.com/litehelpers/cordova-sqlite-ext) - version with REGEXP support for Android/iOS and pre-populated database support *added* for Windows 10
+- [litehelpers / Cordova-sqlite-legacy](https://github.com/litehelpers/Cordova-sqlite-legacy) - maintenance of WP(7/8) version along with Android/iOS/Windows 8.1(+)/Windows Phone 8.1(+)
 - [litehelpers / Cordova-sqlcipher-adapter](https://github.com/litehelpers/Cordova-sqlcipher-adapter) - supports [SQLCipher](https://www.zetetic.net/sqlcipher/) for Android, iOS, and Windows 8.1(+)/Windows Phone 8.1(+)
-- [litehelpers / Cordova-sqlite-legacy](https://github.com/litehelpers/Cordova-sqlite-legacy) - maintenance of WP(7/8) version-working with the other supported platforms Android/iOS/Windows 8.1(+)/Windows Phone 8.1(+)
 - [litehelpers / Cordova-sqlite-enterprise-free](https://github.com/litehelpers/Cordova-sqlite-enterprise-free) - internal memory improvements to support larger transactions (Android/iOS) and fix to support all Unicode characters (iOS) - with a different licensing scheme
 - [litehelpers / cordova-sqlite-workers-evfree](https://github.com/litehelpers/cordova-sqlite-workers-evfree) - version with support for web workers, includes internal memory improvements to support larger transactions (Android/iOS) and fix to support all Unicode characters (iOS) - with a different licensing scheme
 - Adaptation for React Native Android and iOS: [andpor / react-native-sqlite-storage](https://github.com/andpor/react-native-sqlite-storage)
@@ -219,18 +221,28 @@ window.sqlitePlugin.echoTest(successCallback, errorCallback);
 
 ## General
 
-The idea is to emulate the HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/) as closely as possible. The only major change is to use `window.sqlitePlugin.openDatabase()` (or `sqlitePlugin.openDatabase()`) instead of `window.openDatabase()`. If you see any other major change please report it, it is probably a bug.
+The idea is to emulate the HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/) as closely as possible. The only major change is to use `window.sqlitePlugin.openDatabase()` (or `sqlitePlugin.openDatabase()`) *with parameters as documented below* instead of `window.openDatabase()`. If you see any other major change please report it, it is probably a bug.
 
 **NOTE:** If a sqlite statement in a transaction fails with an error, the error handler *must* return `false` in order to recover the transaction. This is correct according to the HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/) standard. This is different from the WebKit implementation of Web SQL in Android and iOS which recovers the transaction if a sql error hander returns a non-`true` value.
 
 ## Opening a database
 
-There are two options to open a database access object:
-- **Recommended:** `var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);`
-- **Classical:** `var db = window.sqlitePlugin.openDatabase("myDatabase.db", "1.0", "Demo", -1);`
+~~There are two options~~ to open a database access object:
+- **Recommended:** `var db = window.sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'default'}, successcb, errorcb);`
+- No longer supported: ~~**Classical:** `var db = window.sqlitePlugin.openDatabase("myDatabase.db", "1.0", "Demo", -1);`~~
+
+The `iosDatabaseLocation` option is used to select the database subdirectory location (iOS *only*) with the following choices:
+- `default`: `Library/LocalDatabase` subdirectory - *NOT* visible to iTunes and *NOT* backed up by iCloud (will be the default in the future)
+- `Library`: `Library` subdirectory - backed up by iCloud, *NOT* visible to iTunes
+- `Documents`: `Documents` subdirectory - visible to iTunes and backed up by iCloud
+
+**WARNING:** The new "default" iosDatabaseLocation value is *NOT* the same as the old default location and would break an upgrade for an app using the old default.
+
+*ALTERNATIVE (deprecated):*
+- `var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);`
 
 The `location` option is used to select the database subdirectory location (iOS *only*) with the following choices:
-- `0` (default): `Documents` - visible to iTunes and backed up by iCloud
+- `0` ~~(default)~~: `Documents` - visible to iTunes and backed up by iCloud
 - `1`: `Library` - backed up by iCloud, *NOT* visible to iTunes
 - `2`: `Library/LocalDatabase` - *NOT* visible to iTunes and *NOT* backed up by iCloud
 
@@ -242,7 +254,7 @@ document.addEventListener('deviceready', onDeviceReady, false);
 
 // Cordova is ready
 function onDeviceReady() {
-  var db = window.sqlitePlugin.openDatabase({name: "my.db"});
+  var db = window.sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'default'});
   // ...
 }
 ```
@@ -250,7 +262,7 @@ function onDeviceReady() {
 The successcb and errorcb callback parameters are optional but can be extremely helpful in case anything goes wrong. For example:
 
 ```js
-window.sqlitePlugin.openDatabase({name: "my.db"}, function(db) {
+window.sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'default'}, function(db) {
   db.transaction(function(tx) {
     // ...
   }, function(err) {
@@ -265,6 +277,16 @@ If any sql statements or transactions are attempted on a database object before 
 - The database file name should include the extension, if desired.
 - It is possible to open multiple database access objects for the same database.
 - The database access object can be closed as described below.
+
+**TIP:**
+
+To overwrite `window.openDatabase`:
+
+```Javascript
+window.openDatabase = function(dbname, ignored1, ignored2, ignored3) {
+  return window.sqlitePlugin.openDatabase({name: dbname, iosDatabaseLocation: 'default'});
+};
+```
 
 ### Android sqlite implementation
 
@@ -394,6 +416,42 @@ db.readTransaction(function(tx) {
 ```
 
 You can find more details and a step-by-step description how to do this right in the [Populating Cordova SQLite storage with the JQuery API post](http://www.brodybits.com/cordova/sqlite/api/jquery/2015/10/26/populating-cordova-sqlite-storage-with-the-jquery-api.html):
+
+**BUG:** If a row item object is retrieved twice, they should be safe from each other.
+But this is not the case. This sample program demonstrates the bug:
+
+```Javascript
+var db = window.sqlitePlugin.openDatabase({name: "my.db"});
+
+var res1 = null,
+    res2 = null;
+
+db.transaction(function(tx) {
+  tx.executeSql('CREATE TABLE IF NOT EXISTS test_table (id integer primary key, data text, data_num integer)');
+  tx.executeSql('INSERT INTO test_table (data, data_num) VALUES (?,?)', ['test', 101], function(tx, res) {
+
+  tx.executeSql('SELECT * FROM test_table;', [], function(tx, res) {
+
+    res1 = res.rows.item(0);
+    res2 = res.rows.item(0);
+
+    res1.data = 'another';
+
+    // immediate check:
+    console.log('res1.data = ' + res1.data);
+    // output: res2.data = 'another'
+    console.log('res2.data = ' + res2.data);
+  });
+
+}, function(e) {
+  console.log('Transaction error: ' + e.message);
+}, function() {
+  // check stored info:
+  console.log('res1.data: ' + res1.data);
+  // output: res2.data = 'another';
+  console.log('res2.data: ' + res2.data);
+});
+```
 
 ## Background processing
 
@@ -544,10 +602,10 @@ db.executeSql("SELECT LENGTH('tenletters') AS stringlength", [], function (res) 
 ## Delete a database
 
 ```js
-window.sqlitePlugin.deleteDatabase({name: "my.db", location: 1}, successcb, errorcb);
+window.sqlitePlugin.deleteDatabase({name: 'my.db', iosDatabaseLocation: 'default'}, successcb, errorcb);
 ```
 
-`location` as described above for `openDatabase` (iOS *only*)
+with `iosDatabaseLocation` or `location` *required* as described above for `openDatabase` (iOS *only*)
 
 # Schema versions
 

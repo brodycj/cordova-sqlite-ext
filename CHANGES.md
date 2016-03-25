@@ -1,5 +1,18 @@
 # Changes
 
+## 0.8.yy-common-dev
+
+### xxx core-master 0.8.5
+
+- More explicit iosDatabaseLocation option
+- iOS database location is now mandatory
+- Split-up of some more spec test scripts
+
+### xxx core-master 0.8.2
+
+- Workaround fix for empty readTransaction issue (litehelpers/Cordova-sqlite-storage#409)
+- Split spec/www/spec/legacy.js into db-open-close-delete-test.js & tx-extended.js
+
 ## 0.8.x-common-dev
 
 - Introduce Windows 10 UWP build (Windows 8.1 and Windows Phone 8.1 build disabled)
