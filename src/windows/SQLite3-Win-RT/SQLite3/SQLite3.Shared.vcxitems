@@ -20,12 +20,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\common\sqlite3.c">
-      <CompileAsWinRT>false</CompileAsWinRT>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Constants.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Database.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Statement.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\common\sqlite3.c">
+      <CompileAsWinRT>false</CompileAsWinRT>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
