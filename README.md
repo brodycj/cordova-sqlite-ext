@@ -6,11 +6,17 @@ License for Android and Windows versions: MIT or Apache 2.0
 
 License for iOS version: MIT only
 
-|Android CI (limited suite)|iOS CI (limited suite)|
+|Android CI (limited suite - missing ext tests)|iOS CI (limited suite)|
 |-----------------------|----------------------|
 |[![Circle CI](https://circleci.com/gh/litehelpers/cordova-sqlite-ext.svg?style=svg)](https://circleci.com/gh/litehelpers/cordova-sqlite-ext)|[![Build Status](https://travis-ci.org/litehelpers/cordova-sqlite-ext.svg?branch=ext-master)](https://travis-ci.org/litehelpers/cordova-sqlite-ext)|
 
-## IMPORTANT: iCloud backup of SQLite database is NOT allowed
+## NOTICE: BREAKING CHANGE COMING
+
+This change will take place in the upcoming release:
+
+> The `location` ~~or `iosDatabaseLocation`~~ *must* be specified in the `openDatabase` and `deleteDatabase` calls, as documented below.
+
+### IMPORTANT: iCloud backup of SQLite database is NOT allowed
 
 As documented in the "**A User’s iCloud Storage Is Limited**" section of [iCloudFundamentals in Mac Developer Library iCloud Design Guide](https://developer.apple.com/library/mac/documentation/General/Conceptual/iCloudDesignGuide/Chapters/iCloudFundametals.html) (near the beginning):
 
@@ -228,7 +234,7 @@ The idea is to emulate the HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/
 
 There are two options to open a database access object:
 - **Recommended:** `var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);`
-- **Classical:** `var db = window.sqlitePlugin.openDatabase("myDatabase.db", "1.0", "Demo", -1);`
+- **Classical** (DEPRECATED and WILL BE REMOVED)**:** `var db = window.sqlitePlugin.openDatabase("myDatabase.db", "1.0", "Demo", -1);`
 
 The `location` option is used to select the database subdirectory location (iOS *only*) with the following choices:
 - `0` (default): `Documents` - visible to iTunes and backed up by iCloud

@@ -1,5 +1,11 @@
 # Changes
 
+## 0.9.0-prep
+
+- TBD: Mark BREAKING CHANGES COMING to openDatabase parameters
+
+NOTICE: `0.8.6` release was published to npm based on the wrong branch and is withdrawn, to be completely superseded by the `0.9.0` release.
+
 ## 0.8.4
 
 - Introduce Windows 10 UWP build (Windows 8.1 and Windows Phone 8.1 build disabled)
