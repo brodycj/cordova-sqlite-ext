@@ -383,7 +383,8 @@ public class SQLitePlugin extends CordovaPlugin {
             this.dbname = dbname;
             this.createFromResource = options.has("createFromResource");
             this.oldImpl = options.has("androidOldDatabaseImplementation");
-            Log.v(SQLitePlugin.class.getSimpleName(), "Android db implementation: built-in android.database.sqlite package");
+            //Log.v(SQLitePlugin.class.getSimpleName(), "Android db implementation: built-in android.database.sqlite package");
+            Log.v(SQLitePlugin.class.getSimpleName(), "Android db implementation: " + (oldImpl ? "built-in android.database.sqlite package (OLD)" : "Android-sqlite-connector (NDK)"));
             this.bugWorkaround = this.oldImpl && options.has("androidBugWorkaround");
             if (this.bugWorkaround)
                 Log.v(SQLitePlugin.class.getSimpleName(), "Android db closing/locking workaround applied");

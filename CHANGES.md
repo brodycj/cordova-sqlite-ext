@@ -1,10 +1,33 @@
 # Changes
 
+## 0.9.x-xx
+
+### x.x.x-common-dev
+
+- Support Windows 8.1/Windows Phone 8.1 along with Windows 10
+- Fix PCH issue with Debug Win32 UWP (Windows 10) build
+
+### cordova-sqlite-storage 1.2.0
+
+- Rename Lawnchair adapter to prevent clash with standard webkit-sqlite adapter
+- Support location: 'default' setting in openDatabase & deleteDatabase
+
+### cordova-sqlite-storage 0.8.5
+
+- More explicit iosDatabaseLocation option
+- iOS database location is now mandatory
+- Split-up of some more spec test scripts
+
+### cordova-sqlite-storage 0.8.2
+
+- Workaround fix for empty readTransaction issue (litehelpers/Cordova-sqlite-storage#409)
+- Split spec/www/spec/legacy.js into db-open-close-delete-test.js & tx-extended.js
+
 ## 0.9.0-prep
 
-- TBD: Mark BREAKING CHANGES COMING to openDatabase parameters
+- ~~TBD:~~ Mark BREAKING CHANGES COMING to openDatabase parameters
 
-NOTICE: `0.8.6` release was published to npm based on the wrong branch and is withdrawn, to be completely superseded by the `0.9.0` release.
+NOTICE: `0.8.6` release was published to npm based on the wrong branch and is withdrawn, to be completely superseded by _the `0.9.*` release_.
 
 ## 0.8.4
 
@@ -17,12 +40,14 @@ NOTICE: `0.8.6` release was published to npm based on the wrong branch and is wi
 - Workaround fix for empty readTransaction issue (litehelpers/Cordova-sqlite-storage#409)
 - Split spec/www/spec/legacy.js into db-open-close-delete-test.js & tx-extended.js
 
-
 ## 0.8.1
 
 - Fix pre-populated database for Windows 8.1(+)/Windows Phone 8.1(+)
 - Separate SQLiteConnectorDatabase class for Android
 - Renamed SQLiteProxy.js to sqlite-proxy.js in Windows version
+
+### cordova-sqlite-storage 0.8.0
+
 - Simple sql batch transaction function
 - Echo test function
 - Remove extra runInBackground: step from iOS version
@@ -50,6 +75,13 @@ NOTICE: `0.8.6` release was published to npm based on the wrong branch and is wi
 - Android version with sqlite `3.8.10.2` embedded (with error messages fixed)
 - Pre-populated database support removed from this version branch
 - Amazon Fire-OS support removed
+
+## 0.8.0-extra-common-dev
+
+- Support pre-populated database for Windows "Universal" _(BROKEN)_
+
+## 0.7.1-common-dev
+
 - Fix conversion warnings in iOS version
 
 ## 0.7.12
