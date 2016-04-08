@@ -1,8 +1,6 @@
 # Changes
 
-## 0.9.x-xx
-
-### x.x.x-common-dev
+## 0.9.1
 
 - Support Windows 8.1/Windows Phone 8.1 along with Windows 10
 - Fix PCH issue with Debug Win32 UWP (Windows 10) build
@@ -25,9 +23,9 @@
 
 ## 0.9.0-prep
 
-- ~~TBD:~~ Mark BREAKING CHANGES COMING to openDatabase parameters
+- Mark upcoming BREAKING CHANGES to openDatabase parameters
 
-NOTICE: `0.8.6` release was published to npm based on the wrong branch and is withdrawn, to be completely superseded by _the `0.9.*` release_.
+NOTICE: `0.8.6` release was published to npm based on the wrong branch and is withdrawn, to be completely superseded by the `0.9.*` release.
 
 ## 0.8.4
 
@@ -75,13 +73,6 @@ NOTICE: `0.8.6` release was published to npm based on the wrong branch and is wi
 - Android version with sqlite `3.8.10.2` embedded (with error messages fixed)
 - Pre-populated database support removed from this version branch
 - Amazon Fire-OS support removed
-
-## 0.8.0-extra-common-dev
-
-- Support pre-populated database for Windows "Universal" _(BROKEN)_
-
-## 0.7.1-common-dev
-
 - Fix conversion warnings in iOS version
 
 ## 0.7.12
