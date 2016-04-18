@@ -13,13 +13,6 @@
 // REGEXP:
 #include <regex.h>
 
-// NOTE: This is now broken by cordova-ios 4.0, see:
-// https://issues.apache.org/jira/browse/CB-9638
-// Solution is to use NSJSONSerialization instead.
-#ifdef READ_BLOB_AS_BASE64
-#import <Cordova/NSData+Base64.h>
-#endif
-
 static void
 sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
     if ( argc < 2 ) {
@@ -436,14 +429,12 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
                             columnValue = [NSNumber numberWithDouble: sqlite3_column_double(statement, i)];
                             break;
                         case SQLITE_BLOB:
-#ifdef READ_BLOB_AS_BASE64
                             columnValue = [SQLitePlugin getBlobAsBase64String: sqlite3_column_blob(statement, i)
                                                         withLength: sqlite3_column_bytes(statement, i)];
 #ifdef INCLUDE_SQL_BLOB_BINDING // TBD subjet to change:
                             columnValue = [@"sqlblob:;base64," stringByAppendingString:columnValue];
 #endif
                             break;
-#endif // else
                         case SQLITE_TEXT:
                             columnValue = [[NSString alloc] initWithBytes:(char *)sqlite3_column_text(statement, i)
                                                                    length:sqlite3_column_bytes(statement, i)
@@ -610,23 +601,17 @@ sqlite_regexp(sqlite3_context * context, int argc, sqlite3_value ** values) {
     }
 }
 
-#ifdef READ_BLOB_AS_BASE64
 +(NSString*)getBlobAsBase64String:(const char*)blob_chars
                        withLength:(int)blob_length
 {
-    size_t outputLength = 0;
-    char* outputBuffer = CDVNewBase64Encode(blob_chars, blob_length, true, &outputLength);
+    NSData *blobData = [[NSData alloc] initWithBytes: blob_chars length: blob_length];
+    NSString *result = [blobData base64EncodedStringWithOptions:0];
 
-    NSString* result = [[NSString alloc] initWithBytesNoCopy:outputBuffer
-                                                      length:outputLength
-                                                    encoding:NSASCIIStringEncoding
-                                                freeWhenDone:YES];
 #if !__has_feature(objc_arc)
     [result autorelease];
 #endif
 
     return result;
 }
-#endif
 
 @end /* vim: set expandtab : */
