@@ -558,9 +558,7 @@
       if (!openargs.name) {
         throw newSQLError('Database name value is missing in openDatabase call');
       }
-      if (!openargs.iosDatabaseLocation && !openargs.location && openargs.location !== 0) {
-        throw newSQLError('Database location or iosDatabaseLocation value is now mandatory in openDatabase call');
-      }
+      
       dblocation = !!openargs.location && openargs.location === 'default' ? iosLocationMap['default'] : !!openargs.iosDatabaseLocation ? iosLocationMap[openargs.iosDatabaseLocation] : dblocations[openargs.location];
       openargs.dblocation = dblocation;
       if (!!openargs.createFromLocation && openargs.createFromLocation === 1) {
