@@ -724,7 +724,7 @@ window.openDatabase = function(dbname, ignored1, ignored2, ignored3) {
 
 ### Pre-populated database(s)
 
-Put the database file in the `www` directory and open the database like (**both** database location and `createFromLocation` items are required):
+Put the database file in the `www` directory and open the database as follows (**both** database location and `createFromLocation` items are required):
 
 ```js
 var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 'default', createFromLocation: 1});
