@@ -732,7 +732,7 @@ var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 'default', c
 
 **IMPORTANT NOTES:**
 
-- Put the pre-populated database file in the `www` subdirectory. (This should work well the Cordova CLI.)
+- Put the pre-populated database file in the `www` subdirectory. (This should work well the Cordova CLI.)  No matter which child folder your HTML file is in, the database MUST sit in the 'www' subdirectory. 
 - The pre-populated database file name must match **exactly** the file name given in `openDatabase`. This plugin does *not* use an automatic extension.
 - The pre-populated database file is ignored if the database file with the same name already exists in your database file location.
 
