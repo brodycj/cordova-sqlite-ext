@@ -1211,8 +1211,6 @@ rm -rf platforms
 cordova platform add ios
 ```
 
-You can find some more details in a nice writeup (though with old links and package names): <http://iphonedevlog.wordpress.com/2014/04/07/installing-chris-brodys-sqlite-database-with-cordova-cli-android/>.
-
 <!-- END Easy installation with Cordova CLI tool -->
 
 ## Plugin installation sources
