@@ -367,16 +367,12 @@
   };
 
   SQLitePluginTransaction.prototype.handleStatementSuccess = function(handler, response) {
-    var payload, rows;
+    var payload;
     if (!handler) {
       return;
     }
-    rows = response.rows || [];
     payload = {
-      rows: {
-        item: function(i) {
-          return rows[i];
-        },
+        rows: response.rows || [],
         length: rows.length
       },
       rowsAffected: response.rowsAffected || 0,
