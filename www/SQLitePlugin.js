@@ -372,9 +372,7 @@
       return;
     }
     payload = {
-        rows: response.rows || [],
-        length: rows.length
-      },
+      rows: response.rows || [],
       rowsAffected: response.rowsAffected || 0,
       insertId: response.insertId || void 0
     };
