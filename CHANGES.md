@@ -1,6 +1,12 @@
 # Changes
 
-## cordova-sqlite-ext 2.0.0
+## cordova-sqlite-ext 2.1.0-pre1
+
+- cordova-sqlite-ext build fixes & updates
+  - use cordova-sqlite-ext-deps 1.0.0 with sqlite-native-driver NDK build in JAR and compile-time option updates for Android
+  - plugin.xml use lib-file for Android library JAR files to resolve issue on cordova-android@7
+  - SQLITE_THREADSAFE=2 on all platforms
+  - Enable FTS5 & JSON1 on all platforms
 
 ## cordova-sqlite-storage 2.1.4
 
