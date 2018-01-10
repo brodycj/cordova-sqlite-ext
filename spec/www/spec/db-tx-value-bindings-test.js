@@ -836,7 +836,7 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INSERT inline BLOB value (X'40414243') and check stored data [XXX SELECT BLOB ISSUE with Windows]", function(done) {
+        it(suiteName + "INSERT inline BLOB value (X'40414243') and check stored data [TBD SELECT BLOB value ISSUE with androidDatabaseImplementation: 2 & Windows]", function(done) {
           var db = openDatabase('INSERT-inline-BLOB-value-and-check-stored-data.db', '1.0', 'Demo', DEFAULT_SIZE);
 
           db.transaction(function(tx) {
@@ -857,11 +857,8 @@ var mytests = function() {
                   expect(item).toBeDefined();
                   expect(item.hexValue).toBe('40414243');
 
-                  // STOP here in case of Android:
-                  //if (!isWindows && isAndroid) return done();
-
                   tx.executeSql('SELECT * FROM test_table', [], function(ignored, rs3) {
-                    //if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
+                    if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
                     expect(rs3).toBeDefined();
                     expect(rs3.rows).toBeDefined();
                     expect(rs3.rows.length).toBeDefined();
@@ -880,9 +877,6 @@ var mytests = function() {
 
                       expect(error.code).toBe(0);
 
-                      //if (isWP8)
-                      //  expect(true).toBe(true); // SKIP for now
-                      //else if (isWindows)
                       if (isWindows)
                         expect(error.message).toMatch(/Unsupported column type in column 0/);
                       else
@@ -905,7 +899,7 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INSERT inline BLOB value (X'FFD1FFD2') and check stored data [Plugin BROKEN: missing result column data; SELECT BLOB value ISSUE with Android-sqlite-connector & Windows]", function(done) {
+        it(suiteName + "INSERT inline BLOB value (X'FFD1FFD2') and check stored data [Plugin BROKEN: missing result column data; SELECT BLOB value ISSUE with Android/Windows/WP8]", function(done) {
           var db = openDatabase('INSERT-inline-BLOB-value-FFD1FFD2-and-check-stored-data.db', '1.0', 'Demo', DEFAULT_SIZE);
 
           db.transaction(function(tx) {
@@ -926,11 +920,11 @@ var mytests = function() {
                   expect(item).toBeDefined();
                   expect(item.hexValue).toBe('FFD1FFD2');
 
-                  // STOP here in case of Android (default Android-sqlite-connector implementation):
-                  if (!isWebSql && !isWindows && isAndroid && !isImpl2) return done();
+                  // STOP here in case of Android:
+                  if (!isWindows && isAndroid) return done();
 
                   tx.executeSql('SELECT * FROM test_table', [], function(ignored, rs3) {
-                    //if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
+                    if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
                     expect(rs3).toBeDefined();
                     expect(rs3.rows).toBeDefined();
                     expect(rs3.rows.length).toBeDefined();
@@ -938,8 +932,6 @@ var mytests = function() {
                     var item = rs3.rows.item(0);
                     expect(item).toBeDefined();
 
-                    // XXX TBD SUBJECT TO CHANGE:
-                    /* **
                     var mydata = item.data;
 
                     if (!isWebSql) {
@@ -950,12 +942,11 @@ var mytests = function() {
                       expect(mydata).toBeDefined();
                       expect(mydata.length).toBe(4);
                     }
-                    // */
 
                     // Close (plugin only) & finish:
                     (isWebSql) ? done() : db.close(done, done);
                   }, function(ignored, error) {
-                    if (!isWebSql && isWindows /*|| (isAndroid && isImpl2)*/) {
+                    if (!isWebSql && isWindows) {
                       expect(error).toBeDefined();
                       expect(error.code).toBeDefined();
                       expect(error.message).toBeDefined();
@@ -964,8 +955,8 @@ var mytests = function() {
 
                       if (isWindows)
                         expect(error.message).toMatch(/Unsupported column type in column 0/);
-                      //else
-                      //  expect(error.message).toMatch(/unknown error.*code 0.*Unable to convert BLOB to string/);
+                      else
+                        expect(error.message).toMatch(/unknown error.*code 0.*Unable to convert BLOB to string/);
                     } else {
                       // NOT EXPECTED:
                       expect(false).toBe(true);
