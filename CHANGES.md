@@ -1,12 +1,28 @@
 # Changes
 
-## cordova-sqlite-ext 2.1.0-pre1
+## cordova-sqlite-ext 2.1.0
 
 - cordova-sqlite-ext build fixes & updates
   - use cordova-sqlite-ext-deps 1.0.0 with sqlite-native-driver NDK build in JAR and compile-time option updates for Android
   - plugin.xml use lib-file for Android library JAR files to resolve issue on cordova-android@7
   - SQLITE_THREADSAFE=2 on all platforms
   - Enable FTS5 & JSON1 on all platforms
+
+### cordova-sqlite-storage 2.2.0
+
+- Fix SQLiteAndroidDatabase implementation for Turkish and other foreign locales
+
+### cordova-sqlite-storage 2.1.5
+
+##### cordova-sqlite-legacy-core 1.0.7
+
+- Add error info text in case of close error on Windows
+- Signal INTERNAL ERROR in case of attempt to reuse db on Windows (should never happen due to workaround solution to BUG 666)
+
+###### cordova-sqlite-legacy-express-core 1.0.5
+
+- iOS/macOS @synchronized guard for sqlite3_open operation
+- Signal INTERNAL ERROR in case of attempt to reuse db (Android/iOS) (should never happen due to workaround solution to BUG 666)
 
 ## cordova-sqlite-storage 2.1.4
 
