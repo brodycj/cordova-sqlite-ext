@@ -546,7 +546,8 @@
   iosLocationMap = {
     'default': 'nosync',
     'Documents': 'docs',
-    'Library': 'libs'
+    'Library': 'libs',
+    'Shared': 'shared'
   };
 
   SQLiteFactory = {

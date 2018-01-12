@@ -607,6 +607,7 @@
       'default' : 'nosync'
       'Documents' : 'docs'
       'Library' : 'libs'
+      'Shared' : 'shared'
 
     SQLiteFactory =
       ###

@@ -75,6 +75,25 @@
                 [appDBPaths setObject: libs forKey:@"nosync"];
             }
         }
+
+        NSString *preferenceName = @"SqliteExtSharedGroupId";
+        NSString *groupId = [self.commandDelegate.settings objectForKey:[preferenceName lowercaseString]];
+        BOOL sharedFolderFound = NO;
+        NSUserDefaults *prefs = [[NSUserDefaults alloc] initWithSuiteName:groupId];
+        if(prefs != nil && groupId != nil) {
+            [prefs synchronize];
+            NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupId];
+
+            if(containerURL != nil)
+            {
+                NSString* containerDirectory = [containerURL path];
+
+                if(containerDirectory != nil) {
+                    sharedFolderFound = YES;
+                    [appDBPaths setObject: containerDirectory forKey:@"shared"];
+                }
+            }
+        }
     }
 }
 

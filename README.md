@@ -721,6 +721,7 @@ where the `iosDatabaseLocation` option may be set to one of the following choice
 - `default`: `Library/LocalDatabase` subdirectory - *NOT* visible to iTunes and *NOT* backed up by iCloud
 - `Library`: `Library` subdirectory - backed up by iCloud, *NOT* visible to iTunes
 - `Documents`: `Documents` subdirectory - visible to iTunes and backed up by iCloud
+- `Shared`: uses a shared directory depending on the app group specified in the `config.xml` with the preference `SqliteExtSharedGroupId`
 
 **WARNING:** Again, the new "default" iosDatabaseLocation value is *NOT* the same as the old default location and would break an upgrade for an app using the old default value (0) on iOS.
 
