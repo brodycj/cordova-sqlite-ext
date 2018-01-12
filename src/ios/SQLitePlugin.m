@@ -76,8 +76,7 @@
             }
         }
 
-        NSString *preferenceName = @"SqliteExtSharedGroupId";
-        NSString *groupId = [self.commandDelegate.settings objectForKey:[preferenceName lowercaseString]];
+        NSString *groupId = [self.commandDelegate.settings objectForKey:[@"SqliteExtAppGroupId" lowercaseString]];
         BOOL sharedFolderFound = NO;
         NSUserDefaults *prefs = [[NSUserDefaults alloc] initWithSuiteName:groupId];
         if(prefs != nil && groupId != nil) {
