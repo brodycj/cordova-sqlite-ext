@@ -75,24 +75,6 @@
                 [appDBPaths setObject: libs forKey:@"nosync"];
             }
         }
-
-        NSString *groupId = [self.commandDelegate.settings objectForKey:[@"SqliteExtAppGroupId" lowercaseString]];
-        BOOL sharedFolderFound = NO;
-        NSUserDefaults *prefs = [[NSUserDefaults alloc] initWithSuiteName:groupId];
-        if(prefs != nil && groupId != nil) {
-            [prefs synchronize];
-            NSURL *containerURL = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupId];
-
-            if(containerURL != nil)
-            {
-                NSString* containerDirectory = [containerURL path];
-
-                if(containerDirectory != nil) {
-                    sharedFolderFound = YES;
-                    [appDBPaths setObject: containerDirectory forKey:@"shared"];
-                }
-            }
-        }
     }
 }
 
@@ -138,6 +120,10 @@
     // DLog(@"using db location: %@", dblocation);
 
     NSString *dbname = [self getDBPath:dbfilename at:dblocation];
+    NSString *absoluteURL = [options objectForKey:@"iosDirectoryURL"];
+    if (absoluteURL != NULL) {
+        dbname = absoluteURL;
+    }
 
     if (dbname == NULL) {
         // XXX NOT EXPECTED (INTERNAL ERROR - XXX TODO SIGNAL ERROR STATUS):
@@ -293,6 +279,11 @@
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"You must specify database path"];
     } else {
         NSString *dbPath = [self getDBPath:dbFileName at:dblocation];
+
+        NSString *absoluteURL = [options objectForKey:@"iosDirectoryURL"];
+        if (absoluteURL != NULL) {
+            dbname = absoluteURL;
+        }
 
         if ([[NSFileManager defaultManager]fileExistsAtPath:dbPath]) {
             DLog(@"delete full db path: %@", dbPath);

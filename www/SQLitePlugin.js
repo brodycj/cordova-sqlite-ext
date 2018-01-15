@@ -546,8 +546,7 @@
   iosLocationMap = {
     'default': 'nosync',
     'Documents': 'docs',
-    'Library': 'libs',
-    'Shared': 'shared'
+    'Library': 'libs'
   };
 
   SQLiteFactory = {
@@ -570,8 +569,8 @@
       if (!openargs.name) {
         throw newSQLError('Database name value is missing in openDatabase call');
       }
-      if (!openargs.iosDatabaseLocation && !openargs.location && openargs.location !== 0) {
-        throw newSQLError('Database location or iosDatabaseLocation setting is now mandatory in openDatabase call.');
+      if (!openargs.iosDatabaseLocation && !openargs.location && openargs.location !== 0 && !openargs.iosDirectoryURL) {
+        throw newSQLError('Database location, iosDatabaseLocation or iosDirectoryURL setting is now mandatory in openDatabase call.');
       }
       if (!!openargs.location && !!openargs.iosDatabaseLocation) {
         throw newSQLError('AMBIGUOUS: both location and iosDatabaseLocation settings are present in openDatabase call. Please use either setting, not both.');
@@ -615,8 +614,8 @@
         }
         args.path = dbname;
       }
-      if (!first.iosDatabaseLocation && !first.location && first.location !== 0) {
-        throw newSQLError('Database location or iosDatabaseLocation setting is now mandatory in deleteDatabase call.');
+      if (!first.iosDatabaseLocation && !first.location && first.location !== 0 && !openargs.iosDirectoryURL) {
+        throw newSQLError('Database location, iosDatabaseLocation and iosDirectoryURL setting is now mandatory in deleteDatabase call.');
       }
       if (!!first.location && !!first.iosDatabaseLocation) {
         throw newSQLError('AMBIGUOUS: both location and iosDatabaseLocation settings are present in deleteDatabase call. Please use either setting value, not both.');
