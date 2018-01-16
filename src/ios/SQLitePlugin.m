@@ -282,7 +282,7 @@
 
         NSString *absoluteURL = [options objectForKey:@"iosDirectoryURL"];
         if (absoluteURL != NULL) {
-            dbname = absoluteURL;
+            dbPath = absoluteURL;
         }
 
         if ([[NSFileManager defaultManager]fileExistsAtPath:dbPath]) {
