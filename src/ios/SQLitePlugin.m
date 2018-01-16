@@ -88,6 +88,15 @@
     return dbPath;
 }
 
+-(id) getDBPath:(NSString *)dbFile inDirectory:(NSString *)directory {
+    if (dbFile == NULL || directory == NULL) {
+        return NULL;
+    }
+    
+    NSString *dbPath = [directory stringByAppendingPathComponent: dbFile];
+    return dbPath;
+}
+
 -(void)echoStringValue: (CDVInvokedUrlCommand*)command
 {
     CDVPluginResult * pluginResult = nil;
@@ -120,9 +129,9 @@
     // DLog(@"using db location: %@", dblocation);
 
     NSString *dbname = [self getDBPath:dbfilename at:dblocation];
-    NSString *absoluteURL = [options objectForKey:@"iosDirectoryURL"];
-    if (absoluteURL != NULL) {
-        dbname = absoluteURL;
+    NSString *directoryURL = [options objectForKey:@"iosDirectoryURL"];
+    if (directoryURL != NULL) {
+        dbname = [self getDBPath:dbfilename inDirectory:directoryURL];
     }
 
     if (dbname == NULL) {
@@ -279,10 +288,9 @@
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"You must specify database path"];
     } else {
         NSString *dbPath = [self getDBPath:dbFileName at:dblocation];
-
-        NSString *absoluteURL = [options objectForKey:@"iosDirectoryURL"];
-        if (absoluteURL != NULL) {
-            dbPath = absoluteURL;
+        NSString *directoryURL = [options objectForKey:@"iosDirectoryURL"];
+        if (directoryURL != NULL) {
+            dbPath = [self getDBPath:dbFileName inDirectory:directoryURL];
         }
 
         if ([[NSFileManager defaultManager]fileExistsAtPath:dbPath]) {

@@ -575,9 +575,11 @@
       if (!!openargs.location && !!openargs.iosDatabaseLocation) {
         throw newSQLError('AMBIGUOUS: both location and iosDatabaseLocation settings are present in openDatabase call. Please use either setting, not both.');
       }
-      dblocation = !!openargs.location && openargs.location === 'default' ? iosLocationMap['default'] : !!openargs.iosDatabaseLocation ? iosLocationMap[openargs.iosDatabaseLocation] : dblocations[openargs.location];
-      if (!dblocation) {
-        throw newSQLError('Valid iOS database location could not be determined in openDatabase call');
+      if (!openargs.iosDirectoryURL) {
+        dblocation = !!openargs.location && openargs.location === 'default' ? iosLocationMap['default'] : !!openargs.iosDatabaseLocation ? iosLocationMap[openargs.iosDatabaseLocation] : dblocations[openargs.location];
+        if (!dblocation) {
+          throw newSQLError('Valid iOS database location could not be determined in openDatabase call');
+        }
       }
       openargs.dblocation = dblocation;
       if (!!openargs.createFromLocation && openargs.createFromLocation === 1) {
@@ -614,15 +616,17 @@
         }
         args.path = dbname;
       }
-      if (!first.iosDatabaseLocation && !first.location && first.location !== 0 && !openargs.iosDirectoryURL) {
+      if (!first.iosDatabaseLocation && !first.location && first.location !== 0 && !first.iosDirectoryURL) {
         throw newSQLError('Database location, iosDatabaseLocation and iosDirectoryURL setting is now mandatory in deleteDatabase call.');
       }
       if (!!first.location && !!first.iosDatabaseLocation) {
         throw newSQLError('AMBIGUOUS: both location and iosDatabaseLocation settings are present in deleteDatabase call. Please use either setting value, not both.');
       }
-      dblocation = !!first.location && first.location === 'default' ? iosLocationMap['default'] : !!first.iosDatabaseLocation ? iosLocationMap[first.iosDatabaseLocation] : dblocations[first.location];
-      if (!dblocation) {
-        throw newSQLError('Valid iOS database location could not be determined in deleteDatabase call');
+      if (!first.iosDirectoryURL) {
+        dblocation = !!first.location && first.location === 'default' ? iosLocationMap['default'] : !!first.iosDatabaseLocation ? iosLocationMap[first.iosDatabaseLocation] : dblocations[first.location];
+        if (!dblocation) {
+          throw newSQLError('Valid iOS database location could not be determined in deleteDatabase call');
+        }
       }
       args.dblocation = dblocation;
       delete SQLitePlugin.prototype.openDBs[args.path];
