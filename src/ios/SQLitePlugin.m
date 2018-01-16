@@ -84,15 +84,14 @@
     }
 
     NSString *dbdir = [appDBPaths objectForKey:atkey];
-    NSString *dbPath = [dbdir stringByAppendingPathComponent: dbFile];
-    return dbPath;
+    return [self getDBPath:dbFile inDirectory:dbdir];
 }
 
 -(id) getDBPath:(NSString *)dbFile inDirectory:(NSString *)directory {
     if (dbFile == NULL || directory == NULL) {
         return NULL;
     }
-    
+
     NSString *dbPath = [directory stringByAppendingPathComponent: dbFile];
     return dbPath;
 }
