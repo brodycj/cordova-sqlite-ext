@@ -627,8 +627,10 @@
         if (!dblocation) {
           throw newSQLError('Valid iOS database location could not be determined in deleteDatabase call');
         }
+        args.dblocation = dblocation;
+      } else {
+        args.iosDirectoryURL = first.iosDirectoryURL;
       }
-      args.dblocation = dblocation;
       delete SQLitePlugin.prototype.openDBs[args.path];
       return cordova.exec(success, error, "SQLitePlugin", "delete", [args]);
     }
