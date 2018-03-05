@@ -1,5 +1,9 @@
 # Changes
 
+## cordova-sqlite-ext 2.1.1
+
+- cordova-sqlite-ext with SQLITE_THREADSAFE=1 for iOS/macOS ref: litehelpers/Cordova-sqlite-storage#754
+
 ## cordova-sqlite-ext 2.1.0
 
 - cordova-sqlite-ext build fixes & updates

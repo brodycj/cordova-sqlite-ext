@@ -139,7 +139,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
 - _BLOB column values are NO LONGER automatically converted to Base64 format. MUST use SELECT BASE64(column) to return column value in Base64 format as documented below._
 - SQLite version `3.15.2` included when building with the following build settings:
-  - `SQLITE_THREADSAFE=2`
+  - `SQLITE_THREADSAFE=1` for iOS/macOS (`SQLITE_THREADSAFE=2` for Android/Windows)
   - `SQLITE_DEFAULT_MEMSTATUS=0`
   - `SQLITE_OMIT_DECLTYPE`
   - `SQLITE_OMIT_DEPRECATED`
