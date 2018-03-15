@@ -131,16 +131,16 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 - New major release under development, with the following major changes:
   - TBD
-- NOT supported by PhoneGap Developer App or PhoneGap Desktop App
+- This plugin is NOT supported by PhoneGap Developer App or PhoneGap Desktop App.
 - This plugin will NOT work on `cordova-android@7` due to issue with JAR and NDK library files as discussed in [litehelpers/Cordova-sqlite-storage#729](https://github.com/litehelpers/Cordova-sqlite-storage/issues/729).
-- A recent version of the Cordova CLI (such as `6.5.0` / `7.1.0`) is recommended. (Cordova CLI 8.x includes `cordova-android@7`, NOT supported by this plugin due to [litehelpers/Cordova-sqlite-storage#729](https://github.com/litehelpers/Cordova-sqlite-storage/issues/729).) Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes. In addition it is *required* to use `cordova prepare` in case of cordova-ios older than `4.3.0` (Cordova CLI `6.4.0`).
-- This plugin version branch uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
-- Other build systems such as Cordova Plugman, PhoneGap CLI, PhoneGap Build, and Intel XDK are no longer supported since they do not honor the `before_plugin_install` hook. The supported solution is to use [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (available with GPL or commercial license terms) or [litehelpers / Cordova-sqlite-legacy-build-support](https://github.com/litehelpers/Cordova-sqlite-legacy-build-support) (limited testing, limited updates)
-- This version includes the following extra features:
+- A recent version of the Cordova CLI (such as `6.5.0` / `7.1.0` / `8.0.0`) is recommended. Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes. In addition it may be needed to use `cordova prepare` in case of cordova-ios older than `4.3.0` (Cordova CLI `6.4.0`).
+- This plugin version uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
+- Use of other systems such as Cordova Plugman, PhoneGap CLI, PhoneGap Build, and Intel XDK is no longer supported by this plugin version since they do not honor the `before_plugin_install` hook. The supported solution is to use [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license terms); alternative with permissive license terms is available at: [brodybits / cordova-sqlite-legacy-build-support](https://github.com/brodybits/cordova-sqlite-legacy-build-support) (limited testing, limited updates).
+- This plugin version includes the following extra features:
   - Pre-populated database support for all platforms Android/iOS/Windows;
   - BASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
-- _BLOB column values are NO LONGER automatically converted to Base64 format. MUST use SELECT BASE64(column) to return column value in Base64 format as documented below._
+- BLOB column values are NO LONGER automatically converted to Base64 format. MUST use SELECT BASE64(column) to return column value in Base64 format as documented below.
 - SQLite version `3.15.2` included when building with the following build settings:
   - `SQLITE_THREADSAFE=2` on iOS/macOS (`SQLITE_THREADSAFE=1` on Android/Windows)
   - `SQLITE_DEFAULT_MEMSTATUS=0` (_iOS/macOS/Windows_)
@@ -156,21 +156,21 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - `SQLITE_ENABLE_RTREE`
   - `SQLITE_DEFAULT_PAGE_SIZE=1024` and `SQLITE_DEFAULT_CACHE_SIZE=2000` to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
   - `SQLITE_OMIT_BUILTIN_TEST` - TBD unwanted option to be removed in the near future (_Android only_)
-  - `SQLITE_OS_WINRT` (Windows only)
+  - `NDEBUG` on Windows (Release build only)
 - The iOS database location is now mandatory, as documented below.
 - This version branch supports the use of two (2) possible Android sqlite database implementations:
   - default: lightweight [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector) (using [brodybits / Android-sqlite-ext-native-driver](https://github.com/brodybits/Android-sqlite-ext-native-driver))
   - optional: built-in Android database classes (usage described below)
-- Windows 8.1 and Windows Phone 8.1 are no longer supported by this _plugin version_. _Windows 8.1 and Windows Phone 8.1_ support is available _(with the extra BASE64, REGEXP, and pre-populated database features included) in: [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy)._
+- Windows 8.1 and Windows Phone 8.1 are no longer supported by this plugin version. Windows 8.1 and Windows Phone 8.1 support is available (with the extra BASE64, REGEXP, and pre-populated database features included) in: [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy).
 - Amazon Fire-OS is dropped due to lack of support by Cordova. Android platform version should be used to deploy to Fire-OS 5.0(+) devices. For reference: [cordova/cordova-discuss#32 (comment)](https://github.com/cordova/cordova-discuss/issues/32#issuecomment-167021676)
 - Windows platform version (using a customized version of the performant [doo / SQLite3-WinRT](https://github.com/doo/SQLite3-WinRT) C++ component) has the following known limitations:
-  - This _plugin version branch_ has dependency on platform toolset libraries included by Visual Studio 2017 ([litehelpers/Cordova-sqlite-storage#580](https://github.com/litehelpers/Cordova-sqlite-storage/issues/580)). _Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED)_
-  - It is **not** possible to use this plugin with the default "Any CPU" target. A specific target CPU type **must** be specified when building an app with this plugin.
+  - This plugin version has dependency on platform toolset libraries included by Visual Studio 2017 ([litehelpers/Cordova-sqlite-storage#580](https://github.com/litehelpers/Cordova-sqlite-storage/issues/580)). Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED, permissive license terms) as well as [litehelpers / Cordova-sqlite-evcore-common-free](https://github.com/litehelpers/Cordova-sqlite-evcore-common-free) (GPL or commercial license terms, with performance enhancements for Android, missing pre-populated database support). UNTESTED workaround for Visual Studio 2015: it *may* be possible to support this plugin version on Visual Studio 2015 Update 3 by installing platform toolset v141.
+  - It is NOT possible to use this plugin with the default "Any CPU" target. A specific target CPU type MUST be specified when building an app with this plugin.
   - Truncation issue with UNICODE `\u0000` character (same as `\0`)
   - No background processing
   - INCORRECT error code (0) and INCONSISTENT error message (missing actual error info) in error callbacks ref: [litehelpers/Cordova-sqlite-storage#539](https://github.com/litehelpers/Cordova-sqlite-storage/issues/539)
-  - _REGEXP is currently not supported on Windows_.
-  - Not possible to _directly select_ BLOB column values _- MUST use BASE64 function to select BLOB values as documented below_
+  - REGEXP is currently not supported on Windows.
+  - It is NOT possible to SELECT BLOB column values directly. It is recommended to use built-in HEX function (also supported by (WebKit) Web SQL) or non-standard BASE64 function (as documented below) to retrieve BLOB column values hex or Base-64 format.
   - Windows platform version uses `UTF-16le` internal database encoding while the other platform versions use `UTF-8` internal encoding. (`UTF-8` internal encoding is preferred ref: [litehelpers/Cordova-sqlite-storage#652](https://github.com/litehelpers/Cordova-sqlite-storage/issues/652))
 - The macOS platform version ("osx" platform) is not tested in a release build and should be considered pre-alpha.
 - Android versions supported: 2.3.3 - 7.1.1 (API level 10 - 25), depending on Cordova version ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
@@ -186,7 +186,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Announcements
 
-- _This plugin version references Windows platform toolset v141 to support Visual Studio 2017. Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED)_
+- This plugin version references Windows platform toolset v141 to support Visual Studio 2017. Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED).
 - Ionic 3 starter template is available at: [iursevla / ionic3-PreDB](https://github.com/iursevla/ionic3-PreDB), Unlicense (public domain)
 - Ionic 2 starter template is available at: [iursevla / ionic2-PreDB](https://github.com/iursevla/ionic2-PreDB), Unlicense (public domain)
 - Advanced Ionic v1.x starter template with pre-populated SQLite database at: [jdnichollsc / Ionic-Starter-Template](https://github.com/jdnichollsc/Ionic-Starter-Template) (MIT license)
@@ -198,7 +198,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - Fixed iOS/macOS platform version to use [PSPDFThreadSafeMutableDictionary.m](https://gist.github.com/steipete/5928916) to avoid threading issue ref: [litehelpers/Cordova-sqlite-storage#716](https://github.com/litehelpers/Cordova-sqlite-storage/issues/716)
 - [brodybits / cordova-sqlite-ext-bootstrap-starter-app](https://github.com/brodybits/cordova-sqlite-ext-bootstrap-starter-app) project is a CC0 (public domain) starting point with a pre-populated database working, may also be used to reproduce issues with this plugin. In addition [brodybits / cordova-sqlite-test-app](https://github.com/brodybits/cordova-sqlite-test-app) may be used to reproduce issues with other versions of this plugin.
 - The Lawnchair adapter is now moved to [litehelpers / cordova-sqlite-lawnchair-adapter](https://github.com/litehelpers/cordova-sqlite-lawnchair-adapter).
-- This _plugin version_ now supports SELECT BLOB data in Base64 format on all platforms in addition to REGEXP (Android/iOS/macOS) and pre-populated database (all platforms).
+- This plugin version now supports SELECT BLOB data in Base64 format on all platforms in addition to REGEXP (Android/iOS/macOS) and pre-populated database (all platforms).
 - [brodybits / sql-promise-helper](https://github.com/brodybits/sql-promise-helper) provides a Promise-based API wrapper.
 - [nolanlawson / pouchdb-adapter-cordova-sqlite](https://github.com/nolanlawson/pouchdb-adapter-cordova-sqlite) supports this plugin along with other implementations such as [nolanlawson / sqlite-plugin-2](https://github.com/nolanlawson/sqlite-plugin-2) and [Microsoft / cordova-plugin-websql](https://github.com/Microsoft/cordova-plugin-websql).
 - macOS ("osx" platform) is now supported
@@ -274,7 +274,7 @@ The Windows platform can present a number of challenges which increase when usin
 Use the following command to install this plugin from the Cordova CLI:
 
 ```shell
-cordova plugin add cordova-sqlite-ext --save
+cordova plugin add cordova-sqlite-ext # --save RECOMMENDED for Cordova CLI pre-7.0
 ```
 
 Add any desired platform(s) if not already present, for example:
@@ -1266,7 +1266,7 @@ Other resource (apparently for Ionic 1): <https://www.packtpub.com/books/content
 ```shell
 npm install -g cordova # (in case you don't have cordova)
 cordova create MyProjectFolder com.my.project MyProject && cd MyProjectFolder # if you are just starting
-cordova plugin add cordova-sqlite-ext --save
+cordova plugin add cordova-sqlite-ext # --save RECOMMENDED for Cordova CLI pre-7.0
 cordova platform add <desired platform> # repeat for all desired platform(s)
 cordova prepare # OPTIONAL (MANDATORY cordova-ios older than 4.3.0 (Cordova CLI 6.4.0))
 ```
@@ -1410,7 +1410,6 @@ Please include the following:
 
 ## Where to ask for help
 
-Once you have followed the directions above, you may request free support in the following location(s):
 - [litehelpers / cordova-sqlite-ext / issues](https://github.com/litehelpers/Cordova-sqlite-ext/issues)
 - [litehelpers / Cordova-sqlite-help](https://github.com/litehelpers/Cordova-sqlite-help)
 
