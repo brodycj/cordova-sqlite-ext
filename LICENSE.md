@@ -26,6 +26,8 @@ by @doo (doo GmbH)
 
 MIT License
 
+## Other components
+
 ### Android-sqlite-connector
 
 Unlicense (public domain)
@@ -44,8 +46,8 @@ Unlicense (public domain)
 
 ### libb64-encode
 
-Based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
+Based on <http://libb64.sourceforge.net/> by Chris Venter, public domain
 
 ### SQLite3
 
-Public domain
+<https://sqlite.org/>, public domain
