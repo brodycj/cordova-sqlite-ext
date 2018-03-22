@@ -3213,8 +3213,9 @@ var mytests = function() {
           }, function(error) {
             // EXPECTED RESULT for (WebKit) Web SQL ONLY:
             if (!isWebSql) expect('Plugin BEHAVIOR CHANGED, please update this test').toBe('--');
-            if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
-              expect(check1).toBe(true);
+            //* XXX (TBD) ???:
+            //* if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
+            //*   expect(check1).toBe(true);
             expect(error).toBeDefined();
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
@@ -3268,8 +3269,9 @@ var mytests = function() {
           }, function(error) {
             // EXPECTED RESULT for (WebKit) Web SQL ONLY:
             if (!isWebSql) expect('Plugin BEHAVIOR CHANGED, please update this test').toBe('--');
-            if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
-              expect(check1).toBe(true);
+            //* XXX (TBD) ???:
+            //* if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
+            //*   expect(check1).toBe(true);
             expect(error).toBeDefined();
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
@@ -3323,8 +3325,9 @@ var mytests = function() {
           }, function(error) {
             // EXPECTED RESULT for (WebKit) Web SQL ONLY:
             if (!isWebSql) expect('Plugin BEHAVIOR CHANGED, please update this test').toBe('--');
-            if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
-              expect(check1).toBe(true);
+            //* XXX (TBD) ???:
+            //* if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
+            //*   expect(check1).toBe(true);
             expect(error).toBeDefined();
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
@@ -3378,8 +3381,9 @@ var mytests = function() {
           }, function(error) {
             // EXPECTED RESULT for (WebKit) Web SQL ONLY:
             if (!isWebSql) expect('Plugin BEHAVIOR CHANGED, please update this test').toBe('--');
-            if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
-              expect(check1).toBe(true);
+            //* XXX (TBD) ???:
+            //* if (isWebSql && isAndroid && !(/Android [1-4]/.test(navigator.userAgent)))
+            //*   expect(check1).toBe(true);
             expect(error).toBeDefined();
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
