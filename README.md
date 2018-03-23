@@ -132,7 +132,6 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - New major release under development, with the following major changes:
   - TBD
 - This plugin is NOT supported by PhoneGap Developer App or PhoneGap Desktop App.
-- This plugin will NOT work on `cordova-android@7` due to issue with JAR and NDK library files as discussed in [litehelpers/Cordova-sqlite-storage#729](https://github.com/litehelpers/Cordova-sqlite-storage/issues/729).
 - A recent version of the Cordova CLI (such as `6.5.0` / `7.1.0` / `8.0.0`) is recommended. Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes. In addition it may be needed to use `cordova prepare` in case of cordova-ios older than `4.3.0` (Cordova CLI `6.4.0`).
 - This plugin version uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
 - Use of other systems such as Cordova Plugman, PhoneGap CLI, PhoneGap Build, and Intel XDK is no longer supported by this plugin version since they do not honor the `before_plugin_install` hook. The supported solution is to use [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license terms); alternative with permissive license terms is available at: [brodybits / cordova-sqlite-legacy-build-support](https://github.com/brodybits/cordova-sqlite-legacy-build-support) (limited testing, limited updates).
@@ -141,21 +140,23 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - BASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
 - BLOB column values are NO LONGER automatically converted to Base64 format. MUST use SELECT BASE64(column) to return column value in Base64 format as documented below.
-- SQLite version `3.15.2` included when building with the following build settings:
-  - `SQLITE_THREADSAFE=2` on iOS/macOS (`SQLITE_THREADSAFE=1` on Android/Windows)
-  - `SQLITE_DEFAULT_MEMSTATUS=0` (_iOS/macOS/Windows_)
-  - `SQLITE_OMIT_DECLTYPE` (_iOS/macOS/Windows_)
-  - `SQLITE_OMIT_DEPRECATED` (_iOS/macOS/Windows_)
-  - `SQLITE_OMIT_PROGRESS_CALLBACK` (_iOS/macOS/Windows_)
-  - `SQLITE_OMIT_SHARED_CACHE` (_iOS/macOS/Windows_)
+- SQLite version `3.22.0` included when building with the following build settings:
+  - `SQLITE_THREADSAFE=1`
+  - `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE build setting) ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)
+  - `SQLITE_DEFAULT_MEMSTATUS=0`
+  - `SQLITE_OMIT_DECLTYPE`
+  - `SQLITE_OMIT_DEPRECATED`
+  - `SQLITE_OMIT_PROGRESS_CALLBACK`
+  - `SQLITE_OMIT_SHARED_CACHE`
   - `SQLITE_TEMP_STORE=2`
   - `SQLITE_OMIT_LOAD_EXTENSION`
   - `SQLITE_ENABLE_FTS3`
   - `SQLITE_ENABLE_FTS3_PARENTHESIS`
   - `SQLITE_ENABLE_FTS4`
+  - `SQLITE_ENABLE_FTS5`
   - `SQLITE_ENABLE_RTREE`
+  - `SQLITE_ENABLE_JSON1`
   - `SQLITE_DEFAULT_PAGE_SIZE=1024` and `SQLITE_DEFAULT_CACHE_SIZE=2000` to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
-  - `SQLITE_OMIT_BUILTIN_TEST` - TBD unwanted option to be removed in the near future (_Android only_)
   - `NDEBUG` on Windows (Release build only)
 - The iOS database location is now mandatory, as documented below.
 - This version branch supports the use of two (2) possible Android sqlite database implementations:
@@ -175,7 +176,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - The macOS platform version ("osx" platform) is not tested in a release build and should be considered pre-alpha.
 - Android versions supported: 2.3.3 - 7.1.1 (API level 10 - 25), depending on Cordova version ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
 - iOS versions supported: 8.x / 9.x / 10.x / 11.x (see [deviations section](#deviations) below for differences in case of WKWebView)
-- FTS3, FTS4, and R-Tree are fully tested and supported for all target platforms in this version branch.
+- FTS3, FTS4, FTS5, R-Tree, and JSON1 are fully tested and supported for all target platforms in this version branch.
 - Default `PRAGMA journal_mode` setting (*tested*):
   - Android (builtin android.database implementation _as selected using the `androidDatabaseImplementation` option in `window.sqlitePlugin.openDatabase`_): `persist` _(Android pre-8.0)_
   - otherwise: `delete`
@@ -186,6 +187,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Announcements
 
+- Using recent version of SQLite3 (`3.22.0`) with `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE) build setting to be extra robust against possible database corruption ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)
 - This plugin version references Windows platform toolset v141 to support Visual Studio 2017. Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED).
 - Ionic 3 starter template is available at: [iursevla / ionic3-PreDB](https://github.com/iursevla/ionic3-PreDB), Unlicense (public domain)
 - Ionic 2 starter template is available at: [iursevla / ionic2-PreDB](https://github.com/iursevla/ionic2-PreDB), Unlicense (public domain)
@@ -469,7 +471,6 @@ See **Security of sensitive data** in the [Security](#security) section above.
 
 ## Known issues
 
-- This plugin will NOT work on `cordova-android@7` due to issue with JAR and NDK library files as discussed in [litehelpers/Cordova-sqlite-storage#729](https://github.com/litehelpers/Cordova-sqlite-storage/issues/729).
 - The iOS/macOS platform versions do not support certain rapidly repeated open-and-close or open-and-delete test scenarios due to how the implementation handles background processing
 - The Android platform version does not always handle four-byte UTF-8 characters emoji characters such as `\u1F603` (SMILING FACE, MOUTH OPEN) correctly ref: [litehelpers/Cordova-sqlite-storage#564](https://github.com/litehelpers/Cordova-sqlite-storage/issues/564). It is sometimes possible to store and retrieve such characters but certain operations such as hex conversions do not work properly when using the default [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector) database implementation. It is suspected that such characters would be stored incorrectly by the default Android platform version. Note that this is not an issue in case the built-in Android database is used (using the `androidDatabaseImplementation: 2` setting in `window.sqlitePlugin.openDatabase`)
 - It is possible to request a SQL statement list such as "SELECT 1; SELECT 2" within a single SQL statement string, however the plugin will only execute the first statement and silently ignore the others ref: [litehelpers/Cordova-sqlite-storage#551](https://github.com/litehelpers/Cordova-sqlite-storage/issues/551)

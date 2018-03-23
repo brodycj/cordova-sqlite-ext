@@ -2,7 +2,12 @@
 
 ### cordova-sqlite-ext 3.0.0-0.00+dev
 
-TBD
+- cordova-sqlite-ext build fixes & updates for 3.0.0
+  - use cordova-sqlite-ext-deps 1.1.0 with SQLite 3.22.0
+  - SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) compile-time setting on all platforms ref: litehelpers/Cordova-sqlite-storage#736
+  - plugin.xml use lib-file for Android sqlite-native-driver NDK build in JAR to resolve issue on cordova-android@7 (along with other compile-time option updates) ref: litehelpers/Cordova-sqlite-storage#729
+  - cordova-sqlite-ext with SQLITE_THREADSAFE=1 for iOS/macOS ref: litehelpers/Cordova-sqlite-storage#754
+  - Enable FTS5 & JSON1 on all platforms
 
 ## cordova-sqlite-ext 2.0.0
 
