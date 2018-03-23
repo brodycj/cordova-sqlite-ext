@@ -1,7 +1,8 @@
 # Changes
 
-## cordova-sqlite-ext 2.2.0-pre0
+## cordova-sqlite-ext 2.2.0
 
+- Use SQLite 3.22.0 with SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) compile-time setting on all platforms (using cordova-sqlite-ext-deps 1.1.0) ref: litehelpers/Cordova-sqlite-storage#736
 - remove bogus jar (accidentally added in cordova-sqlite-ext 2.1.0)
 
 ## cordova-sqlite-ext 2.1.1
