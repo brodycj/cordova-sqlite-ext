@@ -8,7 +8,7 @@ License terms for iOS/macOS platform version: MIT only
 
 ## About this version branch
 
-Version with extra features: REGEXP (Android/iOS/macOS), BASE64, and pre-populated databases
+New major release (cordova-sqlite-ext@3.0.0-0.xx) with extended features: REGEXP (Android/iOS/macOS), BASE64, and pre-populated databases
 
 This version branch uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-storage-dependencies` via npm.
 
@@ -129,6 +129,8 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Status
 
+- New major release under development, with the following major changes:
+  - TBD
 - NOT supported by PhoneGap Developer App or PhoneGap Desktop App
 - This plugin will NOT work on `cordova-android@7` due to issue with JAR and NDK library files as discussed in [litehelpers/Cordova-sqlite-storage#729](https://github.com/litehelpers/Cordova-sqlite-storage/issues/729).
 - A recent version of the Cordova CLI (such as `6.5.0` / `7.1.0`) is recommended. (Cordova CLI 8.x includes `cordova-android@7`, NOT supported by this plugin due to [litehelpers/Cordova-sqlite-storage#729](https://github.com/litehelpers/Cordova-sqlite-storage/issues/729).) Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes. In addition it is *required* to use `cordova prepare` in case of cordova-ios older than `4.3.0` (Cordova CLI `6.4.0`).
