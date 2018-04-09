@@ -143,7 +143,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 ## Status
 
 - New major release under development, with the following major changes:
-  - TBD
+  - _Typings in `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) (community support)_
 - This plugin is NOT supported by PhoneGap Developer App or PhoneGap Desktop App.
 - A recent version of the Cordova CLI (such as `6.5.0` / `7.1.0` / `8.0.0`) is recommended. Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes. In addition it may be needed to use `cordova prepare` in case of cordova-ios older than `4.3.0` (Cordova CLI `6.4.0`).
 - This plugin version uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
@@ -200,6 +200,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Announcements
 
+- _Typings in `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) is now available with community support._
 - Using recent version of SQLite3 (`3.22.0`) with `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE) build setting to be extra robust against possible database corruption ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)
 - This plugin version references Windows platform toolset v141 to support Visual Studio 2017. Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED).
 - Ionic 3 starter template is available at: [iursevla / ionic3-PreDB](https://github.com/iursevla/ionic3-PreDB), Unlicense (public domain)
@@ -1674,6 +1675,7 @@ function closeDB() {
 - `scripts`: installation hook script to fetch the external dependencies via `npm`
 - `spec`: test suite using Jasmine (`2.4.1`)
 - `tests`: very simple Jasmine test suite that is run on Circle CI (Android platform) and Travis CI (iOS platform) (used as a placeholder)
+- _`types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) (community support)_
 
 <!-- END Source tree -->
 
