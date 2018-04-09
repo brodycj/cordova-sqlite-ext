@@ -9,6 +9,26 @@
   - cordova-sqlite-ext with SQLITE_THREADSAFE=1 for iOS/macOS ref: litehelpers/Cordova-sqlite-storage#754
   - Enable FTS5 & JSON1 on all platforms
 
+#### cordova-sqlite-storage 2.2.1
+
+- Fix Android/iOS src copyright, perpetually
+
+#### cordova-sqlite-storage 2.2.0
+
+- Fix SQLiteAndroidDatabase implementation for Turkish and other foreign locales
+
+#### cordova-sqlite-storage 2.1.5
+
+##### cordova-sqlite-legacy-core 1.0.7
+
+- Add error info text in case of close error on Windows
+- Signal INTERNAL ERROR in case of attempt to reuse db on Windows (should never happen due to workaround solution to BUG 666)
+
+###### cordova-sqlite-legacy-express-core 1.0.5
+
+- iOS/macOS @synchronized guard for sqlite3_open operation
+- Signal INTERNAL ERROR in case of attempt to reuse db (Android/iOS) (should never happen due to workaround solution to BUG 666)
+
 ## cordova-sqlite-ext 2.0.0
 
 ## cordova-sqlite-storage 2.1.4
