@@ -187,7 +187,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - It is NOT possible to SELECT BLOB column values directly. It is recommended to use built-in HEX function (also supported by (WebKit) Web SQL) or non-standard BASE64 function (as documented below) to retrieve BLOB column values hex or Base-64 format.
   - Windows platform version uses `UTF-16le` internal database encoding while the other platform versions use `UTF-8` internal encoding. (`UTF-8` internal encoding is preferred ref: [litehelpers/Cordova-sqlite-storage#652](https://github.com/litehelpers/Cordova-sqlite-storage/issues/652))
 - The macOS platform version ("osx" platform) is not tested in a release build and should be considered pre-alpha.
-- Android versions supported: 2.3.3 - 8.1 (API level 10 - 27), tested on Android 4.4 - 8.1 (API 19 - 27) ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
+- Android versions supported: 2.3.3 - 8.1 (API level 10 - 27), tested on Android 4.1 - 8.1 (API level 16 - 27) (cordova-android pre-7.0 needed to support Android pre-4.4 ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>)
 - iOS versions supported: 8.0 - 11.x, tested on iOS 9.0 - 11.x (see [deviations section](#deviations) below for differences in case of WKWebView)
 - FTS3, FTS4, FTS5, R-Tree, and JSON1 are fully tested and supported for all target platforms in this version branch.
 - Default `PRAGMA journal_mode` setting (*tested*):

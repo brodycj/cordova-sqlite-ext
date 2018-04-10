@@ -61,7 +61,7 @@ var mytests = function() {
           // XXX TBD ???:
           if (isWP8) pending('BROKEN for WP(8)'); // (???)
           // if (isWindows) pending('BROKEN for Windows'); // XXX (??)
-          // if (/Android 4/.test(navigator.userAgent)) pending('...'); // XXX TBD
+          if (/Android 4.[1-3]/.test(navigator.userAgent)) pending('SKIP for Android 4.1-4.3');
 
           // IMPORTANT:
           if (typeof Blob === "undefined") pending('Blob type does not exist');

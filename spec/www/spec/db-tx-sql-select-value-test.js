@@ -79,7 +79,7 @@ var mytests = function() {
       // 2. Cordova-sqlcipher-adapter version of this plugin
       if (isAndroid)
         it(suiteName + 'Android ICU-UNICODE string manipulation test', function(done) {
-          // if (isWebSql && /Android 4/.test(navigator.userAgent)) pending('SKIP for (WebKit) Web SQL on Android 4.x');
+          if (isWebSql && /Android 4.[1-3]/.test(navigator.userAgent)) pending('SKIP for (WebKit) Web SQL on Android 4.1-4.3'); // XXX TBD
           if (!isWebSql) pending('SKIP for plugin');
 
           var db = openDatabase('ICU-UNICODE-string-manipulation-results-test.db', '1.0', 'Test', DEFAULT_SIZE);
@@ -1765,44 +1765,58 @@ var mytests = function() {
 
       describe(suiteName + 'Inline BLOB value SELECT result tests', function() {
 
-        it(suiteName + "SELECT LOWER(X'40414243')", function(done) {
-          if (isWindows) pending('SKIP: BROKEN for Windows');
-
+        it(suiteName + "SELECT LOWER(X'40414243') [TBD NOT SUPPORTED: SELECT ERROR EXPECTED on Windows; INCORRECT RESULT IGNORED on Android 4.0-4.4 (WebKit) Web SQL]", function(done) {
           var db = openDatabase("Inline-BLOB-lower-result-test.db", "1.0", "Demo", DEFAULT_SIZE);
 
           db.transaction(function(tx) {
-
             tx.executeSql("SELECT LOWER(X'40414243') AS myresult", [], function(ignored, rs) {
+              if (isWindows) expect('Behavior changed please update this test').toBe('--');
               expect(rs).toBeDefined();
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(1);
-              expect(rs.rows.item(0).myresult).toBe('@abc');
+              if (isWebSql && isAndroid && /Android 4.[1-3]/.test(navigator.userAgent))
+                expect(rs.rows.item(0).myresult).toBeDefined(); // [INCORRECT RESULT IGNORED on Android 4.0-4.4 (WebKit) Web SQL]
+              else
+                expect(rs.rows.item(0).myresult).toBe('@abc');
+
+              // Close (plugin only) & finish:
+              (isWebSql) ? done() : db.close(done, done);
+            }, function(ignored, error) {
+              if (isWindows || (!isWebSql && isAndroid && isImpl2)) {
+                expect(error).toBeDefined();
+                expect(error.code).toBeDefined();
+                expect(error.message).toBeDefined();
+
+                // TBD wrong error code
+                expect(error.code).toBe(0);
+                // TBD error message
+              } else {
+                // NOT EXPECTED:
+                expect(false).toBe(true);
+                expect(error.message).toBe('---');
+              }
 
               // Close (plugin only) & finish:
               (isWebSql) ? done() : db.close(done, done);
             });
-          }, function(error) {
-            // NOT EXPECTED:
-            expect(false).toBe(true);
-            expect(error.message).toBe('---');
-            // Close (plugin only) & finish:
-            (isWebSql) ? done() : db.close(done, done);
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "SELECT X'40414243' [TBD BROKEN androidDatabaseImplementation: 2 & Windows]", function(done) {
+        it(suiteName + "SELECT X'40414243' [TBD NOT SUPPORTED: SELECT ERROR on androidDatabaseImplementation: 2 & Windows; INCORRECT RESULT IGNORED on Android 4.0-4.4 (WebKit) Web SQL]", function(done) {
           if (isWP8) pending('SKIP for WP8'); // [BROKEN]
 
           var db = openDatabase("Inline-BLOB-SELECT-result-40414243-test.db", "1.0", "Demo", DEFAULT_SIZE);
 
           db.transaction(function(tx) {
-
             tx.executeSql("SELECT X'40414243' AS myresult", [], function(ignored, rs) {
               if (isWindows || (!isWebSql && isAndroid && isImpl2)) expect('Behavior changed please update this test').toBe('--');
               expect(rs).toBeDefined();
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(1);
-              expect(rs.rows.item(0).myresult).toBe('@ABC');
+              if (isWebSql && isAndroid && /Android 4.[1-3]/.test(navigator.userAgent))
+                expect(rs.rows.item(0).myresult).toBeDefined(); // [INCORRECT RESULT IGNORED on Android 4.0-4.4 (WebKit) Web SQL]
+              else
+                expect(rs.rows.item(0).myresult).toBe('@ABC');
 
               // Close (plugin only) & finish:
               (isWebSql) ? done() : db.close(done, done);
