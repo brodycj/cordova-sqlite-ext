@@ -143,7 +143,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 ## Status
 
 - New major release under development, with the following major changes:
-  - _Typings in `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) (community support)_
+  - Typings in `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) (community support)
 - This plugin is NOT supported by PhoneGap Developer App or PhoneGap Desktop App.
 - A recent version of the Cordova CLI (such as `6.5.0` / `7.1.0` / `8.0.0`) is recommended. Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes. In addition it may be needed to use `cordova prepare` in case of cordova-ios older than `4.3.0` (Cordova CLI `6.4.0`).
 - This plugin version uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
@@ -187,8 +187,8 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - It is NOT possible to SELECT BLOB column values directly. It is recommended to use built-in HEX function (also supported by (WebKit) Web SQL) or non-standard BASE64 function (as documented below) to retrieve BLOB column values hex or Base-64 format.
   - Windows platform version uses `UTF-16le` internal database encoding while the other platform versions use `UTF-8` internal encoding. (`UTF-8` internal encoding is preferred ref: [litehelpers/Cordova-sqlite-storage#652](https://github.com/litehelpers/Cordova-sqlite-storage/issues/652))
 - The macOS platform version ("osx" platform) is not tested in a release build and should be considered pre-alpha.
-- Android versions supported: 2.3.3 - 7.1.1 (API level 10 - 25), depending on Cordova version ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
-- iOS versions supported: 8.x / 9.x / 10.x / 11.x (see [deviations section](#deviations) below for differences in case of WKWebView)
+- Android versions supported: 2.3.3 - 8.1 (API level 10 - 27), tested on Android 4.4 - 8.1 (API 19 - 27) ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
+- iOS versions supported: 8.0 - 11.x, tested on iOS 9.0 - 11.x (see [deviations section](#deviations) below for differences in case of WKWebView)
 - FTS3, FTS4, FTS5, R-Tree, and JSON1 are fully tested and supported for all target platforms in this version branch.
 - Default `PRAGMA journal_mode` setting (*tested*):
   - Android with builtin android.database implementation (as selected using the `androidDatabaseImplementation` option in `window.sqlitePlugin.openDatabase`): `persist` (pre-8.x) / `truncate` (Android 8+)
@@ -200,7 +200,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Announcements
 
-- _Typings in `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) is now available with community support._
+- Typings in `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) is now available with community support.
 - Using recent version of SQLite3 (`3.22.0`) with `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE) build setting to be extra robust against possible database corruption ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)
 - This plugin version references Windows platform toolset v141 to support Visual Studio 2017. Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED).
 - Ionic 3 starter template is available at: [iursevla / ionic3-PreDB](https://github.com/iursevla/ionic3-PreDB), Unlicense (public domain)
@@ -1675,7 +1675,7 @@ function closeDB() {
 - `scripts`: installation hook script to fetch the external dependencies via `npm`
 - `spec`: test suite using Jasmine (`2.4.1`)
 - `tests`: very simple Jasmine test suite that is run on Circle CI (Android platform) and Travis CI (iOS platform) (used as a placeholder)
-- _`types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) (community support)_
+- `types/index.d.ts` by [@matrosov-nikita (Nikita Matrosov)](https://github.com/matrosov-nikita) (community support)
 
 <!-- END Source tree -->
 
