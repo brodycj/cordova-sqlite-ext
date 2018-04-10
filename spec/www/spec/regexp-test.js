@@ -42,7 +42,6 @@ var mytests = function() {
         function(done) {
           if (isWP8) pending('NOT IMPLEMENTED for WP8 (plugin)');
           if (isWindows) pending('NOT IMPLEMENTED for Windows (plugin)');
-          //if (!isWebSql && !isWindows && isAndroid && isImpl2 && /Android 4/.test(navigator.userAgent)) pending('BROKEN for android.database (Android 4.x)');
           if (isWebSql && !isAndroid && !isWindows && !isWP8) pending('SKIP for iOS (WebKit) Web SQL');
 
           var db = openDatabase('simple-regexp-test.db', '1.0', 'test', DEFAULT_SIZE);
