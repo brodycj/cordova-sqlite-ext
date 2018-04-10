@@ -64,7 +64,7 @@ var mytests = function() {
           if (isWindows) pending('BROKEN for Windows'); // XXX (??)
           if (isWP8) pending('BROKEN for WP(8)'); // (???)
           if (typeof Blob === "undefined") pending('Blob type does not exist');
-          if (/Android [1-4]/.test(navigator.userAgent)) pending('BROKEN for Android [version 1.x-4.x]');
+          if (/Android 4/.test(navigator.userAgent)) pending('BROKEN for Android (4.x)');
           if (isAndroid) pending('SKIP for Android'); // (for now)
 
           // abort the test if ArrayBuffer is undefined

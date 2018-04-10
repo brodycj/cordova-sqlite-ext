@@ -1333,7 +1333,7 @@ var mytests = function() {
                     //
                     // TRUNCATION BUG REPRODUCED on Windows
 
-                    if ((isWebSql && isAndroid && (/Android [2-4]/.test(navigator.userAgent))) ||
+                    if ((isWebSql && isAndroid && (/Android 4/.test(navigator.userAgent))) ||
                         (isWebSql && !isAndroid) ||
                         (!isWebSql && isWindows)) {
                       expect(name.length).toBe(1);
