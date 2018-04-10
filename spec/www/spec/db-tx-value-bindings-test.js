@@ -837,7 +837,7 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INSERT inline BLOB value (X'40414243') and check stored data [TBD SELECT BLOB value ISSUE with androidDatabaseImplementation: 2 & Windows]", function(done) {
+        it(suiteName + "INSERT inline BLOB value (X'40414243') and check stored data [TBD SELECT BLOB value ISSUE EXPECTED on builtin android.database implementation (androidDatabaseImplementation: 2 setting) & Windows]", function(done) {
           var db = openDatabase('INSERT-inline-BLOB-value-and-check-stored-data.db', '1.0', 'Demo', DEFAULT_SIZE);
 
           db.transaction(function(tx) {
@@ -845,7 +845,7 @@ var mytests = function() {
             tx.executeSql('CREATE TABLE IF NOT EXISTS test_table (data)', [], function(ignored1, ignored2) {
 
               tx.executeSql("INSERT INTO test_table VALUES (X'40414243')", [], function(ignored, rs1) {
-
+                // INSERT BLOB value SUCCESS EXPECTED on all plarforms
                 expect(rs1).toBeDefined();
                 expect(rs1.rowsAffected).toBe(1);
 
@@ -859,7 +859,8 @@ var mytests = function() {
                   expect(item.hexValue).toBe('40414243');
 
                   tx.executeSql('SELECT * FROM test_table', [], function(ignored, rs3) {
-                    if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
+                    if (!isWebSql && !isWindows && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
+                    if (isWindows) expect('Behavior changed please update this test').toBe('--');
                     expect(rs3).toBeDefined();
                     expect(rs3.rows).toBeDefined();
                     expect(rs3.rows.length).toBeDefined();
