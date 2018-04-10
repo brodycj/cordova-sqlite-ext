@@ -52,16 +52,16 @@ var mytests = function() {
 
       //describe(scenarioList[i] + ': tx blob test(s)', function() {
 
-        // XXX TBD ENABLED on iOS/macOS ONLY [for now]:
+        // XXX TBD ENABLED on XXX TBD:
         // This test shows that the plugin does not throw an error when trying to serialize
         // a non-standard parameter type. Blob becomes an empty dictionary on iOS, for example,
         // and so this verifies the type is converted to a string and continues. Web SQL does
         // the same but on the JavaScript side and converts to a string like `[object Blob]`.
         it(suiteName + "INSERT Blob from ArrayBuffer (non-standard parameter type)", function(done) {
-          if (isWindows) pending('BROKEN for Windows'); // XXX (??)
+          // XXX TBD ???:
           if (isWP8) pending('BROKEN for WP(8)'); // (???)
-          if (/Android 4/.test(navigator.userAgent)) pending('BROKEN for Android (4.x)');
-          if (isAndroid) pending('SKIP for Android'); // (for now)
+          // if (isWindows) pending('BROKEN for Windows'); // XXX (??)
+          // if (/Android 4/.test(navigator.userAgent)) pending('...'); // XXX TBD
 
           // IMPORTANT:
           if (typeof Blob === "undefined") pending('Blob type does not exist');
