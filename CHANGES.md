@@ -2,6 +2,7 @@
 
 ### cordova-sqlite-ext 3.0.0-0.00+dev
 
+- Disable support for Android 2.x (pre API 11) in src
 - cordova-sqlite-ext build fixes & updates for 3.0.0
   - use cordova-sqlite-ext-deps 1.1.0 with SQLite 3.22.0
   - SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) compile-time setting on all platforms ref: litehelpers/Cordova-sqlite-storage#736

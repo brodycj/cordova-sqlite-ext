@@ -52,7 +52,12 @@ class SQLiteAndroidDatabase
     private static final Pattern DELETE_TABLE_NAME = Pattern.compile("^\\s*DELETE\\s+FROM\\s+(\\S+)",
             Pattern.CASE_INSENSITIVE);
 
+    /**
+     * NO LONGER NEEDED for Android 2.x (pre API 11)
+     * in this plugin version:
+     *
     private static final boolean isPostHoneycomb = android.os.Build.VERSION.SDK_INT >= 11;
+     */
 
     File dbFile;
 
@@ -118,7 +123,12 @@ class SQLiteAndroidDatabase
         cbc.success(batchResults);
     }
 
+    /**
+     * NO LONGER NEEDED for Android 2.x (pre API 11)
+     * in this plugin version:
+     *
     @SuppressLint("NewApi")
+     */
     private void executeSqlBatchStatement(String query, JSONArray json_params, JSONArray batchResults) {
 
         if (mydb == null) {
@@ -126,9 +136,13 @@ class SQLiteAndroidDatabase
             return;
 
         } else {
-
+            /**
+             * NO LONGER NEEDED for Android 2.x (pre API 11)
+             * in this plugin version:
+             *
             int rowsAffectedCompat = 0;
             boolean needRowsAffectedCompat = false;
+             */
 
             JSONObject queryResult = null;
 
@@ -143,7 +157,12 @@ class SQLiteAndroidDatabase
                 //Log.v("executeSqlBatch", "query type: " + queryType);
 
                 if (queryType == QueryType.update || queryType == queryType.delete) {
+                    /**
+                     * NO LONGER NEEDED for Android 2.x (pre API 11)
+                     * in this plugin version:
+                     *
                     if (isPostHoneycomb) {
+                     */
                         SQLiteStatement myStatement = mydb.compileStatement(query);
 
                         if (json_params != null) {
@@ -185,12 +204,18 @@ class SQLiteAndroidDatabase
                             queryResult = new JSONObject();
                             queryResult.put("rowsAffected", rowsAffected);
                         }
+                    /**
+                     * NO LONGER NEEDED for Android 2.x (pre API 11) in this plugin version:
+                     * NO LONGER NEEDED for Android 2.x (pre API 11)
+                     * in this plugin version:
+                     *
                     }
 
                     if (needRawQuery) { // for pre-honeycomb behavior
                         rowsAffectedCompat = countRowsAffectedCompat(queryType, query, json_params, mydb);
                         needRowsAffectedCompat = true;
                     }
+                     */
                 }
 
                 // INSERT:
@@ -295,9 +320,15 @@ class SQLiteAndroidDatabase
                         Log.v("executeSqlBatch", "Raw query error=" + errorMessage);
                     }
 
+                    /**
+                     * NO LONGER NEEDED for Android 2.x (pre API 11) in this plugin version:
+                     * NO LONGER NEEDED for Android 2.x (pre API 11)
+                     * in this plugin version:
+                     *
                     if (needRowsAffectedCompat) {
                         queryResult.put("rowsAffected", rowsAffectedCompat);
                     }
+                     */
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -332,6 +363,11 @@ class SQLiteAndroidDatabase
         }
     }
 
+    /**
+     * NO LONGER NEEDED for Android 2.x (pre API 11) in this plugin version:
+     * NO LONGER NEEDED for Android 2.x (pre API 11)
+     * in this plugin version:
+     *
     private final int countRowsAffectedCompat(QueryType queryType, String query, JSONArray json_params,
                                          SQLiteDatabase mydb) throws JSONException {
         // quick and dirty way to calculate the rowsAffected in pre-Honeycomb.  just do a SELECT
@@ -406,6 +442,7 @@ class SQLiteAndroidDatabase
 
         return 0;
     }
+     */
 
     private void bindArgsToStatement(SQLiteStatement myStatement, JSONArray sqlArgs) throws JSONException {
         for (int i = 0; i < sqlArgs.length(); i++) {
@@ -465,17 +502,29 @@ class SQLiteAndroidDatabase
                     for (int i = 0; i < colCount; ++i) {
                         key = cur.getColumnName(i);
 
+                        /**
+                         * NO LONGER NEEDED for Android 2.x (pre API 11)
+                         * in this plugin version:
+                         *
                         if (isPostHoneycomb) {
 
                             // Use try & catch just in case android.os.Build.VERSION.SDK_INT >= 11 is lying:
                             try {
+                         *
+                         */
                                 bindPostHoneycomb(row, key, cur, i);
+                        /**
+                         * NO LONGER NEEDED for Android 2.x (pre API 11)
+                         * in this plugin version:
+                         *
                             } catch (Exception ex) {
                                 bindPreHoneycomb(row, key, cur, i);
                             }
                         } else {
                             bindPreHoneycomb(row, key, cur, i);
                         }
+                         *
+                         */
                     }
 
                     rowsArrayResult.put(row);
@@ -499,7 +548,13 @@ class SQLiteAndroidDatabase
         return rowsResult;
     }
 
+    /**
+     * NO LONGER NEEDED for Android 2.x (pre API 11)
+     * in this plugin version:
+     *
     @SuppressLint("NewApi")
+     *
+     */
     private void bindPostHoneycomb(JSONObject row, String key, Cursor cur, int i) throws JSONException {
         int curType = cur.getType(i);
 
@@ -520,6 +575,10 @@ class SQLiteAndroidDatabase
         }
     }
 
+    /**
+     * NO LONGER NEEDED for Android 2.x (pre API 11)
+     * in this plugin version:
+     *
     private void bindPreHoneycomb(JSONObject row, String key, Cursor cursor, int i) throws JSONException {
         // Since cursor.getType() is not available pre-honeycomb, this is
         // a workaround so we don't have to bind everything as a string
@@ -538,6 +597,8 @@ class SQLiteAndroidDatabase
             row.put(key, cursor.getString(i));
         }
     }
+     *
+     */
 
     static QueryType getQueryType(String query) {
         Matcher matcher = FIRST_WORD.matcher(query);
