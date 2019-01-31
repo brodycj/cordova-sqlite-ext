@@ -1,5 +1,7 @@
 # Changes
 
+### cordova-sqlite-ext-common 0.2.0-dev
+
 ### cordova-sqlite-ext-common 0.1.0
 
 - BASE64 support
