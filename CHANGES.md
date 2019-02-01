@@ -1,5 +1,9 @@
 # Changes
 
+## cordova-sqlite-ext 2.3.1
+
+- Build with SQLITE_DEFAULT_CACHE_SIZE=2000 setting on Windows as well as the other platforms
+
 ## cordova-sqlite-ext 2.3.0
 
 - SQLite 3.26.0 update from cordova-sqlite-ext-deps 1.1.1
