@@ -2,15 +2,30 @@
 
 Native interface to sqlite in a Cordova/PhoneGap plugin for Android, iOS, macOS, and Windows 10 (UWP), with API similar to HTML5/[Web SQL API](http://www.w3.org/TR/webdatabase/).
 
-License terms for Android and Windows platform versions: MIT or Apache 2.0
+**LICENSE:** MIT, with Apache 2.0 option for Android and Windows platforms (see [LICENSE.md](./LICENSE.md) for details, including third-party components used by this plugin)
 
-License terms for iOS/macOS platform version: MIT only
+## WARNING: Multiple SQLite problem on all platforms
+
+with possible corruption risk in case of sqlite access from multiple plugins (see below)
+
+## NEW MAJOR RELEASE Coming with BREAKING CHANGES
+
+A new major release is planned as discussed in ([litehelpers/Cordova-sqlite-storage#773](https://github.com/litehelpers/Cordova-sqlite-storage/issues/773)).
+
+**BREAKING CHANGES expected:**
+
+- use [`SQLITE_DBCONFIG_DEFENSIVE`](https://www.sqlite.org/c3ref/c_dbconfig_defensive.html#sqlitedbconfigdefensive) build option which disables a few features that "allow ordinary SQL to deliberately corrupt the database file" ([litehelpers/Cordova-sqlite-storage#838](https://github.com/litehelpers/Cordova-sqlite-storage/issues/838))
+- drop support for Android pre-4.4 (Android 4.4 with old `armeabi` CPU to be deprecatd with limited updates in the future) ([litehelpers/Cordova-sqlite-storage#771](https://github.com/litehelpers/C
+ordova-sqlite-storage/issues/771))
+- error `code` will always be `0` (which is already the case on Windows); actual SQLite3 error code will be part of the error `message` member whenever possible ([litehelpers/Cordova-sqlite-storage#821](https://github.com/litehelpers/Cordova-sqlite-storage/issues/821))
+- drop support for iOS 8.x (was already dropped by cordova-ios@4.4.0)
+- drop support for location: 0-2 values in openDatabase call (please use `location: 'default'` or `iosDatabaseLocation` setting in openDatabase as documented below)
 
 ## About this plugin version branch
 
 Version with extra features: REGEXP (Android/iOS/macOS), BASE64, and pre-populated databases
 
-This version branch uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-storage-dependencies` via npm.
+This version branch uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
 
 <!-- TBD NOT WORKING:
 |Android Circle-CI (missing pre-populated tests)|iOS Travis-CI (partial suite)|
@@ -154,7 +169,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - `SQLITE_ENABLE_FTS5`
   - `SQLITE_ENABLE_RTREE`
   - `SQLITE_ENABLE_JSON1`
-  - `SQLITE_DEFAULT_PAGE_SIZE=1024` and `SQLITE_DEFAULT_CACHE_SIZE=2000` to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
+  - `SQLITE_DEFAULT_PAGE_SIZE=1024` (all platforms) and `SQLITE_DEFAULT_CACHE_SIZE=2000` (TBD missing on Windows) to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
   - `SQLITE_OS_WINRT` (Windows only)
   - `NDEBUG` on Windows (Release build only)
 - The iOS database location is now mandatory, as documented below.
@@ -171,7 +186,6 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - INCORRECT error code (0) and INCONSISTENT error message (missing actual error info) in error callbacks ref: [litehelpers/Cordova-sqlite-storage#539](https://github.com/litehelpers/Cordova-sqlite-storage/issues/539)
   - REGEXP is currently not supported on Windows.
   - It is NOT possible to SELECT BLOB column values directly. It is recommended to use built-in HEX function (also supported by (WebKit) Web SQL) or non-standard BASE64 function (as documented below) to retrieve BLOB column values hex or Base-64 format.
-  - Not possible to directly select BLOB column values - use BASE64 function to select BLOB values as documented below
   - Windows platform version uses `UTF-16le` internal database encoding while the other platform versions use `UTF-8` internal encoding. (`UTF-8` internal encoding is preferred ref: [litehelpers/Cordova-sqlite-storage#652](https://github.com/litehelpers/Cordova-sqlite-storage/issues/652))
 - The macOS platform version ("osx" platform) is not tested in a release build and should be considered pre-alpha.
 - Android versions supported: 2.3.3 - 7.1.1 (API level 10 - 25), depending on Cordova version ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
