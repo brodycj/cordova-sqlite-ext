@@ -2,6 +2,13 @@
 
 ### cordova-sqlite-ext-common 0.2.0-dev
 
+- SQLite3 build updates from cordova-sqlite-ext version 2.3.1:
+  - build with SQLite 3.26.0 from cordova-sqlite-ext-deps@1.1.1
+  - sqlite-native-driver NDK build in JAR
+  - FTS5 & JSON1 enabled on all platforms
+  - SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) compile-time setting on all platforms
+  - continue using SQLITE_THREADSAFE=1 on all platforms
+
 ### cordova-sqlite-ext-common 0.1.0
 
 - BASE64 support

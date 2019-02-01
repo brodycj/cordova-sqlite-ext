@@ -114,15 +114,22 @@ See the [Sample section](#sample) for a sample with a more detailed explanation.
 - This plugin version includes the following extra (non-standard) features:
   - BASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
-- SQLite version `3.15.2` included with the following build settings:
-  - `SQLITE_TEMP_STORE=2`
+- SQLite version `3.26.0` included with the following build settings:
   - `SQLITE_THREADSAFE=1`
+  - `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE build setting) ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)
+  - `SQLITE_DEFAULT_MEMSTATUS=0`
+  - `SQLITE_OMIT_DECLTYPE`
+  - `SQLITE_OMIT_DEPRECATED`
+  - `SQLITE_OMIT_PROGRESS_CALLBACK`
+  - `SQLITE_OMIT_SHARED_CACHE`
+  - `SQLITE_TEMP_STORE=2`
+  - `SQLITE_OMIT_LOAD_EXTENSION`
   - `SQLITE_ENABLE_FTS3`
   - `SQLITE_ENABLE_FTS3_PARENTHESIS`
   - `SQLITE_ENABLE_FTS4`
+  - `SQLITE_ENABLE_FTS5`
   - `SQLITE_ENABLE_RTREE`
-  - `SQLITE_OMIT_BUILTIN_TEST`
-  - `SQLITE_OMIT_LOAD_EXTENSION`
+  - `SQLITE_ENABLE_JSON1`
   - `SQLITE_DEFAULT_PAGE_SIZE=1024` and `SQLITE_DEFAULT_CACHE_SIZE=2000` to avoid "potentially distruptive change(s)" from SQLite 3.12.0 ref: <http://sqlite.org/pgszchng2016.html>
   - `SQLITE_OS_WINRT` for Windows only
 - A recent version of the Cordova CLI (such as `6.4.0`) is recommended. Cordova versions older than `6.0.0` are missing the `cordova-ios@4.0.0` security fixes.
