@@ -1,6 +1,13 @@
 # Changes
 
-### cordova-sqlite-ext 3.0.0-dev
+### cordova-sqlite-ext 3.0.0
+
+Note that cordova-sqlite-ext@3.0.0 includes the SQLite 3.26.0 build updates from the following cordova-sqlite-ext versions:
+- cordova-sqlite-ext@2.1.0
+- cordova-sqlite-ext@2.1.1
+- cordova-sqlite-ext@2.2.0
+- cordova-sqlite-ext@2.3.0
+- cordova-sqlite-ext@2.3.1
 
 ### cordova-sqlite-ext-common 1.0.0
 
