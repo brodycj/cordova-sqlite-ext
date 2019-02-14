@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/brodybits/cordova-sqlite-ext-common",
   "dependencies": {
-    "cordova-sqlite-ext-deps": "1.1.1"
+    "cordova-sqlite-ext-deps": "2.0.0"
   },
   "scripts": {
     "start": "node scripts/prepareSpec.js"
