@@ -48,4 +48,4 @@ Based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
 
 ### SQLite3
 
-Public domain
+public domain

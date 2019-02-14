@@ -352,8 +352,8 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INLINE CR-LF String test", function(done) {
-          var db = openDatabase("Inline-CR-LF-String-test.db", "1.0", "Demo", DEFAULT_SIZE);
+        it(suiteName + 'INLINE CR-LF String test', function(done) {
+          var db = openDatabase('INLINE-CR-LF-String-test.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
@@ -406,8 +406,8 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INLINE string tab test", function(done) {
-          var db = openDatabase("Inline-string-tab-test.db", "1.0", "Demo", DEFAULT_SIZE);
+        it(suiteName + 'string tab test (inline vs argument parameter value)', function(done) {
+          var db = openDatabase('string-tab-test.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
@@ -444,10 +444,10 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INLINE string vertical tab test", function(done) {
+        it(suiteName + 'string vertical tab test (inline vs argument parameter value)', function(done) {
           if (isWP8) pending('BROKEN on WP(8)'); // [BUG #202] UNICODE characters not working with WP(8)
 
-          var db = openDatabase("String-vertical-tab-test.db", "1.0", "Demo", DEFAULT_SIZE);
+          var db = openDatabase('String-vertical-tab-test.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
@@ -484,10 +484,10 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INLINE string form feed test", function(done) {
+        it(suiteName + 'string form feed test (inline vs argument parameter value)', function(done) {
           if (isWP8) pending('BROKEN on WP(8)'); // [BUG #202] UNICODE characters not working with WP(8)
 
-          var db = openDatabase("String-form-feed-test.db", "1.0", "Demo", DEFAULT_SIZE);
+          var db = openDatabase('String-form-feed-test.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
@@ -524,10 +524,10 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "INLINE string backspace test", function(done) {
+        it(suiteName + 'string backspace test (inline vs argument parameter value)', function(done) {
           if (isWP8) pending('BROKEN on WP(8)'); // [BUG #202] UNICODE characters not working with WP(8)
 
-          var db = openDatabase("String-backspace-test.db", "1.0", "Demo", DEFAULT_SIZE);
+          var db = openDatabase('String-backspace-test.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
@@ -672,17 +672,22 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        // TBD NOTE: In case of the default Android database implementation
-        // (Android-sqlite-connector) it is possible to manipulate,
-        // store, and retrieve a text string with 4-octet UTF-8 characters such as emojis.
-        // However HEX manipulations do not work the same as Android/iOS WebKit Web SQL,
-        // iOS plugin, or Android plugin with androidDatabaseImplementation : 2 setting.
-        // This linkely indicates that such characters are stored differently [incorrectly]
-        // due to UTF-8 string handling limitations of Android-sqlite-connector
-        // and Android-sqlite-native-driver. ref: litehelpers/Cordova-sqlite-storage#564
+        // TBD NOTE: In case of the default Android database access
+        // implementation (Android-sqlite-connector) it is possible to
+        // manipulate, store, and retrieve a text string with 4-octet
+        // UTF-8 characters such as emojis.
+        // However HEX manipulations do not work the same as on
+        // Android/iOS WebKit Web SQL, iOS plugin,
+        // builtin android.database implementation
+        // (Android plugin with androidDatabaseImplementation : 2 option),
+        // or Windows.
+        // This likely indicates that such characters are stored differently
+        // [incorrectly] due to UTF-8 string handling limitations of
+        // Android-sqlite-connector and Android-sqlite-native-driver.
+        // ref: litehelpers/Cordova-sqlite-storage#564
 
         it(suiteName + 'Inline emoji string manipulation test: SELECT UPPER("a\\uD83D\\uDE03.") [\\u1F603 SMILING FACE (MOUTH OPEN)]', function(done) {
-          var db = openDatabase("Inline-emoji-hex-test.db", "1.0", "Demo", DEFAULT_SIZE);
+          var db = openDatabase('Inline-emoji-hex-test-1.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
@@ -707,7 +712,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Inline emoji HEX test: SELECT HEX("@\\uD83D\\uDE03!") [\\u1F603 SMILING FACE (MOUTH OPEN)] [HEX encoding BUG on Android-sqlite-connector]', function(done) {
-          var db = openDatabase("Inline-emoji-hex-test.db", "1.0", "Demo", DEFAULT_SIZE);
+          var db = openDatabase('Inline-emoji-hex-test-2.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {

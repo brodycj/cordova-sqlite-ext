@@ -1,12 +1,10 @@
 /*
- * Copyright (c) 2012-2017: Christopher J. Brody (aka Chris Brody)
+ * Copyright (c) 2012-present Christopher J. Brody (aka Chris Brody)
  * Copyright (c) 2005-2010, Nitobi Software Inc.
  * Copyright (c) 2010, IBM Corporation
  */
 
 package io.sqlc;
-
-import android.annotation.SuppressLint;
 
 import android.util.Log;
 
@@ -35,7 +33,7 @@ import java.io.IOException;
 public class SQLitePlugin extends CordovaPlugin {
 
     /**
-     * Multiple database runner map (static).
+     * Concurrent database runner map.
      *
      * NOTE: no public static accessor to db (runner) map since it is not
      * expected to work properly with db threading.
@@ -49,7 +47,7 @@ public class SQLitePlugin extends CordovaPlugin {
      * THANKS to @NeoLSN (Jason Yang/楊朝傑) for giving the pointer in:
      * https://github.com/litehelpers/Cordova-sqlite-storage/issues/727
      */
-    static Map<String, DBRunner> dbrmap = new ConcurrentHashMap<String, DBRunner>();
+    private Map<String, DBRunner> dbrmap = new ConcurrentHashMap<String, DBRunner>();
 
     /**
      * NOTE: Using default constructor, no explicit constructor.
@@ -187,16 +185,11 @@ public class SQLitePlugin extends CordovaPlugin {
     // --------------------------------------------------------------------------
 
     private void startDatabase(String dbname, JSONObject options, CallbackContext cbc) {
-        // TODO: is it an issue that we can orphan an existing thread?  What should we do here?
-        // If we re-use the existing DBRunner it might be in the process of closing...
         DBRunner r = dbrmap.get(dbname);
 
-        // Brody TODO: It may be better to terminate the existing db thread here & start a new one, instead.
         if (r != null) {
-            // don't orphan the existing thread; just re-open the existing database.
-            // In the worst case it might be in the process of closing, but even that's less serious
-            // than orphaning the old DBRunner.
-            cbc.success();
+            // NO LONGER EXPECTED due to BUG 666 workaround solution:
+            cbc.error("INTERNAL ERROR: database already open for db name: " + dbname);
         } else {
             r = new DBRunner(dbname, options, cbc);
             dbrmap.put(dbname, r);

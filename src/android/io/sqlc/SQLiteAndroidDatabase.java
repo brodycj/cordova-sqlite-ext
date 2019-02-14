@@ -1,12 +1,10 @@
 /*
- * Copyright (c) 2012-2017: Christopher J. Brody (aka Chris Brody)
+ * Copyright (c) 2012-present Christopher J. Brody (aka Chris Brody)
  * Copyright (c) 2005-2010, Nitobi Software Inc.
  * Copyright (c) 2010, IBM Corporation
  */
 
 package io.sqlc;
-
-import android.annotation.SuppressLint;
 
 import android.database.Cursor;
 import android.database.CursorWindow;
@@ -23,6 +21,8 @@ import java.io.File;
 
 import java.lang.IllegalArgumentException;
 import java.lang.Number;
+
+import java.util.Locale;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,6 +68,14 @@ class SQLiteAndroidDatabase
      * @param dbfile   The database File specification
      */
     void open(File dbfile) throws Exception {
+        if (!isPostHoneycomb) {
+            Log.v("SQLiteAndroidDatabase.open",
+                "INTERNAL PLUGIN ERROR: deprecated android.os.Build.VERSION not supported: " +
+                android.os.Build.VERSION.SDK_INT);
+            throw new RuntimeException(
+                "INTERNAL PLUGIN ERROR: deprecated android.os.Build.VERSION not supported: " +
+                android.os.Build.VERSION.SDK_INT);
+        }
         dbFile = dbfile; // for possible bug workaround
         mydb = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
     }
@@ -116,7 +124,6 @@ class SQLiteAndroidDatabase
         cbc.success(batchResults);
     }
 
-    @SuppressLint("NewApi")
     private void executeSqlBatchStatement(String query, JSONArray json_params, JSONArray batchResults) {
 
         if (mydb == null) {
@@ -141,7 +148,7 @@ class SQLiteAndroidDatabase
                 //Log.v("executeSqlBatch", "query type: " + queryType);
 
                 if (queryType == QueryType.update || queryType == queryType.delete) {
-                    if (isPostHoneycomb) {
+                    // if (isPostHoneycomb) {
                         SQLiteStatement myStatement = mydb.compileStatement(query);
 
                         if (json_params != null) {
@@ -173,7 +180,10 @@ class SQLiteAndroidDatabase
                             // Assuming SDK_INT was lying & method not found:
                             // do nothing here & try again with raw query.
                             ex.printStackTrace();
-                            Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): runtime error (fallback to old API): " + errorMessage);
+                            // Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): runtime error (fallback to old API): " + errorMessage);
+                            Log.v("SQLiteAndroidDatabase.executeSqlBatchStatement",
+                                "INTERNAL PLUGIN ERROR: could not do myStatement.executeUpdateDelete(): " + ex.getMessage());
+                            throw(ex);
                         }
 
                         // "finally" cleanup myStatement
@@ -183,7 +193,7 @@ class SQLiteAndroidDatabase
                             queryResult = new JSONObject();
                             queryResult.put("rowsAffected", rowsAffected);
                         }
-                    }
+                    // }
 
                     if (needRawQuery) { // for pre-honeycomb behavior
                         rowsAffectedCompat = countRowsAffectedCompat(queryType, query, json_params, mydb);
@@ -464,15 +474,23 @@ class SQLiteAndroidDatabase
                         key = cur.getColumnName(i);
 
                         if (isPostHoneycomb) {
-
                             // Use try & catch just in case android.os.Build.VERSION.SDK_INT >= 11 is lying:
                             try {
                                 bindPostHoneycomb(row, key, cur, i);
                             } catch (Exception ex) {
-                                bindPreHoneycomb(row, key, cur, i);
+                                // bindPreHoneycomb(row, key, cur, i);
+                                Log.v("SQLiteAndroidDatabase.executeSqlStatementQuery",
+                                    "INTERNAL PLUGIN ERROR: could not bindPostHoneycomb: " + ex.getMessage());
+                                throw(ex);
                             }
                         } else {
-                            bindPreHoneycomb(row, key, cur, i);
+                            // NOT EXPECTED:
+                            // bindPreHoneycomb(row, key, cur, i);
+                            Log.v("SQLiteAndroidDatabase.executeSqlStatementQuery",
+                                "INTERNAL PLUGIN ERROR: deprecated android.os.Build.VERSION not supported: " + android.os.Build.VERSION.SDK_INT);
+                            throw new RuntimeException(
+                                "INTERNAL PLUGIN ERROR: deprecated android.os.Build.VERSION not supported: " +
+                                android.os.Build.VERSION.SDK_INT);
                         }
                     }
 
@@ -497,7 +515,6 @@ class SQLiteAndroidDatabase
         return rowsResult;
     }
 
-    @SuppressLint("NewApi")
     private void bindPostHoneycomb(JSONObject row, String key, Cursor cur, int i) throws JSONException {
         int curType = cur.getType(i);
 
@@ -518,6 +535,7 @@ class SQLiteAndroidDatabase
         }
     }
 
+    /* ** NO LONGER SUPPORTED:
     private void bindPreHoneycomb(JSONObject row, String key, Cursor cursor, int i) throws JSONException {
         // Since cursor.getType() is not available pre-honeycomb, this is
         // a workaround so we don't have to bind everything as a string
@@ -536,6 +554,7 @@ class SQLiteAndroidDatabase
             row.put(key, cursor.getString(i));
         }
     }
+    // */
 
     static QueryType getQueryType(String query) {
         Matcher matcher = FIRST_WORD.matcher(query);
@@ -549,7 +568,7 @@ class SQLiteAndroidDatabase
                 // (needed for SQLCipher version)
                 if (first.length() == 0) throw new RuntimeException("query not found");
 
-                return QueryType.valueOf(first.toLowerCase());
+                return QueryType.valueOf(first.toLowerCase(Locale.ENGLISH));
             } catch (IllegalArgumentException ignore) {
                 // unknown verb (NOT blank)
                 return QueryType.other;

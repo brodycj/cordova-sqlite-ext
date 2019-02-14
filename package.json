@@ -30,12 +30,12 @@
   },
   "homepage": "https://github.com/litehelpers/cordova-sqlite-ext",
   "dependencies": {
-    "cordova-sqlite-ext-deps": "0.4.1"
+    "cordova-sqlite-ext-deps": "2.0.0"
   },
   "scripts": {
     "start": "node scripts/prepareSpec.js"
   },
   "devDependencies": {
-    "shelljs": "^0.7.4"
+    "shelljs": "^0.8.3"
   }
 }

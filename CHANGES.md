@@ -2,6 +2,65 @@
 
 ### cordova-sqlite-ext 3.0.0-dev
 
+### cordova-sqlite-ext-common 1.0.0
+
+- Use cordova-sqlite-ext-deps@2.0.0 with SQLITE_DBCONFIG_DEFENSIVE setting used by sqlite-native-driver.jar on Android
+
+### cordova-sqlite-common-ext-common 0.2.0
+
+- SQLite3 build updates from cordova-sqlite-ext version 2.3.1:
+  - build with SQLite 3.26.0 from cordova-sqlite-ext-deps@1.1.1
+  - sqlite-native-driver NDK build in JAR
+  - FTS5 & JSON1 enabled on all platforms
+  - SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) compile-time setting on all platforms
+  - continue using SQLITE_THREADSAFE=1 on all platforms
+
+###### cordova-sqlite-ext-core-common 0.1.0
+
+- beforePluginInstall.js updates
+  - use standard Promise
+  - get the plugin package name from package.json
+  - use const instead of var (this should be considered a POSSIBLY BREAKING CHANGE since const may not work on some really old Node.js versions)
+  - remove hasbang line that is not needed
+
+###### cordova-sqlite-storage-ext-core-common 2.0.0
+
+- SQLITE_DBCONFIG_DEFENSIVE flag - iOS/macOS/Windows (POTENTIALLY BREAKING CHANGE)
+- remove internal qid usage from JavaScript (not needed)
+- non-static Android database runner map (POTENTIALLY BREAKING CHANGE)
+- Completely remove old Android SuppressLint (android.annotation.SuppressLint) - POSSIBLY BREAKING CHANGE
+- drop workaround for pre-Honeycomb Android API (BREAKING CHANGE)
+- no extra @synchronized block per batch (iOS/macOS) - should be considered a POSSIBLY BREAKING change
+- remove backgroundExecuteSql method not needed (iOS/macOS)
+- Completely remove iOS/macOS MRC (Manual Reference Counting) support - should be considered a POSSIBLY BREAKING change
+
+###### cordova-sqlite-storage-ext-core-common 1.0.0
+
+- Use SQLite 3.26.0 (with a security update and support for window functions) with SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) from cordova-sqlite-storage-dependencies 1.2.1 in this plugin version branch
+
+### cordova-sqlite-storage 2.2.1
+
+- SQLITE_THREADSAFE=1 compile-time setting for iOS/macOS
+- Fix Android/iOS src copyright, perpetually
+
+## cordova-sqlite-storage 2.2.0
+
+- Android-sqlite-native-driver NDK objects in JAR to resolve issue on cordova-android@7
+- Fix SQLiteAndroidDatabase implementation for Turkish and other foreign locales
+
+## cordova-sqlite-storage 2.1.5
+
+##### cordova-sqlite-legacy-core 1.0.7
+
+- Add error info text in case of close error on Windows
+- Signal INTERNAL ERROR in case of attempt to reuse db on Windows (should never happen due to workaround solution to BUG 666)
+- SQLITE_DEFAULT_CACHE_SIZE build flag fix for macOS ("osx") and Windows
+
+###### cordova-sqlite-legacy-express-core 1.0.5
+
+- iOS/macOS @synchronized guard for sqlite3_open operation
+- Signal INTERNAL ERROR in case of attempt to reuse db (Android/iOS) (should never happen due to workaround solution to BUG 666)
+
 ## cordova-sqlite-ext 2.0.0
 
 ## cordova-sqlite-storage 2.1.4
