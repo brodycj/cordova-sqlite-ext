@@ -1,5 +1,7 @@
 # Changes
 
+### cordova-sqlite-ext-common 0.3.0-dev
+
 ### cordova-sqlite-common-ext-common 0.2.0
 
 - SQLite3 build updates from cordova-sqlite-ext version 2.3.1:
