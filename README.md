@@ -15,7 +15,7 @@ This plugin version uses a `before_plugin_install` hook to install sqlite3 libra
 <!-- XXX TBD NOT WORKING:
 |Android Circle-CI (missing pre-populated tests)|iOS Travis-CI (partial suite)|
 |-----------------------|----------------------|
-|[![Circle CI](https://circleci.com/gh/litehelpers/cordova-sqlite-ext.svg?style=svg)](https://circleci.com/gh/litehelpers/cordova-sqlite-ext)|[![Build Status](https://travis-ci.org/litehelpers/cordova-sqlite-ext.svg)](https://travis-ci.org/litehelpers/cordova-sqlite-ext)|
+|[![Circle CI](https://circleci.com/gh/brodybits/cordova-sqlite-ext.svg?style=svg)](https://circleci.com/gh/brodybits/cordova-sqlite-ext)|[![Build Status](https://travis-ci.org/brodybits/cordova-sqlite-ext.svg)](https://travis-ci.org/brodybits/cordova-sqlite-ext)|
  -->
 
 <!-- FUTURE TBD critial bug notices for this version branch -->
@@ -501,7 +501,7 @@ See **Security of sensitive data** in the [Security](#security) section above.
 - It is NOT possible to open multiple databases with the same name but in different locations (iOS/macOS platform version).
 - Incorrect or missing rowsAffected in results for INSERT/UPDATE/DELETE SQL statements with extra semicolon(s) in the beginning for Android in case the `androidDatabaseImplementation: 2` (built-in android.database implementation) option is used.
 
-Some additional issues are tracked in [open Cordova-sqlite-storage bug-general issues](https://github.com/litehelpers/Cordova-sqlite-storage/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general) and [open cordova-sqlite-ext bug-general issues](https://github.com/litehelpers/cordova-sqlite-ext/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general).
+Some additional issues are tracked in [open Cordova-sqlite-storage bug-general issues](https://github.com/litehelpers/Cordova-sqlite-storage/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general) and [open cordova-sqlite-ext bug-general issues](https://github.com/brodybits/cordova-sqlite-ext/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general).
 
 <!-- END Known issues -->
 
@@ -530,7 +530,7 @@ Some additional issues are tracked in [open Cordova-sqlite-storage bug-general i
 - Issues have been reported with using this plugin together with Crosswalk for Android, especially on `x86_64` CPU ([litehelpers/Cordova-sqlite-storage#336](https://github.com/litehelpers/Cordova-sqlite-storage/issues/336)). Please see [litehelpers/Cordova-sqlite-storage#336 (comment)](https://github.com/litehelpers/Cordova-sqlite-storage/issues/336#issuecomment-364752652) for workaround on x64 CPU. In addition it may be helpful to install Crosswalk as a plugin instead of using Crosswalk to create a project that will use this plugin.
 - Does not work with [axemclion / react-native-cordova-plugin](https://github.com/axemclion/react-native-cordova-plugin) since the `window.sqlitePlugin` object is NOT properly exported (ES5 feature). It is recommended to use [andpor / react-native-sqlite-storage](https://github.com/andpor/react-native-sqlite-storage) for SQLite database access with React Native Android/iOS instead.
 
-Additional limitations are tracked in [marked Cordova-sqlite-storage doc-todo issues](https://github.com/litehelpers/Cordova-sqlite-storage/issues?q=is%3Aissue+label%3Adoc-todo) and [marked cordova-sqlite-ext doc-todo issues](https://github.com/litehelpers/cordova-sqlite-ext/issues?q=is%3Aissue+label%3Adoc-todo).
+Additional limitations are tracked in [marked Cordova-sqlite-storage doc-todo issues](https://github.com/litehelpers/Cordova-sqlite-storage/issues?q=is%3Aissue+label%3Adoc-todo) and [marked cordova-sqlite-ext doc-todo issues](https://github.com/brodybits/cordova-sqlite-ext/issues?q=is%3Aissue+label%3Adoc-todo).
 
 <!-- END Other limitations -->
 
@@ -649,7 +649,7 @@ FUTURE TBD: Proper date/time handling will be further tested and documented at s
 ### Comparison of sqlite plugin versions
 
 - [litehelpers / Cordova-sqlite-storage](https://github.com/litehelpers/Cordova-sqlite-storage) - core plugin version for Android/iOS/macOS/Windows (permissive license terms)
-- [litehelpers / cordova-sqlite-ext](https://github.com/litehelpers/cordova-sqlite-ext) - plugin version with REGEXP (Android/iOS/macOS), SELECT BLOB in Base64 format (all platforms Android/iOS/macOS/Windows), and pre-populated databases (all platforms Android/iOS/macOS/Windows). Permissive license terms.
+- [litehelpers / cordova-sqlite-ext](https://github.com/brodybits/cordova-sqlite-ext) - plugin version with REGEXP (Android/iOS/macOS), SELECT BLOB in Base64 format (all platforms Android/iOS/macOS/Windows), and pre-populated databases (all platforms Android/iOS/macOS/Windows). Permissive license terms.
 - [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) - support for Windows 8.1/Windows Phone 8.1 along with Android/iOS/macOS/Windows 10, with support for REGEXP (Android/iOS/macOS), SELECT BLOB in Base64 format (all platforms Android/iOS/macOS/Windows), and pre-populated databases (all platforms Android/iOS/macOS/Windows). Limited updates. Permissive license terms.
 - [brodybits / cordova-sqlite-legacy-build-support](https://github.com/brodybits/cordova-sqlite-legacy-build-support) - maintenance of WP8 platform version along with Windows 8.1/Windows Phone 8.1 and the other supported platforms Android/iOS/macOS/Windows 10; limited support for PhoneGap CLI/PhoneGap Build/plugman/Intel XDK; limited testing; limited updates. Permissive license terms.
 - [litehelpers / Cordova-sqlcipher-adapter](https://github.com/litehelpers/Cordova-sqlcipher-adapter) - supports [SQLCipher](https://www.zetetic.net/sqlcipher/) for Android/iOS/macOS/Windows
@@ -1317,7 +1317,7 @@ cordova platform add ios
 
 ## Plugin installation sources
 
-- https://github.com/litehelpers/cordova-sqlite-ext - latest version
+- <https://github.com/brodybits/cordova-sqlite-ext> - latest version
 - `cordova-sqlite-ext` - stable npm package version
 
 <!-- END Plugin installation sources -->
