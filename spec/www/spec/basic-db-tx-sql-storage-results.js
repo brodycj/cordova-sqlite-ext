@@ -7,10 +7,12 @@ var DEFAULT_SIZE = 5000000; // max to avoid popup in safari/ios
 var isWP8 = /IEMobile/.test(navigator.userAgent); // Matches WP(7/8/8.1)
 var isWindows = /Windows /.test(navigator.userAgent); // Windows
 var isAndroid = !isWindows && /Android/.test(navigator.userAgent);
+var isMac = /Macintosh/.test(navigator.userAgent);
 
-// NOTE: In the core-master branch there is no difference between the default
-// implementation and implementation #2. But the test will also apply
-// the androidLockWorkaround: 1 option in the case of implementation #2.
+// NOTE: While in certain version branches there is no difference between
+// the default Android implementation and implementation #2,
+// this test script will also apply the androidLockWorkaround: 1 option
+// in case of implementation #2.
 var scenarioList = [
   isAndroid ? 'Plugin-implementation-default' : 'Plugin',
   'HTML5',
@@ -25,7 +27,7 @@ var mytests = function() {
 
   for (var i=0; i<scenarioCount; ++i) {
 
-    describe(scenarioList[i] + ': BASIC db tx sql results test(s)', function() {
+    describe(scenarioList[i] + ': BASIC db tx sql storage results test(s)', function() {
       var scenarioName = scenarioList[i];
       var suiteName = scenarioName + ': ';
       var isWebSql = (i === 1);
@@ -313,15 +315,19 @@ var mytests = function() {
                   temp1.data = 'another';
 
                   if (isWebSql) {
-                    // Web SQL STANDARD:
-                    // 1. this is a native object that is NOT affected by the change (SKIP for Android 5.x/+):
-                    if (!isAndroid || /Android [1-4]/.test(navigator.userAgent))
+                    // (WebKit) Web SQL:
+                    // 1. [TBD] this is a native object that is NOT affected by the change
+                    //    on Android pre-5.x & iOS pre-11.x
+                    if ((!isAndroid && !(/OS 1[1-9]/.test(navigator.userAgent))) ||
+                        (/Android [2-4]/.test(navigator.userAgent)))
                       expect(temp1.data).toBe('test');
+                    else
+                      expect(temp1.data).toBe('another');
                     // 2. object returned by second resultSet.rows.item call not affected:
                     expect(temp2.data).toBe('test');
                   } else {
                     // PLUGIN:
-                    // 1. DEVIATION - temp1 is just like any other Javascript object:
+                    // 1. [TBD] is just like any other Javascript object:
                     expect(temp1.data).toBe('another');
                     // 2. DEVIATION - same object is returned by second resultSet.rows.item IS affected:
                     expect(temp2.data).toBe('another');
@@ -479,9 +485,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'tx sql starting with extra semicolon results test', function(done) {
-          // [BUG #458] BROKEN for androidDatabaseImplementation: 2 (built-in android.database) setting
           if (isWP8) pending('BROKEN for WP8');
-          if (isAndroid && isImpl2) pending('BROKEN for androidDatabaseImplementation: 2 (built-in android.database) setting');
 
           var db = openDatabase('tx-sql-starting-with-extra-semicolon-results-test.db', '1.0', 'Test', DEFAULT_SIZE);
 
@@ -772,6 +776,8 @@ var mytests = function() {
       describe(suiteName + 'STANDARD multi-row INSERT tests', function() {
 
         it(suiteName + 'INSERT multiple rows from with SELECT; check results & check stored data [rowsAffected INCORRECT with androidDatabaseImplementation: 2 (built-in android.database) setting]', function(done) {
+          // NOTE: This test also verifies litehelpers/Cordova-sqlite-storage#63
+          // (insertId randomly "returns undefined" after an INSERT) is fixed.
           var db = openDatabase('INSERT-with-SELECT-test.db', '1.0', 'Test', DEFAULT_SIZE);
 
           db.transaction(function(tx) {
@@ -885,6 +891,64 @@ var mytests = function() {
 
       });
 
+        it(suiteName + 'INSERT OR IGNORE result in case of constraint violation [(WebKit) Web SQL DEVIATION on Android/iOS: reports old insertId value]', function(done) {
+          var db = openDatabase('INSERT-OR-IGNORE-test.db', '1.0', 'Test', DEFAULT_SIZE);
+
+          db.transaction(function(tx) {
+            tx.executeSql('DROP TABLE IF EXISTS tt;');
+
+            tx.executeSql('CREATE TABLE tt (data1 NUMERIC UNIQUE, data2 TEXT);');
+
+            tx.executeSql('INSERT OR IGNORE INTO tt VALUES (?,?)', [101,'Alice'], function(ignored, rs) {
+              // CORRECT RESULT EXPECTED:
+              expect(rs).toBeDefined();
+              expect(rs.insertId).toBe(1);
+              expect(rs.rowsAffected).toBe(1);
+            });
+
+            var check1 = false;
+            tx.executeSql('INSERT OR IGNORE INTO tt VALUES (?,?)', [102,'Betty'], function(ignored, rs) {
+              // CORRECT RESULT EXPECTED:
+              expect(rs).toBeDefined();
+              expect(rs.insertId).toBe(2);
+              expect(rs.rowsAffected).toBe(1);
+              check1 = true;
+            });
+
+            tx.executeSql('INSERT OR IGNORE INTO tt VALUES (?,?)', [102,'Carol'], function(ignored, rs1) {
+              expect(check1).toBe(true);
+              expect(rs1).toBeDefined();
+
+              // NOTE: According to https://www.w3.org/TR/webdatabase/#database-query-results (section 4.5)
+              // this access should really raise an INVALID_ACCESS_ERR exception.
+              var checkInsertId = rs1.insertId;
+              if (isWebSql)
+                expect(checkInsertId).toBe(2); // Andriod/iOS WebKit Web SQL DEVIATION: OLD insertId value
+              else
+                expect(checkInsertId).toBe(undefined);
+
+              expect(rs1.rowsAffected).toBe(0);
+
+              tx.executeSql('SELECT COUNT(*) AS MyCount FROM tt', [], function(ignored, rs2) {
+                expect(rs2).toBeDefined();
+                expect(rs2.rows).toBeDefined();
+                expect(rs2.rows.length).toBe(1);
+                expect(rs2.rows.item(0).MyCount).toBe(2);
+
+                // Close (plugin only - always the case in this test) & finish:
+                (isWebSql) ? done() : db.close(done, done);
+              });
+            });
+          }, function(e) {
+            // ERROR RESULT (NOT EXPECTED):
+            expect(false).toBe(true);
+            expect(e).toBeDefined();
+
+            // Close (plugin only) & finish:
+            (isWebSql) ? done() : db.close(done, done);
+          });
+        }, MYTIMEOUT);
+
       describe(suiteName + 'ALTER TABLE tests', function() {
 
         it(suiteName + 'ALTER TABLE ADD COLUMN test', function(done) {
@@ -908,6 +972,8 @@ var mytests = function() {
               addColumnTest();
             } else {
               createdb.close(addColumnTest, function(e) {
+                // XXX TBD IGNORE close error on Windows:
+                if (isWindows) return addColumnTest();
                 // ERROR RESULT (NOT EXPECTED):
                 expect(false).toBe(true);
                 expect(e).toBeDefined();
@@ -966,6 +1032,8 @@ var mytests = function() {
               tableRenameTest();
             } else {
               createdb.close(tableRenameTest, function(e) {
+                // XXX TBD IGNORE close error on Windows:
+                if (isWindows) return tableRenameTest();
                 // ERROR RESULT (NOT EXPECTED):
                 expect(false).toBe(true);
                 expect(e).toBeDefined();

@@ -51,6 +51,10 @@
         <header-file src="src/ios/SQLitePlugin.h" />
         <source-file src="src/ios/SQLitePlugin.m" />
 
+        <header-file src="src/ios/PSPDFThreadSafeMutableDictionary.h" />
+        <source-file src="src/ios/PSPDFThreadSafeMutableDictionary.m"
+                compiler-flags="-w" />
+
         <header-file src="node_modules/cordova-sqlite-ext-deps/sqlite3-regexp-cached/sqlite3_regexp.h" />
         <source-file src="node_modules/cordova-sqlite-ext-deps/sqlite3-regexp-cached/sqlite3_regexp.c" />
 
@@ -65,7 +69,7 @@
                      compiler-flags="-w -DSQLITE_THREADSAFE=1 -DSQLITE_DEFAULT_SYNCHRONOUS=3 -DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DECLTYPE -DSQLITE_OMIT_DEPRECATED -DSQLITE_OMIT_PROGRESS_CALLBACK -DSQLITE_OMIT_SHARED_CACHE -DSQLITE_TEMP_STORE=2 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_FTS5 -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_JSON1 -DSQLITE_DEFAULT_PAGE_SIZE=1024 -DSQLITE_DEFAULT_CACHE_SIZE=2000" />
     </platform>
 
-    <!-- macOS -->
+    <!-- macOS (osx) -->
     <platform name="osx">
         <config-file target="config.xml" parent="/*">
             <feature name="SQLitePlugin">
@@ -73,10 +77,13 @@
             </feature>
         </config-file>
 
-        <!-- Note: the macOS src is based off src/ios implicitly -->
+        <!-- Note: the macOS (osx) src is based off src/ios implicitly -->
         <header-file src="src/ios/SQLitePlugin.h" />
         <source-file src="src/ios/SQLitePlugin.m" />
-        <!-- FUTURE TBD: more common directory name for Apple macOS/iOS versions -->
+
+        <header-file src="src/ios/PSPDFThreadSafeMutableDictionary.h" />
+        <source-file src="src/ios/PSPDFThreadSafeMutableDictionary.m"
+                compiler-flags="-w" />
 
         <header-file src="node_modules/cordova-sqlite-ext-deps/sqlite3-regexp-cached/sqlite3_regexp.h" />
         <source-file src="node_modules/cordova-sqlite-ext-deps/sqlite3-regexp-cached/sqlite3_regexp.c" />
@@ -95,12 +102,12 @@
     <!-- windows -->
     <platform name="windows">
         <js-module src="src/windows/sqlite-proxy.js" name="SQLiteProxy">
-            <merges target="" />
+            <runs />
         </js-module>
 
         <!-- SQLite3 JS module from SQLite3-WinRT/SQLite3JS: -->
         <js-module src="src/windows/SQLite3-Win-RT/SQLite3JS/js/SQLite3.js" name="SQLite3">
-            <merges target="" />
+            <runs />
         </js-module>
 
         <!-- Thanks to AllJoyn-Cordova / cordova-plugin-alljoyn for guidance: -->

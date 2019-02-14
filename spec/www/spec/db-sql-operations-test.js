@@ -35,9 +35,10 @@ var isAndroid = !isWindows && /Android/.test(navigator.userAgent);
 var isMac = /Macintosh/.test(navigator.userAgent);
 var isWKWebView = !isWindows && !isAndroid && !isWP8 && !isMac && !!window.webkit && !!window.webkit.messageHandlers;
 
-// NOTE: In the common storage-master branch there is no difference between the
-// default implementation and implementation #2. But the test will also apply
-// the androidLockWorkaround: 1 option in the case of implementation #2.
+// NOTE: While in certain version branches there is no difference between
+// the default Android implementation and implementation #2,
+// this test script will also apply the androidLockWorkaround: 1 option
+// in case of implementation #2.
 var scenarioList = [
   isAndroid ? 'Plugin-implementation-default' : 'Plugin',
   'HTML5',
@@ -48,7 +49,7 @@ var scenarioCount = (!!window.hasWebKitBrowser) ? (isAndroid ? 3 : 2) : 1;
 
 var mytests = function() {
 
-  describe('Plugin: plugin-specific sql test(s)', function() {
+  describe('Plugin: plugin-specific sql operations test(s)', function() {
 
     var pluginScenarioList = [
       isAndroid ? 'Plugin-implementation-default' : 'Plugin',
@@ -385,14 +386,11 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + 'db.executeSql check SELECT TYPEOF(?) with [undefined] for parameter argument array [BROKEN on Windows]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
-
+        it(suiteName + 'db.executeSql check SELECT TYPEOF(?) with [undefined] for parameter argument array', function(done) {
           var db = openDatabase("DB-sql-SELECT-TYPEOF-undefined.db", "1.0", "Demo", DEFAULT_SIZE);
           expect(db).toBeDefined();
 
           db.executeSql('SELECT TYPEOF(?) AS myresult', [undefined], function(rs) {
-            if (isWindows) expect('Windows plugin version FIXED please update this test').toBe('--');
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
@@ -402,17 +400,6 @@ var mytests = function() {
               expect(rs.rows.item(0).myresult).toBe('null');
             db.close(done, done);
           }, function(error) {
-            // ERROR in case of Windows:
-            if (isWindows) {
-              expect(error).toBeDefined();
-              expect(error.code).toBeDefined();
-              expect(error.message).toBeDefined();
-              expect(error.code).toBe(0);
-              expect(error.message).toMatch(/Unsupported argument type: undefined/);
-              return done();
-            }
-
-            // OTHERWISE
             // NOT EXPECTED:
             expect(false).toBe(true);
             expect(error.message).toBe('--');
@@ -627,13 +614,11 @@ var mytests = function() {
               expect(rs.rows.item(8).u1).toBe('0.0');
             else
               expect(rs.rows.item(8).u1).toBe('0');
-            done();
+            db.close(done, done);
           });
         }, MYTIMEOUT);
 
-        it(suiteName + 'db.executeSql store null/undefined values and check [store undefined value BROKEN on Windows]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
-
+        it(suiteName + 'db.executeSql store null/undefined values and check', function(done) {
           var db = openDatabase("DB-sql-store-null-undefined-values-and-check.db", "1.0", "Demo", DEFAULT_SIZE);
           expect(db).toBeDefined();
 
@@ -645,20 +630,16 @@ var mytests = function() {
 
           db.executeSql('SELECT data AS d1, TYPEOF(data) AS t1, ABS(data) AS a1, UPPER(data) as u1 FROM MyTable', [], function (rs) {
             expect(rs.rows).toBeDefined();
-            if (isWindows) // [FUTURE TBD]
-              expect(rs.rows.length).toBe(1);
-            else
-              expect(rs.rows.length).toBe(2);
+            expect(rs.rows.length).toBe(2);
             expect(rs.rows.item(0).d1).toBe(null);
             expect(rs.rows.item(0).t1).toBe('null');
             expect(rs.rows.item(0).a1).toBe(null);
             expect(rs.rows.item(0).u1).toBe(null);
-            if (isWindows) return done(); // [FUTURE TBD]
             expect(rs.rows.item(1).d1).toBe(null);
             expect(rs.rows.item(1).t1).toBe('null');
             expect(rs.rows.item(1).a1).toBe(null);
             expect(rs.rows.item(1).u1).toBe(null);
-            done();
+            db.close(done, done);
           });
         }, MYTIMEOUT);
 
@@ -700,7 +681,30 @@ var mytests = function() {
             expect(rs.rows.item(2).t1).toBe('null');
             expect(rs.rows.item(2).a1).toBe(null);
             expect(rs.rows.item(2).u1).toBe(null);
-            done();
+            db.close(done, done);
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'db.executeSql store true/false values and check [stored as strings]', function(done) {
+          var db = openDatabase("DB-sql-store-true-false-values-and-check.db", "1.0", "Demo", DEFAULT_SIZE);
+
+          db.executeSql('DROP TABLE IF EXISTS MyTable');
+          db.executeSql('CREATE TABLE MyTable (data)');
+          db.executeSql('INSERT INTO MyTable VALUES (?)', [true]);
+          db.executeSql('INSERT INTO MyTable VALUES (?)', [false]);
+
+          db.executeSql('SELECT data AS d1, TYPEOF(data) AS t1, ABS(data) AS a1, UPPER(data) as u1 FROM MyTable', [], function (rs) {
+            expect(rs.rows).toBeDefined();
+            expect(rs.rows.length).toBe(2);
+            expect(rs.rows.item(0).d1).toBe('true');
+            expect(rs.rows.item(0).t1).toBe('text');
+            expect(rs.rows.item(0).a1).toBe(0);
+            expect(rs.rows.item(0).u1).toBe('TRUE');
+            expect(rs.rows.item(1).d1).toBe('false');
+            expect(rs.rows.item(1).t1).toBe('text');
+            expect(rs.rows.item(1).a1).toBe(0);
+            expect(rs.rows.item(1).u1).toBe('FALSE');
+            db.close(done, done);
           });
         }, MYTIMEOUT);
 
@@ -742,16 +746,18 @@ var mytests = function() {
           expect(myObject.constructor).toBe(Array);
 
           db.executeSql('SELECT UPPER(?) AS upper1, UPPER(?) AS upper2', myObject, function(rs) {
+            // EXPECTED RESULT:
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
             expect(rs.rows.item(0).upper1).toBe('S1');
             expect(rs.rows.item(0).upper2).toBe('S2');
-            done();
+            db.close(done, done);
           }, function(error) {
+            // NOT EXPECTED:
             expect(false).toBe(true);
             expect(error.message).toBe('--');
-            done();
+            db.close(done, done);
           });
         }, MYTIMEOUT);
 
@@ -777,16 +783,18 @@ var mytests = function() {
           expect(myObject.constructor).toBe(MyArraySubclass);
 
           db.executeSql('SELECT UPPER(?) AS upper1, UPPER(?) AS upper2', myObject, function(rs) {
+            // EXPECTED RESULT:
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
             expect(rs.rows.item(0).upper1).toBeNull();
             expect(rs.rows.item(0).upper2).toBeNull();
-            done();
+            db.close(done, done);
           }, function(error) {
+            // NOT EXPECTED:
             expect(false).toBe(true);
             expect(error.message).toBe('--');
-            done();
+            db.close(done, done);
           });
         }, MYTIMEOUT);
 
@@ -889,12 +897,12 @@ var mytests = function() {
             expect(rs2.rows.item(1).x).toBe('b');
             expect(rs2.rows.item(1).y).toBe(2);
             expect(check1).toBe(true);
-            done();
+            db.close(done, done);
           }, function(error) {
             // NOT EXPECTED (SELECT):
             expect(false).toBe(true);
             expect(error.message).toBe('--');
-            done();
+            db.close(done, done);
           });
         }, MYTIMEOUT);
 
@@ -1371,8 +1379,97 @@ var mytests = function() {
           }
         }, MYTIMEOUT);
 
-        it(suiteName + 'db.executeSql() error test with "string-value" for success callback', function(done) {
+        it(suiteName + 'db.executeSql() with valid SQL, null arguments, false for success cb then inline string test', function(done) {
+          var db = openDatabase("DB-execute-sql-with-false-for-success-cb.db", "1.0", "Demo", DEFAULT_SIZE);
+          expect(db).toBeDefined();
+
+          var check1 = false;
+          try {
+            // DOES NOT THROW:
+            db.executeSql('SELECT 1', null, false, function(error) {
+              // NOT EXPECTED:
+              expect(false).toBe(true);
+              expect(error.message).toBe('--');
+            });
+            check1 = true;
+          } catch (ex) {
+            expect('Plugin behavior changed please update this test').toBe('--');
+            expect(ex).toBeDefined();
+            expect(ex.code).toBeDefined();
+            expect(ex.message).toBeDefined();
+          }
+
+          db.executeSql("SELECT UPPER('first') AS uppertext", null, function(rs) {
+            expect(check1).toBe(true);
+            expect(rs).toBeDefined();
+            expect(rs.rows).toBeDefined();
+            expect(rs.rows.length).toBe(1);
+            expect(rs.rows.item(0).uppertext).toBe('FIRST');
+            db.close(done, done);
+          }, function(error) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            db.close(done, done);
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'db.executeSql() with valid SQL, null arguments, "string-value" for success cb then inline string test', function(done) {
           var db = openDatabase("DB-execute-sql-with-string-value-for-success-cb.db", "1.0", "Demo", DEFAULT_SIZE);
+          expect(db).toBeDefined();
+
+          var check1 = false;
+          try {
+            // DOES NOT THROW:
+            db.executeSql('SELECT 1', null, 'string-value', function(error) {
+              // NOT EXPECTED:
+              expect(false).toBe(true);
+              expect(error.message).toBe('--');
+            });
+            check1 = true;
+          } catch (ex) {
+            expect('Plugin behavior changed please update this test').toBe('--');
+            expect(ex).toBeDefined();
+            expect(ex.code).toBeDefined();
+            expect(ex.message).toBeDefined();
+          }
+
+          db.executeSql("SELECT UPPER('first') AS uppertext", null, function(rs) {
+            expect(check1).toBe(true);
+            expect(rs).toBeDefined();
+            expect(rs.rows).toBeDefined();
+            expect(rs.rows.length).toBe(1);
+            expect(rs.rows.item(0).uppertext).toBe('FIRST');
+            db.close(done, done);
+          }, function(error) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            db.close(done, done);
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'db.executeSql() error test with false for success callback', function(done) {
+          var db = openDatabase("DB-execute-sql-error-with-false-for-success-cb.db", "1.0", "Demo", DEFAULT_SIZE);
+          expect(db).toBeDefined();
+
+          try {
+            // DOES NOT THROW:
+            db.executeSql('SLCT 1', null, false, function(error) {
+              expect(error).toBeDefined();
+              db.close(done, done);
+            });
+          } catch(ex) {
+            expect('Plugin behavior changed please update this test').toBe('--');
+            expect(ex).toBeDefined();
+            expect(ex.code).toBeDefined();
+            expect(ex.message).toBeDefined();
+            db.close(done, done);
+          }
+        }, MYTIMEOUT);
+
+        it(suiteName + 'db.executeSql() error test with "string-value" for success callback', function(done) {
+          var db = openDatabase("DB-execute-sql-error-with-string-value-for-success-cb.db", "1.0", "Demo", DEFAULT_SIZE);
           expect(db).toBeDefined();
 
           var check1 = true;
@@ -1389,6 +1486,38 @@ var mytests = function() {
             expect(ex.message).toBeDefined();
             db.close(done, done);
           }
+        }, MYTIMEOUT);
+
+        it(suiteName + 'db.executeSql() error test with false for error callback and then inline string test', function(done) {
+          var db = openDatabase("DB-execute-sql-with-false-for-error-cb.db", "1.0", "Demo", DEFAULT_SIZE);
+          expect(db).toBeDefined();
+
+          var check1 = true;
+          try {
+            // DOES NOT THROW:
+            db.executeSql('SLCT 1', null, null, false);
+
+            check1 = true;
+          } catch(ex) {
+            expect('Plugin behavior changed please update this test').toBe('--');
+            expect(ex).toBeDefined();
+            expect(ex.code).toBeDefined();
+            expect(ex.message).toBeDefined();
+          }
+
+          db.executeSql("SELECT UPPER('first') AS uppertext", null, function(rs) {
+            expect(check1).toBe(true);
+            expect(rs).toBeDefined();
+            expect(rs.rows).toBeDefined();
+            expect(rs.rows.length).toBe(1);
+            expect(rs.rows.item(0).uppertext).toBe('FIRST');
+            db.close(done, done);
+          }, function(error) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            db.close(done, done);
+          });
         }, MYTIMEOUT);
 
         it(suiteName + 'db.executeSql() error test with "string-value" for error callback and then inline string test', function(done) {
@@ -1485,7 +1614,7 @@ var mytests = function() {
             ++error_result_count;
 
             // and finish this test:
-            done();
+            db.close(done, done);
           });
         });
 

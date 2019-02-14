@@ -1,20 +1,21 @@
 /*
- * Copyright (c) 2012-2016: Christopher J. Brody (aka Chris Brody)
+ * Copyright (c) 2012-present Christopher J. Brody (aka Chris Brody)
  * Copyright (c) 2005-2010, Nitobi Software Inc.
  * Copyright (c) 2010, IBM Corporation
  */
 
 package io.sqlc;
 
-import android.annotation.SuppressLint;
-
 import android.util.Log;
 
 import java.io.File;
+
 import java.lang.IllegalArgumentException;
 import java.lang.Number;
-import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.cordova.CallbackContext;
@@ -24,19 +25,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
-
 public class SQLitePlugin extends CordovaPlugin {
 
     /**
-     * Multiple database runner map (static).
-     * NOTE: no public static accessor to db (runner) map since it would not work with db threading.
-     * FUTURE put DBRunner into a public class that can provide external accessor.
+     * Concurrent database runner map.
+     *
+     * NOTE: no public static accessor to db (runner) map since it is not
+     * expected to work properly with db threading.
+     *
+     * FUTURE TBD put DBRunner into a public class that can provide external accessor.
+     *
+     * ADDITIONAL NOTE: Storing as Map<String, DBRunner> to avoid portabiity issue
+     * between Java 6/7/8 as discussed in:
+     * https://gist.github.com/AlainODea/1375759b8720a3f9f094
+     *
+     * THANKS to @NeoLSN (Jason Yang/楊朝傑) for giving the pointer in:
+     * https://github.com/litehelpers/Cordova-sqlite-storage/issues/727
      */
-    static ConcurrentHashMap<String, DBRunner> dbrmap = new ConcurrentHashMap<String, DBRunner>();
+    private Map<String, DBRunner> dbrmap = new ConcurrentHashMap<String, DBRunner>();
 
     /**
      * NOTE: Using default constructor, no explicit constructor.
@@ -174,16 +180,11 @@ public class SQLitePlugin extends CordovaPlugin {
     // --------------------------------------------------------------------------
 
     private void startDatabase(String dbname, JSONObject options, CallbackContext cbc) {
-        // TODO: is it an issue that we can orphan an existing thread?  What should we do here?
-        // If we re-use the existing DBRunner it might be in the process of closing...
         DBRunner r = dbrmap.get(dbname);
 
-        // Brody TODO: It may be better to terminate the existing db thread here & start a new one, instead.
         if (r != null) {
-            // don't orphan the existing thread; just re-open the existing database.
-            // In the worst case it might be in the process of closing, but even that's less serious
-            // than orphaning the old DBRunner.
-            cbc.success();
+            // NO LONGER EXPECTED due to BUG 666 workaround solution:
+            cbc.error("INTERNAL ERROR: database already open for db name: " + dbname);
         } else {
             r = new DBRunner(dbname, options, cbc);
             dbrmap.put(dbname, r);

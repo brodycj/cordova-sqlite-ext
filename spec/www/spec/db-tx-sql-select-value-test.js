@@ -10,9 +10,10 @@ var isAndroid = !isWindows && /Android/.test(navigator.userAgent);
 var isMac = /Macintosh/.test(navigator.userAgent);
 var isWKWebView = !isWindows && !isAndroid && !isWP8 && !isMac && !!window.webkit && !!window.webkit.messageHandlers;
 
-// NOTE: In the core-master branch there is no difference between the default
-// implementation and implementation #2. But the test will also apply
-// the androidLockWorkaround: 1 option in the case of implementation #2.
+// The following openDatabase settings are used for Plugin-implementation-2
+// on Android:
+// - androidDatabaseImplementation: 2
+// - androidLockWorkaround: 1
 var scenarioList = [
   isAndroid ? 'Plugin-implementation-default' : 'Plugin',
   'HTML5',
@@ -31,15 +32,19 @@ var mytests = function() {
       var isWebSql = (i === 1);
       var isImpl2 = (i === 2);
 
-      // NOTE: MUST be defined in function scope, NOT outer scope:
-      var openDatabase = function(name, ignored1, ignored2, ignored3) {
+      // NOTE 1: MUST be defined in proper describe function scope, NOT outer scope.
+      // NOTE 2: Using same database name in this script to avoid issue with
+      //         "Too many open files" on iOS with WKWebView engine plugin.
+      //         (FUTURE TBD NEEDS INVESTIGATION)
+      var openDatabase = function(name_ignored, ignored1, ignored2, ignored3) {
+        var name = 'select-value-test.db';
         if (isImpl2) {
           return window.sqlitePlugin.openDatabase({
             // prevent reuse of database from default db implementation:
             name: 'i2-'+name,
             androidDatabaseImplementation: 2,
             androidLockWorkaround: 1,
-            location: 1
+            location: 'default'
           });
         }
         if (isWebSql) {
@@ -98,19 +103,16 @@ var mytests = function() {
 
         // Truthy string
         // ref: https://developer.mozilla.org/en-US/docs/Glossary/Truthy
-        it(suiteName + 'SELECT TYPEOF(?) with ["abc"] parameter argument', function(done) {
+        it(suiteName + "SELECT TYPEOF(?) with ['abc'] parameter argument", function(done) {
           var db = openDatabase('SELECT-TYPEOF-with-abc-TEXT-string-argument.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
-            tx.executeSql('SELECT TYPEOF(?) as myresult', [null], function(ignored, rs) {
+            tx.executeSql('SELECT TYPEOF(?) as myresult', ['abc'], function(ignored, rs) {
               expect(rs).toBeDefined();
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(1);
-              if (!isWebSql && isAndroid && isImpl2)
-                expect(rs.rows.item(0).myresult).toBe('text');
-              else
-                expect(rs.rows.item(0).myresult).toBe('null');
+              expect(rs.rows.item(0).myresult).toBe('text');
               done();
             });
           }, function(error) {
@@ -205,7 +207,7 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + 'SELECT ? with [null] parameter argument [returns text in case of androidDatabaseImplementation: 2; BROKEN for Windows]', function(done) {
+        it(suiteName + 'SELECT ? with [null] parameter argument [returns text in case of androidDatabaseImplementation: 2]', function(done) {
           var db = openDatabase('SELECT-with-null-argument.db');
           expect(db).toBeDefined();
 
@@ -227,15 +229,12 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + 'SELECT TYPEOF(?) with [undefined] parameter argument [returns text in case of Android (WebKit) Web SQL or androidDatabaseImplementation: 2; BROKEN for Windows]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
-
+        it(suiteName + 'SELECT TYPEOF(?) with [undefined] parameter argument [returns text in case of Android (WebKit) Web SQL or androidDatabaseImplementation: 2]', function(done) {
           var db = openDatabase('SELECT-TYPEOF-with-undefined-argument.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
             tx.executeSql('SELECT TYPEOF(?) as myresult', [undefined], function(ignored, rs) {
-              if (isWindows) expect('Windows plugin version FIXED please update this test').toBe('--');
               expect(rs).toBeDefined();
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(1);
@@ -246,17 +245,6 @@ var mytests = function() {
               done();
             });
           }, function(error) {
-            // ERROR in case of Windows:
-            if (isWindows) {
-              expect(error).toBeDefined();
-              expect(error.code).toBeDefined();
-              expect(error.message).toBeDefined();
-              expect(error.code).toBe(0);
-              expect(error.message).toMatch(/a statement with no error handler failed: Unsupported argument type: undefined/);
-              return done();
-            }
-
-            // OTHERWISE
             // NOT EXPECTED:
             expect(false).toBe(true);
             expect(error.message).toBe('--');
@@ -265,14 +253,11 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'SELECT ? with [undefined] parameter argument [returns text in case of androidDatabaseImplementation: 2]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
-
           var db = openDatabase('SELECT-with-undefined-argument.db');
           expect(db).toBeDefined();
 
           db.transaction(function(tx) {
             tx.executeSql('SELECT ? as myresult', [undefined], function(ignored, rs) {
-              if (isWindows) expect('Windows plugin version FIXED please update this test').toBe('--');
               expect(rs).toBeDefined();
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(1);
@@ -285,17 +270,6 @@ var mytests = function() {
               done();
             });
           }, function(error) {
-            // ERROR in case of Windows:
-            if (isWindows) {
-              expect(error).toBeDefined();
-              expect(error.code).toBeDefined();
-              expect(error.message).toBeDefined();
-              expect(error.code).toBe(0);
-              expect(error.message).toMatch(/a statement with no error handler failed: Unsupported argument type: undefined/);
-              return done();
-            }
-
-            // OTHERWISE
             // NOT EXPECTED:
             expect(false).toBe(true);
             expect(error.message).toBe('--');
@@ -1619,6 +1593,162 @@ var mytests = function() {
 
       });
 
+      describe(suiteName + 'true/false parameter argument value test(s)', function() {
+
+        it(suiteName + 'SELECT TYPEOF(?) with [true] parameter argument value', function(done) {
+          var db = openDatabase('SELECT-TYPEOF-with-true-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT TYPEOF(?) as myresult', [true], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe('text');
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT UPPER(?) with [true] parameter argument', function(done) {
+          var db = openDatabase('SELECT-UPPER-with-true-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT UPPER(?) as myresult', [true], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe('TRUE');
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT ABS(?) with [true] parameter argument', function(done) {
+          var db = openDatabase('SELECT-ABS-with-true-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT ABS(?) as myresult', [true], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe(0);
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT ? with [true] parameter argument', function(done) {
+          var db = openDatabase('SELECT-with-true-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT ? as myresult', [true], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe('true');
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT TYPEOF(?) with [false] parameter argument value', function(done) {
+          var db = openDatabase('SELECT-TYPEOF-with-false-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT TYPEOF(?) as myresult', [false], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe('text');
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT UPPER(?) with [false] parameter argument', function(done) {
+          var db = openDatabase('SELECT-UPPER-with-false-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT UPPER(?) as myresult', [false], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe('FALSE');
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT ABS(?) with [false] parameter argument', function(done) {
+          var db = openDatabase('SELECT-ABS-with-false-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT ABS(?) as myresult', [false], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe(0);
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + 'SELECT ? with [false] parameter argument', function(done) {
+          var db = openDatabase('SELECT-with-false-argument-value.db');
+          expect(db).toBeDefined();
+
+          db.transaction(function(tx) {
+            tx.executeSql('SELECT ? as myresult', [false], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).myresult).toBe('false');
+              done();
+            });
+          }, function(error) {
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            done();
+          });
+        }, MYTIMEOUT);
+
+      });
+
         it(suiteName + 'String test with array parameter value including undefined/Infinity/NaN values', function(done) {
           var db = openDatabase("String-test-with-array-parameter-value.db", "1.0", "Demo", DEFAULT_SIZE);
 
@@ -1660,17 +1790,15 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
-        it(suiteName + "SELECT X'40414243'", function(done) {
+        it(suiteName + "SELECT X'40414243' [TBD BROKEN androidDatabaseImplementation: 2 & Windows]", function(done) {
           if (isWP8) pending('SKIP for WP8'); // [BROKEN]
-          if (!isWebSql && isAndroid && isImpl2) pending('SKIP: BROKEN for androidDatabaseImplementation: 2');
-          if (isWindows) pending('SKIP: BROKEN for Windows');
 
           var db = openDatabase("Inline-BLOB-SELECT-result-40414243-test.db", "1.0", "Demo", DEFAULT_SIZE);
 
           db.transaction(function(tx) {
 
             tx.executeSql("SELECT X'40414243' AS myresult", [], function(ignored, rs) {
-              if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
+              if (isWindows || (!isWebSql && isAndroid && isImpl2)) expect('Behavior changed please update this test').toBe('--');
               expect(rs).toBeDefined();
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(1);
@@ -1679,91 +1807,65 @@ var mytests = function() {
               // Close (plugin only) & finish:
               (isWebSql) ? done() : db.close(done, done);
             }, function(ignored, error) {
-              // NOT EXPECTED:
-              expect(false).toBe(true);
-              expect(error.message).toBe('---');
+              if (isWindows || (!isWebSql && isAndroid && isImpl2)) {
+                expect(error).toBeDefined();
+                expect(error.code).toBeDefined();
+                expect(error.message).toBeDefined();
 
-              // Close (plugin only) & finish:
-              (isWebSql) ? done() : db.close(done, done);
-            });
-
-          }, function(error) {
-            if (!isWebSql && isAndroid && isImpl2) {
-              expect(error).toBeDefined();
-              expect(error.code).toBeDefined();
-              expect(error.message).toBeDefined();
-
-              // TBD wrong error code
-              expect(error.code).toBe(0);
-              expect(error.message).toMatch(/error callback did not return false: unknown error.*code 0.*Unable to convert BLOB to string/);
-            } else {
-              // NOT EXPECTED:
-              expect(false).toBe(true);
-              expect(error.message).toBe('---');
-            }
-
-            // Close (plugin only) & finish:
-            (isWebSql) ? done() : db.close(done, done);
-          });
-        }, MYTIMEOUT);
-
-        it(suiteName + "SELECT X'FFD1FFD2' [Plugin BROKEN: missing result column data]", function(done) {
-          if (isWP8) pending('SKIP for WP8'); // [BROKEN]
-          if (!isWebSql && isAndroid && !isImpl2) pending('SKIP for default Android implemetation [POSSIBLE CRASH]');
-          if (!isWebSql && isAndroid && isImpl2) pending('SKIP: BROKEN for androidDatabaseImplementation: 2');
-          if (isWindows) pending('SKIP: BROKEN for Windows');
-
-          var db = openDatabase("Inline-BLOB-SELECT-result-FFD1FFD2-test.db", "1.0", "Demo", DEFAULT_SIZE);
-
-          db.transaction(function(tx) {
-
-            tx.executeSql("SELECT X'FFD1FFD2' AS myresult", [], function(ignored, rs) {
-              if (!isWebSql && isAndroid && isImpl2) expect('Behavior changed please update this test').toBe('--');
-              expect(rs).toBeDefined();
-              expect(rs.rows).toBeDefined();
-              expect(rs.rows.length).toBe(1);
-              var item = rs.rows.item(0);
-              expect(item).toBeDefined();
-
-              var myresult = item.myresult;
-
-              if (!isWebSql) {
-                // PLUGIN (iOS/macOS):
-                expect(myresult).not.toBeDefined();
-                return done();
+                // TBD wrong error code
+                expect(error.code).toBe(0);
+                // TBD error message
               } else {
-                expect(myresult).toBeDefined();
-                expect(myresult.length).toBe(4);
+                // NOT EXPECTED:
+                expect(false).toBe(true);
+                expect(error.message).toBe('---');
               }
 
               // Close (plugin only) & finish:
               (isWebSql) ? done() : db.close(done, done);
+            });
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + "SELECT X'FFD1FFD2' [TBD BROKEN androidDatabaseImplementation: 2 & Windows; missing result value iOS/macOS]", function(done) {
+          if (isWP8) pending('SKIP for WP8');
+          if (!isWebSql && !isWindows && isAndroid && !isImpl2) pending('BROKEN: CRASH on Android 5.x (default sqlite-connector version)');
+
+          var db = openDatabase("Inline-SELECT-BLOB-FFD1FFD2-result-test.db", "1.0", "Demo", DEFAULT_SIZE);
+
+          db.transaction(function(tx) {
+
+            tx.executeSql("SELECT X'FFD1FFD2' AS myresult", [], function(ignored, rs) {
+              if (isWindows || (!isWebSql && isAndroid && isImpl2)) expect('Behavior changed please update this test').toBe('--');
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              if (!isWebSql && !isAndroid && !isWindows && !isWP8)
+                expect(rs.rows.item(0).myresult).not.toBeDefined(); // not defined iOS/macOS
+              else
+                expect(rs.rows.item(0).myresult).toBeDefined();
+              // TBD actual value (???)
+
+              // Close (plugin only) & finish:
+              (isWebSql) ? done() : db.close(done, done);
             }, function(ignored, error) {
-              // NOT EXPECTED:
-              expect(false).toBe(true);
-              expect(error.message).toBe('---');
+              if (isWindows || (!isWebSql && isAndroid && isImpl2)) {
+                expect(error).toBeDefined();
+                expect(error.code).toBeDefined();
+                expect(error.message).toBeDefined();
+
+                // TBD wrong error code
+                expect(error.code).toBe(0);
+                // TBD error message
+              } else {
+                // NOT EXPECTED:
+                expect(false).toBe(true);
+                expect(error.message).toBe('---');
+              }
 
               // Close (plugin only) & finish:
               (isWebSql) ? done() : db.close(done, done);
             });
-
-          }, function(error) {
-            if (!isWebSql && isAndroid && isImpl2) {
-              expect(error).toBeDefined();
-              expect(error.code).toBeDefined();
-              expect(error.message).toBeDefined();
-
-              // TBD wrong error code
-              expect(error.code).toBe(0);
-              expect(error.message).toMatch(/error callback did not return false: unknown error.*code 0.*Unable to convert BLOB to string/);
-            } else {
-              // NOT EXPECTED:
-              expect(false).toBe(true);
-              expect(error.message).toBe('---');
-            }
-
-            // Close (plugin only) & finish:
-            (isWebSql) ? done() : db.close(done, done);
           });
         }, MYTIMEOUT);
 
