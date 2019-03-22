@@ -4,7 +4,7 @@
     id="cordova-sqlite-ext-common"
     version="1.1.0-dev">
 
-    <name>Cordova sqlite ext common</name>
+    <name>Cordova sqlite storage plugin - cordova-sqlite-ext-common version branch</name>
 
     <license>MIT</license>
 
