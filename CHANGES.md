@@ -1,5 +1,7 @@
 # Changes
 
+### cordova-sqlite-ext-common 1.1.0-dev
+
 ### cordova-sqlite-ext-common 1.0.0
 
 - Use cordova-sqlite-ext-deps@2.0.0 with SQLITE_DBCONFIG_DEFENSIVE setting used by sqlite-native-driver.jar on Android
