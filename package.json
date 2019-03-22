@@ -33,9 +33,13 @@
     "cordova-sqlite-ext-deps": "2.0.0"
   },
   "scripts": {
-    "start": "node scripts/prepareSpec.js"
+    "clean-spec": "rm -rf spec/[mnp]* && git cl spec/config.xml && git st",
+    "prepare-js": "coffee -p SQLitePlugin.coffee.md > www/SQLitePlugin.js",
+    "prepare-spec": "node scripts/prepareSpec.js"
   },
   "devDependencies": {
-    "shelljs": "^0.8.3"
+    "coffeescript": "1",
+    "cross-spawn": "^6.0.5",
+    "fs-extra": "^7.0.1"
   }
 }
