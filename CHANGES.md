@@ -2,6 +2,8 @@
 
 ### cordova-sqlite-ext-common 1.1.0-dev
 
+- no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on iOS/macOS (cordova-sqlite-ext-common version branch)
+
 ### cordova-sqlite-ext-common 1.0.0
 
 - Use cordova-sqlite-ext-deps@2.0.0 with SQLITE_DBCONFIG_DEFENSIVE setting used by sqlite-native-driver.jar on Android
