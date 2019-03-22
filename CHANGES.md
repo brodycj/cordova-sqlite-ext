@@ -1,6 +1,6 @@
 # Changes
 
-### cordova-sqlite-ext-common 1.1.0-dev
+### cordova-sqlite-ext-common 1.1.0
 
 - no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on Windows (cordova-sqlite-ext-common version branch)
 - no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on iOS/macOS (cordova-sqlite-ext-common version branch)
