@@ -86,7 +86,12 @@ class SQLiteAndroidDatabase
     void closeDatabaseNow() {
         if (mydb != null) {
             if (isTransactionActive) {
-                mydb.endTransaction();
+                try {
+                    mydb.endTransaction();
+                } catch (Exception ex) {
+                    Log.v("closeDatabaseNow", "INTERNAL PLUGIN ERROR IGNORED: Not able to end active transaction before closing database: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
                 isTransactionActive = false;
             }
             mydb.close();
@@ -110,7 +115,8 @@ class SQLiteAndroidDatabase
 
         if (mydb == null) {
             // not allowed - can only happen if someone has closed (and possibly deleted) a database and then re-used the database
-            cbc.error("database has been closed");
+            // (internal plugin error)
+            cbc.error("INTERNAL PLUGIN ERROR: database not open");
             return;
         }
 
