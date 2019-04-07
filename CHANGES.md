@@ -1,6 +1,6 @@
 # Changes
 
-### cordova-sqlite-ext-common 1.1.0-dev
+#### brodybits/cordova-sqlite-ext-common-version-branch 1.1.0
 
 - open database cleanup on Windows (add extra blank line)
 - cleanup open database REGEXP initialization on iOS/macOS
