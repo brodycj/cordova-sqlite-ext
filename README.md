@@ -247,7 +247,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - Truncation issue with UNICODE `\u0000` character (same as `\0`)
   - REGEXP not supported
   - INCONSISTENT error code (0) and INCORRECT error message (missing actual error info) in error callbacks ref: [xpbrew/cordova-sqlite-storage#539](https://github.com/xpbrew/cordova-sqlite-storage/issues/539)
-  - Not possible to SELECT BLOB column values directly. It is recommended to use built-in HEX function to retrieve BLOB column values, which should work consistently across all platform implementations as well as (WebKit) Web SQL. Non-standard BASE64 function to SELECT BLOB column values in Base64 format is supported by [`brodybits/cordova-sqlite-ext`](https://github.com/brodybits/cordova-sqlite-ext) (permissive license terms) and [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license terms).
+  - Not possible to SELECT BLOB column values directly. It is recommended to use built-in HEX function to retrieve BLOB column values, which should work consistently across all platform implementations as well as (WebKit) Web SQL. Non-standard BASE64 function to SELECT BLOB column values in Base64 format is supported by *this plugin version* (permissive license terms) and [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license terms).
   - Windows platform version uses `UTF-16le` internal database encoding while the other platform versions use `UTF-8` internal encoding. (`UTF-8` internal encoding is preferred ref: [xpbrew/cordova-sqlite-storage#652](https://github.com/xpbrew/cordova-sqlite-storage/issues/652))
   - Known issue with database names that contain certain US-ASCII punctuation and control characters (see below)
 - The macOS platform version ("osx" platform) is not tested in a release build and should be considered pre-alpha.
@@ -277,7 +277,8 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - This plugin version references Windows platform toolset v141 to support Visual Studio 2017 ref: [xpbrew/cordova-sqlite-storage#580](https://github.com/xpbrew/cordova-sqlite-storage/issues/580). (Visual Studio 2015 is now supported by [`brodybits/cordova-sqlite-legacy`](https://github.com/brodybits/cordova-sqlite-legacy) (permissive license terms, no performance enhancements for Android) and [`brodybits/cordova-sqlite-evcore-legacy-ext-common-free`](https://github.com/brodybits/cordova-sqlite-evcore-legacy-ext-common-free) (GPL or commercial license terms, with performance enhancements for Android). UNTESTED workaround for Visual Studio 2015: it *may* be possible to support this plugin version on Visual Studio 2015 Update 3 by installing platform toolset v141.)
 - [brodybits / cordova-sqlite-test-app](https://github.com/brodybits/cordova-sqlite-test-app) is a CC0 (public domain) starting point to reproduce issues with this plugin and may be used as a quick way to start developing a new app.
 - The Lawnchair adapter is now moved to [litehelpers / cordova-sqlite-lawnchair-adapter](https://github.com/litehelpers/cordova-sqlite-lawnchair-adapter).
-- [`brodybits/cordova-sqlite-ext`](https://github.com/brodybits/cordova-sqlite-ext) now supports SELECT BLOB data in Base64 format on all platforms in addition to REGEXP (Android/iOS/macOS) and pre-populated database (all platforms).
+- This plugin version supports SELECT BLOB data in Base64 format on all platforms, REGEXP on Android/iOS/macOS, and FTS5 on all platforms.
+- [`brodybits/cordova-sqlite-ext`](https://github.com/brodybits/cordova-sqlite-ext) supports SELECT BLOB data in Base64 format on all platforms in addition to REGEXP (Android/iOS/macOS), FTS5 (all platforms), and pre-populated database (all platforms).
 - [brodybits / sql-promise-helper](https://github.com/brodybits/sql-promise-helper) provides a Promise-based API wrapper.
 - [nolanlawson / pouchdb-adapter-cordova-sqlite](https://github.com/nolanlawson/pouchdb-adapter-cordova-sqlite) supports this plugin along with other implementations such as [nolanlawson / sqlite-plugin-2](https://github.com/nolanlawson/sqlite-plugin-2) and [Microsoft / cordova-plugin-websql](https://github.com/Microsoft/cordova-plugin-websql).
 - macOS ("osx" platform) is now supported
@@ -597,7 +598,7 @@ See **Security of sensitive data** in the [Security](#security) section above.
 - When a database is opened and deleted without closing, the iOS/macOS platform version is known to leak resources.
 - It is NOT possible to open multiple databases with the same name but in different locations (iOS/macOS platform version).
 
-Some additional issues are tracked in [open cordova-sqlite-storage bug-general issues](https://github.com/xpbrew/cordova-sqlite-storage/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general).
+Some additional issues are tracked in [open cordova-sqlite-storage bug-general issues](https://github.com/xpbrew/cordova-sqlite-storage/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general) and [open cordova-sqlite-ext bug-general issues](https://github.com/brodybits/cordova-sqlite-ext/issues?q=is%3Aissue+is%3Aopen+label%3Abug-general).
 
 <!-- END Known issues -->
 
@@ -610,6 +611,7 @@ Some additional issues are tracked in [open cordova-sqlite-storage bug-general i
 - This plugin version will not work within a web worker (not properly supported by the Cordova framework). Use within a web worker is supported for Android/iOS/macOS in [litehelpers / cordova-sqlite-evmax-ext-workers-legacy-build-free](https://github.com/litehelpers/cordova-sqlite-evmax-ext-workers-legacy-build-free) (GPL or special premium commercial license terms).
 - In-memory database `db=window.sqlitePlugin.openDatabase({name: ':memory:', ...})` is currently not supported.
 - The Android platform version cannot properly support more than 100 open database files due to the threading model used.
+- REGEXP is currently not supported on Windows.
 - SQL error messages reported by Windows platform version are not consistent with Android/iOS/macOS platform versions.
 - UNICODE `\u2028` (line separator) and `\u2029` (paragraph separator) characters are currently not supported and known to be broken on iOS, macOS, and Android platform versions due to JSON issues reported in [Cordova bug CB-9435](https://issues.apache.org/jira/browse/CB-9435) and [cordova/cordova-discuss#57](https://github.com/cordova/cordova-discuss/issues/57). This is fixed with a workaround for iOS/macOS in: [litehelpers / Cordova-sqlite-evplus-legacy-free](https://github.com/litehelpers/Cordova-sqlite-evplus-legacy-free) and [litehelpers / Cordova-sqlite-evplus-legacy-attach-detach-free](https://github.com/litehelpers/Cordova-sqlite-evplus-legacy-attach-detach-free) (GPL or special commercial license terms) as well as [litehelpers / cordova-sqlite-evmax-ext-workers-legacy-build-free](https://github.com/litehelpers/cordova-sqlite-evmax-ext-workers-legacy-build-free) (GPL or premium commercial license terms).
 - SELECT BLOB column value type is not supported consistently across all platforms (not supported on Windows). It is recommended to use the built-in HEX function to SELECT BLOB column data in hexadecimal format, working consistently across all platforms. As an alternative: SELECT BLOB in Base64 format is supported by *this plugin version* (permissive license terms) and [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license options).
@@ -629,8 +631,7 @@ Some additional issues are tracked in [open cordova-sqlite-storage bug-general i
 - Does not work with [axemclion / react-native-cordova-plugin](https://github.com/axemclion/react-native-cordova-plugin) since the `window.sqlitePlugin` object is NOT properly exported (ES5 feature). It is recommended to use [andpor / react-native-sqlite-storage](https://github.com/andpor/react-native-sqlite-storage) for SQLite database access with React Native Android/iOS instead.
 - Does not support named parameters (`?NNN`/`:AAA`/`@AAAA`/`$AAAA` parameter placeholders as documented in <https://www.sqlite.org/lang_expr.html#varparam> and <https://www.sqlite.org/c3ref/bind_blob.html>) ref: [xpbrew/cordova-sqlite-storage#717](https://github.com/xpbrew/cordova-sqlite-storage/issues/717)
 - User defined functions not supported, due to problems described in [xpbrew/cordova-sqlite-storage#741](https://github.com/xpbrew/cordova-sqlite-storage/issues/741)
-
-Additional limitations are tracked in [marked cordova-sqlite-storage doc-todo issues](https://github.com/xpbrew/cordova-sqlite-storage/issues?q=is%3Aissue+label%3Adoc-todo).
+- Additional limitations are tracked in [marked cordova-sqlite-storage doc-todo issues](https://github.com/xpbrew/cordova-sqlite-storage/issues?q=is%3Aissue+label%3Adoc-todo) and [marked cordova-sqlite-ext doc-todo issues](https://github.com/brodybits/cordova-sqlite-ext/issues?q=is%3Aissue+label%3Adoc-todo).
 
 <!-- END Other limitations -->
 
@@ -1571,7 +1572,7 @@ Please include the following:
 
 ## Where to request help
 
-- [brodybits / cordova-sqlite-ext-common / issues](https://github.com/brodybits/cordova-sqlite-ext-common/issues)
+- [brodybits / cordova-sqlite-ext / issues](https://github.com/brodybits/cordova-sqlite-ext/issues)
 - [xpbrew / cordova-sqlite-storage-help / issues](https://github.com/xpbrew/cordova-sqlite-storage-help)
 
 Please include the information described above otherwise.
