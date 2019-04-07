@@ -2,6 +2,7 @@
 
 ### cordova-sqlite-ext-common 1.1.0-dev
 
+- open database cleanup on Windows (add extra blank line)
 - cleanup open database REGEXP initialization on iOS/macOS
 - no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on Windows (cordova-sqlite-ext-common version branch)
 - no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on iOS/macOS (cordova-sqlite-ext-common version branch)
