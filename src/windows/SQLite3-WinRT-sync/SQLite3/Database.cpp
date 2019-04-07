@@ -22,6 +22,7 @@ namespace SQLite3
     }
 
     sqlite3_db_config(sqlite, SQLITE_DBCONFIG_DEFENSIVE, 1, NULL);
+
     sqlite3_base64_init(sqlite);
   }
 
