@@ -155,10 +155,11 @@
                 [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
                 return;
             } else {
-                // TBD IGNORE result:
-                const char * err1;
                 sqlite3_db_config(db, SQLITE_DBCONFIG_DEFENSIVE, 1, NULL);
-                sqlite3_regexp_init(db, &err1);
+
+                // [TBD] any possible sqlite3_regexp_init error result ignored:
+                const char * errIgnored;
+                sqlite3_regexp_init(db, &errIgnored);
 
                 sqlite3_base64_init(db);
 
