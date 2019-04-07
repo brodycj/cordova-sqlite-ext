@@ -1,4 +1,4 @@
-# Cordova/PhoneGap sqlite storage adapter with extra features
+# Cross-platform SQLite storage plugin for Cordova/PhoneGap - cordova-sqlite-ext version with extra features
 
 Native interface to sqlite in a Cordova/PhoneGap plugin for Android, iOS, macOS, and Windows 10 (UWP), with API similar to HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/).
 
@@ -215,7 +215,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - Fixed iOS/macOS platform version to use [PSPDFThreadSafeMutableDictionary.m](https://gist.github.com/steipete/5928916) to avoid threading issue ref: [litehelpers/Cordova-sqlite-storage#716](https://github.com/litehelpers/Cordova-sqlite-storage/issues/716)
 - [brodybits / cordova-sqlite-ext-bootstrap-starter-app](https://github.com/brodybits/cordova-sqlite-ext-bootstrap-starter-app) project is a CC0 (public domain) starting point with a pre-populated database working, may also be used to reproduce issues with this plugin. In addition [brodybits / cordova-sqlite-test-app](https://github.com/brodybits/cordova-sqlite-test-app) may be used to reproduce issues with other versions of this plugin.
 - The Lawnchair adapter is now moved to [litehelpers / cordova-sqlite-lawnchair-adapter](https://github.com/litehelpers/cordova-sqlite-lawnchair-adapter).
-- This _plugin version_ now supports SELECT BLOB data in Base64 format on all platforms in addition to REGEXP (Android/iOS/macOS) and pre-populated database (all platforms).
+- This plugin version supports SELECT BLOB data in Base64 format on all platforms in addition to REGEXP (Android/iOS/macOS), FTS5 (all platforms), and pre-populated database (all platforms).
 - [brodybits / sql-promise-helper](https://github.com/brodybits/sql-promise-helper) provides a Promise-based API wrapper.
 - [nolanlawson / pouchdb-adapter-cordova-sqlite](https://github.com/nolanlawson/pouchdb-adapter-cordova-sqlite) supports this plugin along with other implementations such as [nolanlawson / sqlite-plugin-2](https://github.com/nolanlawson/sqlite-plugin-2) and [Microsoft / cordova-plugin-websql](https://github.com/Microsoft/cordova-plugin-websql).
 - macOS ("osx" platform) is now supported
@@ -291,7 +291,7 @@ The Windows platform can present a number of challenges which increase when usin
 Use the following command to install this plugin from the Cordova CLI:
 
 ```shell
-cordova plugin add cordova-sqlite-ext --save
+cordova plugin add cordova-sqlite-ext # --save RECOMMENDED for Cordova CLI pre-7.0
 ```
 
 Add any desired platform(s) if not already present, for example:
@@ -1288,7 +1288,7 @@ Other resource (apparently for Ionic 1): <https://www.packtpub.com/books/content
 ```shell
 npm install -g cordova # (in case you don't have cordova)
 cordova create MyProjectFolder com.my.project MyProject && cd MyProjectFolder # if you are just starting
-cordova plugin add cordova-sqlite-ext --save
+cordova plugin add cordova-sqlite-ext # --save RECOMMENDED for Cordova CLI pre-7.0
 cordova platform add <desired platform> # repeat for all desired platform(s)
 cordova prepare # OPTIONAL (MAY BE NEEDED cordova-ios pre-4.3.0 (Cordova CLI pre-6.4.0))
 ```
