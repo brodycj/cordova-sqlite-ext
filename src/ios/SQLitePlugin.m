@@ -219,7 +219,7 @@
         else
             NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
     } else if ([[NSFileManager defaultManager] fileExistsAtPath:prepopulatedDbAssets]) {
-        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+        NSLog(@"Found prepopulated DB: %@", prepopulatedDbAssets);
         NSError * error;
         BOOL success = [[NSFileManager defaultManager] copyItemAtPath:prepopulatedDbAssets toPath:dbname error:&error];
         
@@ -228,7 +228,7 @@
         else
             NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
     } else if ([[NSFileManager defaultManager] fileExistsAtPath:publicDB]) {
-        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+        NSLog(@"Found prepopulated DB: %@", publicDB);
         NSError * error;
         BOOL success = [[NSFileManager defaultManager] copyItemAtPath:publicDB toPath:dbname error:&error];
         
@@ -237,7 +237,7 @@
         else
             NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
     } else if ([[NSFileManager defaultManager] fileExistsAtPath:assetsDB]) {
-        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+        NSLog(@"Found prepopulated DB: %@", assetsDB);
         NSError * error;
         BOOL success = [[NSFileManager defaultManager] copyItemAtPath:assetsDB toPath:dbname error:&error];
         
