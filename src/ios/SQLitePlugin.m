@@ -199,14 +199,48 @@
     NSString * bundleRoot = [[NSBundle mainBundle] resourcePath];
 
     NSString * www = [bundleRoot stringByAppendingPathComponent:@"www"];
+    NSString * wwwAssets = [www stringByAppendingPathComponent:@"assets"];
     NSString * prepopulatedDb = [www stringByAppendingPathComponent: dbfile];
+    NSString * prepopulatedDbAssets = [wwwAssets stringByAppendingPathComponent: dbfile];
     // NSLog(@"Look for pre-populated DB at: %@", prepopulatedDb);
+    
+    NSString * public = [bundleRoot stringByAppendingPathComponent:@"public"];
+    NSString * assets = [public stringByAppendingPathComponent:@"assets"];
+    NSString * publicDB = [public stringByAppendingPathComponent: dbfile];
+    NSString * assetsDB = [assets stringByAppendingPathComponent: dbfile];
 
     if ([[NSFileManager defaultManager] fileExistsAtPath:prepopulatedDb]) {
         NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
         NSError * error;
         BOOL success = [[NSFileManager defaultManager] copyItemAtPath:prepopulatedDb toPath:dbname error:&error];
 
+        if(success)
+            NSLog(@"Copied pre-populated DB content to: %@", dbname);
+        else
+            NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:prepopulatedDbAssets]) {
+        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+        NSError * error;
+        BOOL success = [[NSFileManager defaultManager] copyItemAtPath:prepopulatedDbAssets toPath:dbname error:&error];
+        
+        if(success)
+            NSLog(@"Copied pre-populated DB content to: %@", dbname);
+        else
+            NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:publicDB]) {
+        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+        NSError * error;
+        BOOL success = [[NSFileManager defaultManager] copyItemAtPath:publicDB toPath:dbname error:&error];
+        
+        if(success)
+            NSLog(@"Copied pre-populated DB content to: %@", dbname);
+        else
+            NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
+    } else if ([[NSFileManager defaultManager] fileExistsAtPath:assetsDB]) {
+        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+        NSError * error;
+        BOOL success = [[NSFileManager defaultManager] copyItemAtPath:assetsDB toPath:dbname error:&error];
+        
         if(success)
             NSLog(@"Copied pre-populated DB content to: %@", dbname);
         else
