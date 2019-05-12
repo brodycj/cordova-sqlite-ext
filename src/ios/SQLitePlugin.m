@@ -198,8 +198,9 @@
     // IMPLEMENTATION based on various sources:
     NSString * bundleRoot = [[NSBundle mainBundle] resourcePath];
 
-    NSString * www = [bundleRoot stringByAppendingPathComponent:@"www"];
-    NSString * prepopulatedDb = [www stringByAppendingPathComponent: dbfile];
+    NSString * public = [bundleRoot stringByAppendingPathComponent:@"public"];
+    NSString * assets = [public stringByAppendingPathComponent:@"assets"];
+    NSString * prepopulatedDb = [assets stringByAppendingPathComponent: dbfile];
     // NSLog(@"Look for pre-populated DB at: %@", prepopulatedDb);
 
     if ([[NSFileManager defaultManager] fileExistsAtPath:prepopulatedDb]) {
