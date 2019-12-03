@@ -1,6 +1,6 @@
 {
   "name": "cordova-sqlite-ext",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Native interface to SQLite for PhoneGap/Cordova with extra features",
   "cordova": {
     "id": "cordova-sqlite-ext",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/litehelpers/cordova-sqlite-ext",
   "dependencies": {
-    "cordova-sqlite-ext-deps": "2.0.1"
+    "cordova-sqlite-ext-deps": "2.1.0"
   },
   "scripts": {
     "start": "node scripts/prepareSpec.js"

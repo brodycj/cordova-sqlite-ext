@@ -147,7 +147,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - BASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
 - _BLOB column values are NO LONGER automatically converted to Base64 format. MUST use SELECT BASE64(column) to return column value in Base64 format as documented below._
-- SQLite version `3.28.0` included with the following build settings:
+- SQLite version `3.30.1` included with the following build settings:
   - `SQLITE_THREADSAFE=1`
   - `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE build setting) ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)
   - `SQLITE_DEFAULT_MEMSTATUS=0`
@@ -164,7 +164,8 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - `SQLITE_ENABLE_RTREE`
   - `SQLITE_ENABLE_JSON1`
   - `SQLITE_ENABLE_RTREE`
-  - `SQLITE_DEFAULT_PAGE_SIZE=1024` and `SQLITE_DEFAULT_CACHE_SIZE=2000` to avoid "potentially distruptive change(s)" from SQLite 3.12.0 described at: <http://sqlite.org/pgszchng2016.html>
+  - _`SQLITE_DEFAULT_PAGE_SIZE=1024` and `SQLITE_DEFAULT_CACHE_SIZE=2000` (old default values) on iOS, macOS, and Windows_
+  - _`SQLITE_DEFAULT_PAGE_SIZE=4096` and `SQLITE_DEFAULT_CACHE_SIZE=-2000` (new default values) on Android ref: <http://sqlite.org/pgszchng2016.html>_
   - `SQLITE_OS_WINRT` (Windows only)
   - `NDEBUG` on Windows (Release build only)
 - `SQLITE_DBCONFIG_DEFENSIVE` flag is used for extra SQL safety on all platforms Android/iOS/macOS/Windows ref:
@@ -200,7 +201,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 ## Announcements
 
 - This plugin version includes the following extra (non-standard) features: BASE 64 (all platforms Android/iOS/macOS/Windows), REGEXP (Android/iOS/macOS)
-- _Using recent version of SQLite3 (`3.28.0`) with a security update ([litehelpers/Cordova-sqlite-storage#837](https://github.com/litehelpers/Cordova-sqlite-storage/issues/837)) and window functions_
+- _Using recent version of SQLite3 (`3.30.1`) with security updates and window functions_
 - _Using `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE) build setting to be extra robust against possible database corruption ref: [litehelpers/Cordova-sqlite-storage#736](https://github.com/litehelpers/Cordova-sqlite-storage/issues/736)_
 - `SQLITE_DBCONFIG_DEFENSIVE` flag is used for extra SQL safety, as described above
 - _This plugin version references Windows platform toolset v141 to support Visual Studio 2017. Visual Studio 2015 is now supported by [litehelpers / cordova-sqlite-legacy](https://github.com/litehelpers/cordova-sqlite-legacy) (WITH the extra BASE64, REGEXP, and pre-populated database features INCLUDED)_

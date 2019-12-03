@@ -1,5 +1,9 @@
 # Changes
 
+### cordova-sqlite-ext 3.1.0
+
+- cordova-sqlite-ext-deps@2.1.0 with SQLite 3.30.1 update, with new default page size & cache size on Android
+
 ### cordova-sqlite-ext 3.0.1
 
 - cordova-sqlite-ext-deps@2.0.1 with SQLite 3.28.0 update
