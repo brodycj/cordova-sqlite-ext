@@ -1,6 +1,8 @@
 # Changes
 
-### cordova-sqlite-ext-common 2.0.0-pre01
+### cordova-sqlite-ext-common 2.0.0-pre02
+
+- SQLite 3.30.1 build update, with new default page & cache sizes from cordova-sqlite-ext-deps@2.1.0
 
 #### cordova-sqlite-storage 3.0.0
 
