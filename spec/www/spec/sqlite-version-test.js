@@ -161,7 +161,7 @@ var mytests = function() {
             expect(rs).toBeDefined();
             expect(rs.rows).toBeDefined();
             expect(rs.rows.length).toBe(1);
-            // TBD STOP here for now
+            expect(rs.rows.item(0).page_size).toBe(4096);
 
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
@@ -187,12 +187,11 @@ var mytests = function() {
             var resultRow = rs.rows.item(0);
             expect(resultRow).toBeDefined();
             expect(resultRow.cache_size).toBeDefined();
-            return done(); // TBD STOP here for now
-            if (!isWebSql && !isWindows && isAndroid && isImpl2 &&
-                (/Android 8/.test(navigator.userAgent)))
-              expect(resultRow.cache_size).toBe(-2000); // NEW VALUE for androidDatabaseImplementation: 2, Android 8.x
+            if (!isWebSql && isAndroid && isImpl2
+                && (/Android [3-7]/.test(navigator.userAgent)))
+              expect(resultRow.cache_size).toBe(2000); // TBD OLD VALUE on Android (...)
             else
-              expect(resultRow.cache_size).toBe(2000); // XXX TBD OLD VALUE USED IN THIS PLUGIN VERSION & androidDatabaseImplementation: 2 for Android 4.x-7.x
+              expect(resultRow.cache_size).toBe(-2000); // NEW VALUE, otherwise
 
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
@@ -224,6 +223,7 @@ var mytests = function() {
             // DIFFERENT for builtin android.database implementation:
             if (!isWindows && isAndroid && isImpl2)
               expect(rs.rows.item(0).journal_mode).toBe(
+                (/Android 9/.test(navigator.userAgent)) ? 'wal' :
                 (/Android 8.1.99/.test(navigator.userAgent)) ? 'wal' :
                 (/Android 8/.test(navigator.userAgent)) ? 'truncate' :
                 'persist');

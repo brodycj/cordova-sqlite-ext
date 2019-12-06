@@ -1,6 +1,6 @@
 {
   "name": "cordova-sqlite-ext-common",
-  "version": "2.0.0-pre02",
+  "version": "2.0.0",
   "description": "Native interface to SQLite for PhoneGap/Cordova - cordova-sqlite-ext-common version branch",
   "cordova": {
     "id": "cordova-sqlite-ext-common",
@@ -33,9 +33,13 @@
     "cordova-sqlite-ext-deps": "2.1.0"
   },
   "scripts": {
-    "start": "node scripts/prepareSpec.js"
+    "clean-spec": "rm -rf spec/[mnp]* && git cl spec/config.xml && git status --ignored",
+    "prepare-js": "coffee -p SQLitePlugin.coffee.md > www/SQLitePlugin.js",
+    "prepare-spec": "node scripts/prepareSpec.js"
   },
   "devDependencies": {
-    "shelljs": "^0.8.3"
+    "coffeescript": "1",
+    "cross-spawn": "^6.0.5",
+    "fs-extra": "^8.1.0"
   }
 }

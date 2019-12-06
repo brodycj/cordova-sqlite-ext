@@ -1,8 +1,40 @@
 # Changes
 
-### cordova-sqlite-ext-common 2.0.0-pre02
+### cordova-sqlite-ext-common 2.0.0
 
 - SQLite 3.30.1 build update, with new default page & cache sizes from cordova-sqlite-ext-deps@2.1.0
+
+#### cordova-sqlite-storage 4.0.0
+
+- rename PSPDFThreadSafeMutableDictionary to CustomPSPDFThreadSafeMutableDictionary and completely remove PSPDFThreadSafeMutableDictionary.h
+
+#### cordova-sqlite-storage 3.4.1
+
+- SQLite 3.31.1 update from cordova-sqlite-storage-dependencies@2.1.1
+
+#### cordova-sqlite-storage 3.4.0
+
+- quick workaround for `SYNTAX_ERR` redefinition
+
+#### cordova-sqlite-storage 3.3.0
+
+- new default page & cache sizes with cordova-sqlite-storage-dependencies@2.1.0
+
+##### cordova-sqlite-storage-commoncore 1.0.0
+
+- additional EU string manipulation test cases
+
+#### cordova-sqlite-storage 3.2.1
+
+- cordova-sqlite-storage-dependencies@2.0.1 with SQLite 3.28.0 update for all supported platforms Android/iOS/macOS/Windows
+
+#### cordova-sqlite-storage 3.2.0
+
+- sqlite3_threadsafe() error handling on iOS/macOS
+
+#### cordova-sqlite-storage 3.1.0
+
+- no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on iOS/macOS/Windows
 
 #### cordova-sqlite-storage 3.0.0
 

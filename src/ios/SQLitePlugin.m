@@ -14,8 +14,6 @@
 
 #import "sqlite3_base64.h"
 
-#import "PSPDFThreadSafeMutableDictionary.h"
-
 // Defines Macro to only log lines when in DEBUG mode
 #ifdef DEBUG
 #   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
@@ -27,6 +25,13 @@
 #   error "Missing objc_arc feature"
 #endif
 
+// CustomPSPDFThreadSafeMutableDictionary interface copied from
+// CustomPSPDFThreadSafeMutableDictionary.m:
+//
+// Dictionary-Subclasss whose primitive operations are thread safe.
+@interface CustomPSPDFThreadSafeMutableDictionary : NSMutableDictionary
+@end
+
 @implementation SQLitePlugin
 
 @synthesize openDBs;
@@ -37,7 +42,7 @@
     DLog(@"Initializing SQLitePlugin");
 
     {
-        openDBs = [PSPDFThreadSafeMutableDictionary dictionaryWithCapacity:0];
+        openDBs = [CustomPSPDFThreadSafeMutableDictionary dictionaryWithCapacity:0];
         appDBPaths = [NSMutableDictionary dictionaryWithCapacity:0];
 
         NSString *docs = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex: 0];
@@ -120,14 +125,19 @@
 
     NSString *dbname = [self getDBPath:dbfilename at:dblocation];
 
-    if (dbname == NULL) {
+    if (!sqlite3_threadsafe()) {
+        // INTERNAL PLUGIN ERROR:
+        NSLog(@"INTERNAL PLUGIN ERROR: sqlite3_threadsafe() returns false value");
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"INTERNAL PLUGIN ERROR: sqlite3_threadsafe() returns false value"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
+        return;
+    } else if (dbname == NULL) {
         // INTERNAL PLUGIN ERROR - NOT EXPECTED:
         NSLog(@"INTERNAL PLUGIN ERROR (NOT EXPECTED): open with database name missing");
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"INTERNAL PLUGIN ERROR: open with database name missing"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
         return;
-    }
-    else {
+    } else {
         NSValue *dbPointer = [openDBs objectForKey:dbfilename];
 
         if (dbPointer != NULL) {
@@ -174,13 +184,6 @@
                 }
             }
         }
-    }
-
-    if (sqlite3_threadsafe()) {
-        DLog(@"Good news: SQLite is thread safe!");
-    }
-    else {
-        DLog(@"Warning: SQLite is not thread safe.");
     }
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
@@ -528,7 +531,7 @@
     // the websql error code
     switch(code) {
         case SQLITE_ERROR:
-            return SYNTAX_ERR;
+            return SYNTAX_ERR_;
         case SQLITE_FULL:
             return QUOTA_ERR;
         case SQLITE_CONSTRAINT:
