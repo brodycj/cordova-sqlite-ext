@@ -1,5 +1,56 @@
 # Changes
 
+### cordova-sqlite-ext 4.0.0
+
+### cordova-sqlite-ext-common 2.0.0
+
+- SQLite 3.30.1 build update, with new default page & cache sizes from cordova-sqlite-ext-deps@2.1.0
+
+#### cordova-sqlite-storage 4.0.0
+
+- rename PSPDFThreadSafeMutableDictionary to CustomPSPDFThreadSafeMutableDictionary and completely remove PSPDFThreadSafeMutableDictionary.h
+
+#### cordova-sqlite-storage 3.4.1
+
+- SQLite 3.31.1 update from cordova-sqlite-storage-dependencies@2.1.1
+
+#### cordova-sqlite-storage 3.4.0
+
+- quick workaround for `SYNTAX_ERR` redefinition
+
+#### cordova-sqlite-storage 3.3.0
+
+- new default page & cache sizes with cordova-sqlite-storage-dependencies@2.1.0
+
+##### cordova-sqlite-storage-commoncore 1.0.0
+
+- additional EU string manipulation test cases
+
+#### cordova-sqlite-storage 3.2.1
+
+- cordova-sqlite-storage-dependencies@2.0.1 with SQLite 3.28.0 update for all supported platforms Android/iOS/macOS/Windows
+
+#### cordova-sqlite-storage 3.2.0
+
+- sqlite3_threadsafe() error handling on iOS/macOS
+
+#### cordova-sqlite-storage 3.1.0
+
+- no SQLITE_DEFAULT_CACHE_SIZE compile-time setting on iOS/macOS/Windows
+
+#### cordova-sqlite-storage 3.0.0
+
+- Use cordova-sqlite-storage-dependencies 2.0.0 with SQLITE_DBCONFIG_DEFENSIVE setting used by sqlite-native-driver.jar on Android
+
+###### cordova-sqlite-ext-common-core 0.2.0
+
+- Move SQLite3.UWP.vcxproj out of extra SQLite3.UWP subdirectory
+- Completely remove old Windows 8.1 & Windows Phone 8.1 vcxproj files
+
+###### cordova-sqlite-extcore 0.1.0
+
+- move the embedded `SQLite3-WinRT` component to `src/windows/SQLite3-WinRT-sync` and update `plugin.xml`
+
 ### cordova-sqlite-ext 3.1.0
 
 - cordova-sqlite-ext-deps@2.1.0 with SQLite 3.30.1 update, with new default page size & cache size on Android
@@ -49,9 +100,50 @@ Note that cordova-sqlite-ext@3.0.0 includes the SQLite 3.26.0 build updates from
 - remove backgroundExecuteSql method not needed (iOS/macOS)
 - Completely remove iOS/macOS MRC (Manual Reference Counting) support - should be considered a POSSIBLY BREAKING change
 
-###### cordova-sqlite-storage-ext-core-common 1.0.0
+### cordova-sqlite-storage 2.6.0
 
-- Use SQLite 3.26.0 (with a security update and support for window functions) with SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) from cordova-sqlite-storage-dependencies 1.2.1 in this plugin version branch
+- Use cordova-sqlite-storage-dependencies 1.2.1 with SQLite 3.26.0, with a security update and support for window functions
+
+### cordova-sqlite-storage 2.5.2
+
+- Ignore Android end transaction error when closing for androidDatabaseProvider: 'system' setting, to avoid possible crash during app shutdown (<https://github.com/litehelpers/Cordova-sqlite-storage/issues/833>)
+
+### cordova-sqlite-storage 2.5.1
+
+- fix internal plugin cleanup error log on Android
+
+### cordova-sqlite-storage 2.5.0
+
+- androidDatabaseProvider: 'system' setting, to replace androidDatabaseImplementation setting which is now deprecated
+
+### cordova-sqlite-storage 2.4.0
+
+- Report internal plugin error in case of attempt to open database with no database name on iOS or macOS
+- Cover use of standard (WebKit) Web SQL API in spec test suite
+- Test and document insertId in UPDATE result set on plugin vs (WebKit) Web SQL
+- other test updates
+
+### cordova-sqlite-storage 2.3.3
+
+- Quick fix for some iOS/macOS internal plugin error log messagess
+- test updates
+- quick doc updates
+
+### cordova-sqlite-storage 2.3.2
+
+- Mark some Android errors as internal plugin errors (quick fix)
+- remove trailing whitespace from Android implementation
+- test coverage updates
+- quick doc updates
+
+### cordova-sqlite-storage 2.3.1
+
+- Mark some iOS/macOS plugin error messages as internal plugin errors (quick fix)
+- Quick documentation updates
+
+### cordova-sqlite-storage 2.3.0
+
+- Use SQLite 3.22.0 with SQLITE_DEFAULT_SYNCHRONOUS=3 (EXTRA DURABLE) compile-time setting on all platforms (Android/iOS/macOS/Windows) ref: litehelpers/Cordova-sqlite-storage#736
 
 ### cordova-sqlite-storage 2.2.1
 
