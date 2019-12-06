@@ -289,7 +289,7 @@ The Windows platform can present a number of challenges which increase when usin
 Use the following command to install this plugin from the Cordova CLI:
 
 ```shell
-cordova plugin add https://github.com/brodybits/cordova-sqlite-ext-common --save
+cordova plugin add https://github.com/brodybits/cordova-sqlite-ext#cordova-sqlite-ext-common
 ```
 
 Add any desired platform(s) if not already present, for example:
@@ -1248,11 +1248,7 @@ Other resource (apparently for Ionic 1): <https://www.packtpub.com/books/content
 ## Easy installation with Cordova CLI tool
 
 ```shell
-npm install -g cordova # (in case you don't have cordova)
-cordova create MyProjectFolder com.my.project MyProject && cd MyProjectFolder # if you are just starting
-cordova plugin add https://github.com/brodybits/cordova-sqlite-ext-common --save
-cordova platform add <desired platform> # repeat for all desired platform(s)
-cordova prepare # OPTIONAL (MAY BE NEEDED cordova-ios pre-4.3.0 (Cordova CLI pre-6.4.0))
+cordova plugin add https://github.com/brodybits/cordova-sqlite-ext#cordova-sqlite-ext-common
 ```
 
 **Additional Cordova CLI NOTES:**
@@ -1389,7 +1385,7 @@ Please include the following:
 
 ## Where to request help
 
-- [brodybits / cordova-sqlite-ext-common / issues](https://github.com/brodybits/cordova-sqlite-ext-common/issues)
+- [brodybits / cordova-sqlite-ext / issues](https://github.com/brodybits/cordova-sqlite-ext/issues)
 - [litehelpers / Cordova-sqlite-help / issues](https://github.com/litehelpers/Cordova-sqlite-help/issues)
 
 Please include the information described above otherwise.
