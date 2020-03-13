@@ -6,25 +6,39 @@ Native SQLite component with API based on HTML5/[Web SQL (DRAFT) API](http://www
 - macOS ("osx" platform)
 - Windows 10 (UWP) DESKTOP and MOBILE (see below for major limitations)
 
+<!-- [TBD] HIDE browser usage notes for now (at least):
 Browser platform is currently supported with some limitations as described in [browser platform usage notes](#browser-platform-usage-notes) section below, will be supported with more features such as numbered parameters and SQL batch API in the near future.
+- -->
 
 **LICENSE:** MIT, with Apache 2.0 option for Android and Windows platforms (see [LICENSE.md](./LICENSE.md) for details, including third-party components used by this plugin)
 
-__WARNING: Multiple SQLite problem on all platforms__ _with possible corruption risk in case of sqlite access from multiple plugins (see below)_
+## WARNINGS
 
-## NEW MAJOR RELEASE Coming with BREAKING CHANGES
+- **Multiple SQLite corruption problem** - see section below & [`xpbrew/cordova-sqlite-storage#626`](https://github.com/xpbrew/cordova-sqlite-storage/issues/626)
+- **Breaking changes coming soon** - see section nearby & see [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922)
 
-A new major release is planned as discussed in ([xpbrew/cordova-sqlite-storage#773](https://github.com/xpbrew/cordova-sqlite-storage/issues/773)).
+## Comparison of supported plugin versions
 
-**BREAKING CHANGES expected:**
+| | Free license terms | Commercial license & support |
+| --- | --- | --- |
+| [`cordova-sqlite-storage`](https://github.com/xpbrew/cordova-sqlite-storage) - core plugin version | MIT (or Apache 2.0 on Android & Windows) | |
+| [`cordova-sqlite-express-build-support`](https://github.com/xpbrew/cordova-sqlite-express-build-support) - using built-in SQLite libraries on Android, iOS, and macOS | MIT (or Apache 2.0 on Android & Windows) | |
+| [`cordova-sqlite-ext`](https://github.com/brodybits/cordova-sqlite-ext) - with extra features including BASE64, REGEXP, and pre-populated databases | MIT (or Apache 2.0 on Android & Windows) | |
+| [`cordova-sqlite-evcore-extbuild-free`](https://github.com/brodysoft/cordova-sqlite-evcore-extbuild-free) - plugin version with lighter resource usage in Android NDK | GPL v3 | available, see <https://xpbrew.consulting/> |
+| [`cordova-plugin-sqlite-evplus-ext-common-free`](https://github.com/brodysoft/cordova-plugin-sqlite-evplus-ext-common-free) - includes workaround for extra-large result data on Android and lighter resource usage on iOS, macOS, and in Android NDK | GPL v3 | available, see <https://xpbrew.consulting/> |
 
-- error `code` will always be `0` (which is already the case on Windows); actual SQLite3 error code will be part of the error `message` member whenever possible ([xpbrew/cordova-sqlite-storage#821](https://github.com/xpbrew/cordova-sqlite-storage/issues/821))
-- drop support for iOS 8.x (was already dropped by cordova-ios@4.4.0)
+### COMING SOON
+
+New SQLite plugin design with a simpler API is in progress with a working demo - see [`brodybits/ask-me-anything#3`](https://github.com/brodybits/ask-me-anything/issues/3)
+
+
+## Breaking changes coming soon
+
+in an upcoming major release - see [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922):
+
+- drop support for Android pre-5.1, which will also be dropped by `cordova-android`, including deprecated `armeabi` target (superseded by `armeabi-v7a`, seems to be not supported by Android 5.0) - more info in [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922)
+- error `code` will always be `0` (which is already the case on Windows); actual SQLite3 error code will be part of the error `message` member whenever possible (see [`xpbrew/cordova-sqlite-storage#821`](https://github.com/xpbrew/cordova-sqlite-storage/issues/821))
 - drop support for location: 0-2 values in openDatabase call (please use `location: 'default'` or `iosDatabaseLocation` setting in openDatabase as documented below)
-
-__BREAKING CHANGE under consideration:__
-
-- drop support for Android pre-4.4 (Android 4.4 with old `armeabi` CPU to be deprecatd with limited updates in the future) ([xpbrew/cordova-sqlite-storage#771](https://github.com/xpbrew/cordova-sqlite-storage/issues/771))
 
 ## About this plugin version
 
@@ -125,7 +139,9 @@ To check the data using the DRAFT standard transaction API:
 
 ### Using plugin-specific API calls
 
+<!-- [TBD] HIDE browser usage notes for now (at least):
 NOTE: These samples will *not* work with alternative 3 for browser platform support discussed in [browser platform usage notes](#browser-platform-usage-notes).
+- -->
 
 To populate a database using the SQL batch API:
 
@@ -250,12 +266,14 @@ and window functions
 - Ionic 3 starter template is available at: [iursevla / ionic3-PreDB](https://github.com/iursevla/ionic3-PreDB), Unlicense (public domain)
 - Ionic 2 starter template is available at: [iursevla / ionic2-PreDB](https://github.com/iursevla/ionic2-PreDB), Unlicense (public domain)
 - Advanced Ionic v1.x starter template with pre-populated SQLite database at: [jdnichollsc / Ionic-Starter-Template](https://github.com/jdnichollsc/Ionic-Starter-Template) (MIT license)
+- Recent build fixes:
+  - Fixed iOS/macOS platform version to use *custom* version of [PSPDFThreadSafeMutableDictionary.m](https://gist.github.com/steipete/5928916) to avoid threading issue, custom version to avoid potential conflicts with custom iOS/macOS plugins ref: [xpbrew/cordova-sqlite-storage#716](https://github.com/xpbrew/cordova-sqlite-storage/issues/716), [xpbrew/cordova-sqlite-storage#861](https://github.com/xpbrew/cordova-sqlite-storage/issues/861)
+  - workaround for redefinition of `SYNTAX_ERR` when using some other plugins ref: [xpbrew/cordova-sqlite-storage#868](https://github.com/xpbrew/cordova-sqlite-storage/issues/868)
 - Nice overview of alternatives for storing local data in Cordova apps at: <https://www.sitepoint.com/storing-local-data-in-a-cordova-app/>
 - New alternative solution for small data storage: [TheCocoaProject / cordova-plugin-nativestorage](https://github.com/TheCocoaProject/cordova-plugin-nativestorage) - simpler "native storage of variables" for Android/iOS/Windows
 - Resolved Java 6/7/8 concurrent map compatibility issue reported in [xpbrew/cordova-sqlite-storage#726](https://github.com/xpbrew/cordova-sqlite-storage/issues/726), THANKS to pointer by [@NeoLSN (Jason Yang/楊朝傑)](https://github.com/NeoLSN) in [xpbrew/cordova-sqlite-storage#727](https://github.com/xpbrew/cordova-sqlite-storage/issues/727).
 - Updated workaround solution to [BUG 666 (xpbrew/cordova-sqlite-storage#666)](https://github.com/xpbrew/cordova-sqlite-storage/issues/666) (possible transaction issue after window.location change with possible data loss): close database if already open before opening again
 - Windows 10 (UWP) build with /SAFESEH flag on Win32 (x86) target to specify "Image has Safe Exception Handlers" as described in <https://docs.microsoft.com/en-us/cpp/build/reference/safeseh-image-has-safe-exception-handlers>
-- Fixed iOS/macOS platform version to use [PSPDFThreadSafeMutableDictionary.m](https://gist.github.com/steipete/5928916) to avoid threading issue ref: [xpbrew/cordova-sqlite-storage#716](https://github.com/xpbrew/cordova-sqlite-storage/issues/716)
 - This plugin version references Windows platform toolset v141 to support Visual Studio 2017 ref: [xpbrew/cordova-sqlite-storage#580](https://github.com/xpbrew/cordova-sqlite-storage/issues/580). (Visual Studio 2015 is now supported by [`brodybits/cordova-sqlite-legacy`](https://github.com/brodybits/cordova-sqlite-legacy) (permissive license terms, no performance enhancements for Android) and [`brodybits/cordova-sqlite-evcore-legacy-ext-common-free`](https://github.com/brodybits/cordova-sqlite-evcore-legacy-ext-common-free) (GPL or commercial license terms, with performance enhancements for Android). UNTESTED workaround for Visual Studio 2015: it *may* be possible to support this plugin version on Visual Studio 2015 Update 3 by installing platform toolset v141.)
 - [brodybits / cordova-sqlite-test-app](https://github.com/brodybits/cordova-sqlite-test-app) is a CC0 (public domain) starting point to reproduce issues with this plugin and may be used as a quick way to start developing a new app.
 - [brodybits / sql-promise-helper](https://github.com/brodybits/sql-promise-helper) provides a Promise-based API wrapper.
@@ -319,6 +337,7 @@ In addition, this guide assumes a basic knowledge of some key JavaScript concept
 
 **NOTICE:** This plugin is only supported with the Cordova CLI. This plugin is *not* supported with other Cordova/PhoneGap systems such as PhoneGap CLI, PhoneGap Build, Plugman, Intel XDK, Webstorm, etc.
 
+<!-- [TBD] HIDE browser usage notes for now (at least):
 ## Browser platform usage notes
 
 As stated above the browser platform will supported with features such as numbered parameters using [kripken / sql.js](https://github.com/kripken/sql.js) (see [xpbrew/cordova-sqlite-storage#576](https://github.com/xpbrew/cordova-sqlite-storage/pull/576)) in the near future. Alternative solutions for now, with features such as numbered paramters (`?1`, `?2`, etc.) missing:
@@ -351,6 +370,7 @@ and limit database access to DRAFT standard transactions, no plugin-specific API
 This kind of usage on Safari and Chrome desktop browser (with (WebKit) Web SQL) is now covered by the `spec` test suite.
 
 It would be ideal for the application code to abstract the part with the `openDatabase()` call away from the rest of the database access code.
+- -->
 
 ### Windows platform notes
 
@@ -1020,7 +1040,9 @@ The following types of SQL transactions are supported by this plugin version:
 
 ### Single-statement transactions
 
+<!-- [TBD] HIDE browser usage notes for now (at least):
 NOTE: This call will NOT work alternative 3 for browser platform support discussed in [browser platform usage notes](#browser-platform-usage-notes).
+- -->
 
 Sample with INSERT:
 
@@ -1069,7 +1091,9 @@ db.executeSql("SELECT UPPER('First') AS uppertext", [], function (resultSet) {
 
 ### SQL batch transactions
 
+<!-- [TBD] HIDE browser usage notes for now (at least):
 NOTE: This call will NOT work alternative 3 for browser platform support discussed in [browser platform usage notes](#browser-platform-usage-notes).
+- -->
 
 Sample:
 
