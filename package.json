@@ -1,6 +1,6 @@
 {
   "name": "cordova-sqlite-ext-common",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Native interface to SQLite for PhoneGap/Cordova - cordova-sqlite-ext-common version branch",
   "cordova": {
     "id": "cordova-sqlite-ext-common",

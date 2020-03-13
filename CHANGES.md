@@ -1,5 +1,13 @@
 # Changes
 
+### cordova-sqlite-ext-common 3.0.0
+
+#### cordova-sqlite-storage 5.0.0
+
+- avoid incorrect default directory on iOS/macOS - to be extra safe (see <https://github.com/xpbrew/cordova-sqlite-storage/issues/907>)
+  - ensure that default "nosync" directory *always* has resource value set for `NSURLIsExcludedFromBackupKey`
+  - add more checks for missing database directory
+
 ### cordova-sqlite-ext-common 2.0.0
 
 - SQLite 3.30.1 build update, with new default page & cache sizes from cordova-sqlite-ext-deps@2.1.0
