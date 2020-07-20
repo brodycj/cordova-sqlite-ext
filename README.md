@@ -34,11 +34,18 @@ New SQLite plugin design with a simpler API is in progress with a working demo -
 
 ## Breaking changes coming soon
 
-in an upcoming major release - see [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922):
+in an upcoming major release - see [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922)
+
+some highlights:
 
 - drop support for Android pre-5.1, which will also be dropped by `cordova-android`, including deprecated `armeabi` target (superseded by `armeabi-v7a`, seems to be not supported by Android 5.0) - more info in [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922)
 - error `code` will always be `0` (which is already the case on Windows); actual SQLite3 error code will be part of the error `message` member whenever possible (see [`xpbrew/cordova-sqlite-storage#821`](https://github.com/xpbrew/cordova-sqlite-storage/issues/821))
 - drop support for location: 0-2 values in openDatabase call (please use `location: 'default'` or `iosDatabaseLocation` setting in openDatabase as documented below)
+- throw an exception in case of `androidDatabaseImplementation: 2` setting which is now superseded by `androidDatabaseProvider: 'system'` setting
+
+under consideration:
+
+- remove `androidLockWorkaround: 1` option if not needed any longer - [`xpbrew/cordova-sqlite-storage#925`](https://github.com/xpbrew/cordova-sqlite-storage/issues/925)
 
 ## About this plugin version
 
@@ -200,7 +207,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
   - BASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
 - _BLOB column values are NO LONGER automatically converted to Base64 format. MUST use SELECT BASE64(column) to return column value in Base64 format as documented below._
-- SQLite `3.30.1` included when building (all platforms), with the following compile-time definitions:
+- SQLite `3.32.3` included when building (all platforms), with the following compile-time definitions:
   - `SQLITE_THREADSAFE=1`
   - `SQLITE_DEFAULT_SYNCHRONOUS=3` (EXTRA DURABLE build setting) ref: [xpbrew/cordova-sqlite-storage#736](https://github.com/xpbrew/cordova-sqlite-storage/issues/736)
   - `SQLITE_DEFAULT_MEMSTATUS=0`
