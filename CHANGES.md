@@ -2,6 +2,8 @@
 
 ### cordova-sqlite-ext-common 3.0.1-dev
 
+- update cordova-sqlite-ext-deps -> 2.1.1 with SQLite 3.32.3 update
+
 #### cordova-sqlite-storage 5.0.0
 
 - avoid incorrect default directory on iOS/macOS - to be extra safe (see <https://github.com/xpbrew/cordova-sqlite-storage/issues/907>)
