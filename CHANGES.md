@@ -1,5 +1,11 @@
 # Changes
 
+### cordova-sqlite-ext-common 3.1.0
+
+#### cordova-sqlite-storage 5.1.0
+
+- Add browser platform support using sql-asm-memory-growth.js from sql.js, with some limitations as documented
+
 ### cordova-sqlite-ext-common 3.0.1
 
 - update cordova-sqlite-ext-deps -> 2.1.1 with SQLite 3.32.3 update

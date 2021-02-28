@@ -37,8 +37,6 @@ var scenarioCount = (!!window.hasWebKitWebSQL) ? (isAndroid ? 3 : 2) : 1;
 var mytests = function() {
 
   for (var i=0; i<scenarioCount; ++i) {
-    // TBD skip plugin test on browser platform (not yet supported):
-    if (isBrowser && (i === 0)) continue;
 
     describe(scenarioList[i] + ': BASIC db tx sql storage results test(s)', function() {
       var scenarioName = scenarioList[i];
@@ -1024,6 +1022,8 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'ALTER TABLE RENAME test', function(done) {
+          if (isWebSql && isAppleMobileOS) pending('TBD SKIP for (WebKit) Web SQL on iOS');
+
           var dbname = 'ALTER-TABLE-RENAME-test.db';
           var createdb = openDatabase(dbname, '1.0', 'Test', DEFAULT_SIZE);
 
