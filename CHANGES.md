@@ -1,5 +1,7 @@
 # Changes
 
+### cordova-sqlite-ext 6.0.0-dev
+
 ### cordova-sqlite-ext 5.0.1
 
 ### cordova-sqlite-ext-common 3.0.1
