@@ -2,6 +2,14 @@
 
 ### cordova-sqlite-ext 6.0.0-dev
 
+### cordova-sqlite-ext-common 4.0.0
+
+### cordova-sqlite-storage-commoncore 2.0.0
+
+- refactor: clean up imports for Android
+- Fix plugin param name for macOS ("osx") - *tested* with Cordova 9 and cordova-osx@5
+- Drop support for Windows on ARM (Windows Mobile)
+
 ### cordova-sqlite-ext 5.0.1
 
 ### cordova-sqlite-ext-common 3.0.1
