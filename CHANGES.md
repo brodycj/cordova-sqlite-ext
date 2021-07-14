@@ -1,5 +1,9 @@
 # Changes
 
+### cordova-sqlite-ext-common 5.0.0
+
+- feat: add BLOBFROMBASE64 using cordova-sqlite-ext-deps 3.0.0 - BREAKING CHANGE due to removed Android pre-5.1 support
+
 ### cordova-sqlite-ext-common 4.0.0
 
 ### cordova-sqlite-storage-commoncore 2.0.0

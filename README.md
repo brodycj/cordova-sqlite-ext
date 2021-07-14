@@ -38,7 +38,6 @@ in an upcoming major release - see [`xpbrew/cordova-sqlite-storage#922`](https:/
 
 some highlights:
 
-- drop support for Android pre-5.1, which will also be dropped by `cordova-android`, including deprecated `armeabi` target (superseded by `armeabi-v7a`, seems to be not supported by Android 5.0) - more info in [`xpbrew/cordova-sqlite-storage#922`](https://github.com/xpbrew/cordova-sqlite-storage/issues/922)
 - error `code` will always be `0` (which is already the case on Windows); actual SQLite3 error code will be part of the error `message` member whenever possible (see [`xpbrew/cordova-sqlite-storage#821`](https://github.com/xpbrew/cordova-sqlite-storage/issues/821))
 - drop support for location: 0-2 values in openDatabase call (please use `location: 'default'` or `iosDatabaseLocation` setting in openDatabase as documented below)
 - throw an exception in case of `androidDatabaseImplementation: 2` setting which is now superseded by `androidDatabaseProvider: 'system'` setting
@@ -49,7 +48,7 @@ under consideration:
 
 ## About this plugin version
 
-This is a common plugin version branch with the following extra (non-standard) features: REGEXP, BASE64
+This is a common plugin version branch with the following extra (non-standard) features: REGEXP, BASE64, BLOBFROMBASE64
 
 This plugin version uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-ext-deps` via npm.
 
@@ -204,7 +203,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - This plugin version uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-storage-dependencies` via npm.
 - Use of other systems such as Cordova Plugman, PhoneGap CLI, PhoneGap Build, and Intel XDK is no longer supported by this plugin version since they do not honor the `before_plugin_install` hook. The supported solution is to use [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license terms); deprecated alternative with permissive license terms is available at: [brodybits / cordova-sqlite-legacy-build-support](https://github.com/brodybits/cordova-sqlite-legacy-build-support) (very limited testing, very limited updates).
 - This plugin version includes the following extra (non-standard) features:
-  - BASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
+  - BASE64 and BLOBFROMBASE64 integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-core](https://github.com/brodybits/libb64-core) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
   - REGEXP for Android (default Android-sqlite-connector database implementation), iOS, and macOS using [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
 - SQLite `3.32.3` included when building (all platforms), with the following compile-time definitions:
   - `SQLITE_THREADSAFE=1`
@@ -1217,6 +1216,17 @@ db.readTransaction(function(tx) {
 db.readTransaction(function(tx) {
   tx.executeSql("SELECT BASE64(data) AS base64_data FROM MyTable", [], function(tx, resultSet) {
     console.log('BLOB data (base64): ' + resultSet.rows.item(0).base64_data);
+  });
+});
+```
+
+### INSERT BLOB data from BASE64 string value
+
+```Javascript
+db.transaction(function(tx) {
+  tx.executeSql("INSERT INTO MyTable (data) VALUES (BLOBFROMBASE64(?))", ["AQID"], function(tx, resultSet) {
+    console.log("insertId: " + resultSet.insertId + " -- probably 1");
+    console.log("rowsAffected: " + resultSet.rowsAffected + " -- should be 1");
   });
 });
 ```
