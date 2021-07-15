@@ -45,11 +45,11 @@ var mytests = function() {
 
       describe(suiteName + 'SELECT BLOBFROMBASE64 value test(s)', function() {
 
-        it(suiteName + "SELECT HEX(BLOBFROMBASE64('AQID')) [X'010203']", function(done) {
+        it(suiteName + "SELECT HEX(BLOBFROMBASE64('AQID')) [X'010203'] INLINE", function(done) {
           if (isWebSql) pending('SKIP: BLOBFROMBASE64 not supported by Web SQL');
           if (!isWebSql && isAndroid && isImpl2) pending("SKIP: BLOBFROMBASE64 not supported with androidDatabaseProvider: 'system'");
 
-          var db = openDatabase('SELECT-BLOBFROMBASE64-AQID-AS-HEX-VALUE.db');
+          var db = openDatabase('SELECT-BLOBFROMBASE64-AQID-AS-HEX-VALUE-INLINE.db');
 
           db.transaction(function(tx) {
             tx.executeSql("SELECT HEX(BLOBFROMBASE64('AQID')) AS hex_value", [], function(ignored, rs) {
@@ -64,9 +64,47 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
+        it(suiteName + "SELECT HEX of BLOBFROMBASE64 with 'AQID' [X'010203'] parameter", function(done) {
+          if (isWebSql) pending('SKIP: BLOBFROMBASE64 not supported by Web SQL');
+          if (!isWebSql && isAndroid && isImpl2) pending("SKIP: BLOBFROMBASE64 not supported with androidDatabaseProvider: 'system'");
+
+          var db = openDatabase('SELECT-HEX-of-BLOBFROMBASE64-AQID-AS-HEX-VALUE.db');
+
+          db.transaction(function(tx) {
+            tx.executeSql("SELECT HEX(BLOBFROMBASE64(?)) AS hex_value", ['AQID'], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).hex_value).toBe('010203');
+
+              // Close (plugin only) & finish:
+              (isWebSql) ? done() : db.close(done, done);
+            });
+          });
+        }, MYTIMEOUT);
+
+        it(suiteName + "SELECT HEX of BLOBFROMBASE64 with 'AQID AQIE AQIF' [X'010203010204010205' - spaces ignored] parameter", function(done) {
+          if (isWebSql) pending('SKIP: BLOBFROMBASE64 not supported by Web SQL');
+          if (!isWebSql && isAndroid && isImpl2) pending("SKIP: BLOBFROMBASE64 not supported with androidDatabaseProvider: 'system'");
+
+          var db = openDatabase('SELECT-HEX-of-BLOBFROMBASE64-AQID-AS-HEX-VALUE.db');
+
+          db.transaction(function(tx) {
+            tx.executeSql("SELECT HEX(BLOBFROMBASE64(?)) AS hex_value", ['AQID AQIE AQIF'], function(ignored, rs) {
+              expect(rs).toBeDefined();
+              expect(rs.rows).toBeDefined();
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).hex_value).toBe('010203010204010205');
+
+              // Close (plugin only) & finish:
+              (isWebSql) ? done() : db.close(done, done);
+            });
+          });
+        }, MYTIMEOUT);
+
       });
 
-      describe(suiteName + 'INSERT inline BLOB data & SELECT as BASE64', function() {
+      describe(suiteName + 'INSERT BLOB data from BLOBFROMBASE64 & check stored data', function() {
 
         it(suiteName + "INSERT BLOBFROMBASE64 from 'AQID AQIE AQIF' [X'010203010204010205' - spaces ignored], SELECT as BASE64, and check type", function(done) {
           if (isWebSql) pending('SKIP: BLOBFROMBASE64 not supported by Web SQL');
