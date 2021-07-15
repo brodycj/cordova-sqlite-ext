@@ -1,6 +1,6 @@
 {
   "name": "cordova-sqlite-ext-common",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Native interface to SQLite for PhoneGap/Cordova - cordova-sqlite-ext-common version branch",
   "cordova": {
     "id": "cordova-sqlite-ext-common",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/brodybits/cordova-sqlite-ext",
   "dependencies": {
-    "cordova-sqlite-ext-deps": "3.0.0"
+    "cordova-sqlite-ext-deps": "3.0.1"
   },
   "scripts": {
     "clean-spec": "rm -rf spec/[mnp]* && git cl spec/config.xml spec/package.json && git status --ignored",
