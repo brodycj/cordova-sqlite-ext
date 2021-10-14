@@ -1,5 +1,9 @@
 # Changes
 
+### cordova-sqlite-ext-common 5.1.0
+
+- use cordova-sqlite-ext-deps 4.0.0 with Android JARs built from android-sqlite-native-ndk-connector and android-sqlite-ndk-native-driver, with enhancements by Luis Silva of OutSystems needed for some Android 11 devices
+
 ### cordova-sqlite-ext-common 5.0.1
 
 - fix: use cordova-sqlite-ext-deps 3.0.1 - with quick workaround update needed for BLOBFROMBASE64 on Android ARM target CPUs
