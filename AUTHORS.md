@@ -12,6 +12,7 @@
 
 - Extracted from DroidGap by @brodybits (Chris Brody)
 - Transaction batch processing of Android version by @marcucio
+- NDK response type enhancements to android-sqlite-native-ndk-connector & android-sqlite-ndk-native-driver by Luis Silva of OutSystems
 - Maintained by @brodybits (Chris Brody)
 - Fixes to support old Android versions by @nolanlawson
 - Thanks to Mark Oppenheim <mark.oppenheim@mnetics.co.uk> for fixes to open/close callbacks and repeated open/close/delete operations

@@ -2,6 +2,18 @@
 
 ### cordova-sqlite-ext 6.0.0-dev
 
+### cordova-sqlite-ext-common 5.1.0
+
+- use cordova-sqlite-ext-deps 4.0.0 with Android JARs built from android-sqlite-native-ndk-connector and android-sqlite-ndk-native-driver, with enhancements by Luis Silva of OutSystems needed for some Android 11 devices
+
+### cordova-sqlite-ext-common 5.0.1
+
+- fix: use cordova-sqlite-ext-deps 3.0.1 - with quick workaround update needed for BLOBFROMBASE64 on Android ARM target CPUs
+
+### cordova-sqlite-ext-common 5.0.0
+
+- feat: add BLOBFROMBASE64 using cordova-sqlite-ext-deps 3.0.0 - BREAKING CHANGE due to removed Android pre-5.1 support
+
 ### cordova-sqlite-ext-common 4.0.0
 
 ### cordova-sqlite-storage-commoncore 2.0.0
