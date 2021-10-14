@@ -241,46 +241,60 @@ public class SQLitePlugin extends CordovaPlugin {
         // IMPLEMENTATION based on various sources:
         InputStream in = null;
         OutputStream out = null;
+        
+        /*
+     ** Different path variations for Cordova/Ionic, Capacitor
+     ** Capacitor writes the source to the public/assets path, but
+     ** some have an old code which copies the dataabse to the root: 'public'.
+     ** So we check for all different versions
+     */
+     
+        String[] pathArray = {"www/", "www/assets/", "public/", "public/assets/"};
 
-        try {
-            in = this.cordova.getActivity().getAssets().open("www/" + myDBName);
-            String dbPath = dbfile.getAbsolutePath();
-            dbPath = dbPath.substring(0, dbPath.lastIndexOf("/") + 1);
+        for (String resourcePath : pathArray) {
 
-            File dbPathFile = new File(dbPath);
-            if (!dbPathFile.exists())
-                dbPathFile.mkdirs();
+            try {
+                in = this.cordova.getActivity().getAssets().open(resourcePath + myDBName);
+                String dbPath = dbfile.getAbsolutePath();
+                dbPath = dbPath.substring(0, dbPath.lastIndexOf("/") + 1);
 
-            File newDbFile = new File(dbPath + myDBName);
-            out = new FileOutputStream(newDbFile);
+                File dbPathFile = new File(dbPath);
+                if (!dbPathFile.exists())
+                    dbPathFile.mkdirs();
 
-            // XXX TODO: this is very primitive, other alternatives at:
-            // http://www.journaldev.com/861/4-ways-to-copy-file-in-java
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0)
-                out.write(buf, 0, len);
-    
-            Log.v("info", "Copied prepopulated DB content to: " + newDbFile.getAbsolutePath());
-        } catch (IOException e) {
-            Log.v("createFromResource", "No prepopulated DB found, Error=" + e.getMessage());
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ignored) {
-                    Log.v("info", "Error closing input DB file, ignored");
+                File newDbFile = new File(dbPath + myDBName);
+                out = new FileOutputStream(newDbFile);
+
+                // XXX TODO: this is very primitive, other alternatives at:
+                // http://www.journaldev.com/861/4-ways-to-copy-file-in-java
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0)
+                    out.write(buf, 0, len);
+
+                Log.v("info", "Copied prepopulated DB content from " + resourcePath + " to: " + newDbFile.getAbsolutePath());
+            } catch (IOException e) {
+                Log.v("createFromResource", "No prepopulated DB found in path " + resourcePath + ", Error=" + e.getMessage());
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException ignored) {
+                        Log.v("info", "Error closing input DB file, ignored");
+                    }
+                }
+
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException ignored) {
+                        Log.v("info", "Error closing output DB file, ignored");
+                    }
                 }
             }
-    
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException ignored) {
-                    Log.v("info", "Error closing output DB file, ignored");
-                }
-            }
+
         }
+
     }
 
     /**

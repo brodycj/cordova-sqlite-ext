@@ -225,20 +225,40 @@
 -(void) createFromResource: (NSString *)dbfile withDbname:(NSString *)dbname {
     // IMPLEMENTATION based on various sources:
     NSString * bundleRoot = [[NSBundle mainBundle] resourcePath];
-
-    NSString * www = [bundleRoot stringByAppendingPathComponent:@"www"];
-    NSString * prepopulatedDb = [www stringByAppendingPathComponent: dbfile];
-    // NSLog(@"Look for pre-populated DB at: %@", prepopulatedDb);
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:prepopulatedDb]) {
-        NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
-        NSError * error;
-        BOOL success = [[NSFileManager defaultManager] copyItemAtPath:prepopulatedDb toPath:dbname error:&error];
-
-        if(success)
-            NSLog(@"Copied pre-populated DB content to: %@", dbname);
-        else
-            NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
+    
+    /*
+     ** Different path variations for Cordova/Ionic, Capacitor
+     ** Capacitor writes the source to the public/assets path, but
+     ** some have an old code which copies the dataabse to the root: 'public'.
+     ** So we check for all different versions
+     */
+    
+    NSArray * pathArray = @[
+                            [bundleRoot stringByAppendingPathComponent:@"www"],
+                            [bundleRoot stringByAppendingPathComponent:@"www/assets"],
+                            [bundleRoot stringByAppendingPathComponent:@"public"],
+                            [bundleRoot stringByAppendingPathComponent:@"public/assets"]
+                            ];
+    
+    /*
+     ** Loop the paths from the pathArray for all possible variations in db locations
+     */
+    for (NSString *copyPath in pathArray) {
+        
+        
+        NSString *prepopulatedDb = [copyPath stringByAppendingPathComponent:dbfile];
+        
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:prepopulatedDb]) {
+            NSLog(@"Found prepopulated DB: %@", prepopulatedDb);
+            NSError * error;
+            BOOL success = [[NSFileManager defaultManager] copyItemAtPath:prepopulatedDb toPath:dbname error:&error];
+            
+            if(success)
+                NSLog(@"Copied pre-populated DB content to: %@", dbname);
+            else
+                NSLog(@"Unable to copy pre-populated DB file: %@", [error localizedDescription]);
+        }
     }
 }
 
