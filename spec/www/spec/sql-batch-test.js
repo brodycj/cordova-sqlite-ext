@@ -2,13 +2,15 @@
 
 var MYTIMEOUT = 12000;
 
-var DEFAULT_SIZE = 5000000; // max to avoid popup in safari/ios
-
-var isWP8 = /IEMobile/.test(navigator.userAgent); // Matches WP(7/8/8.1)
-var isWindows = /Windows /.test(navigator.userAgent); // Windows (8.1)
+var isWindows = /MSAppHost/.test(navigator.userAgent);
 var isAndroid = !isWindows && /Android/.test(navigator.userAgent);
-var isMac = /Macintosh/.test(navigator.userAgent);
-var isWKWebView = !isWindows && !isAndroid && !isWP8 && !isMac && !!window.webkit && !!window.webkit.messageHandlers;
+var isFirefox = /Firefox/.test(navigator.userAgent);
+var isWebKitBrowser = !isWindows && !isAndroid && /Safari/.test(navigator.userAgent);
+var isBrowser = isWebKitBrowser || isFirefox;
+var isMac = !isBrowser && /Macintosh/.test(navigator.userAgent);
+var isAppleMobileOS = /iPhone/.test(navigator.userAgent) ||
+      /iPad/.test(navigator.userAgent) || /iPod/.test(navigator.userAgent);
+var hasMobileWKWebView = isAppleMobileOS && !!window.webkit && !!window.webkit.messageHandlers;
 
 // NOTE: While in certain version branches there is no difference between
 // the default Android implementation and implementation #2,
@@ -26,6 +28,9 @@ var mytests = function() {
   for (var i=0; i<pluginScenarioCount; ++i) {
 
     describe(pluginScenarioList[i] + ': sqlBatch test(s)', function() {
+      // TBD skip plugin test on browser platform (not yet supported):
+      if (isBrowser) return;
+
       var scenarioName = pluginScenarioList[i];
       var suiteName = scenarioName + ': ';
       var isImpl2 = (i === 1);
@@ -50,7 +55,7 @@ var mytests = function() {
       describe(pluginScenarioList[i] + ': Basic sql batch test(s)', function() {
 
         it(suiteName + 'Single-column batch sql test', function(done) {
-          var db = openDatabase('Single-column-batch-sql-test.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Single-column-batch-sql-test.db');
           expect(db).toBeDefined();
 
           db.sqlBatch([
@@ -73,7 +78,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Single-column batch sql test 2 (CREATE TABLE SQL statement with no parameters in [])', function(done) {
-          var db = openDatabase('Single-column-batch-sql-test-2.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Single-column-batch-sql-test-2.db');
           expect(db).toBeDefined();
 
           db.sqlBatch([
@@ -96,7 +101,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Single-column batch sql test values: INSERT INTEGER/REAL number values and check stored data', function(done) {
-          var db = openDatabase('Single-column-batch-sql-test-number-values.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Single-column-batch-sql-test-number-values.db');
           expect(db).toBeDefined();
 
           db.sqlBatch([
@@ -114,22 +119,22 @@ var mytests = function() {
               expect(rs.rows).toBeDefined();
               expect(rs.rows.length).toBe(7);
               expect(rs.rows.item(0).d1).toBe(101);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(0).t1).toBe('real');
               else
                 expect(rs.rows.item(0).t1).toBe('integer');
               expect(rs.rows.item(0).a1).toBe(101);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(0).u1).toBe('101.0');
               else
                 expect(rs.rows.item(0).u1).toBe('101');
               expect(rs.rows.item(1).d1).toBe(-101);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(1).t1).toBe('real');
               else
                 expect(rs.rows.item(1).t1).toBe('integer');
               expect(rs.rows.item(1).a1).toBe(101);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(1).u1).toBe('-101.0');
               else
                 expect(rs.rows.item(1).u1).toBe('-101');
@@ -142,32 +147,32 @@ var mytests = function() {
               expect(rs.rows.item(3).a1).toBe(123.456);
               expect(rs.rows.item(3).u1).toBe('-123.456');
               expect(rs.rows.item(4).d1).toBe(1234567890123);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(4).t1).toBe('real');
               else
                 expect(rs.rows.item(4).t1).toBe('integer');
               expect(rs.rows.item(4).a1).toBe(1234567890123);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(4).u1).toBe('1234567890123.0');
               else
                 expect(rs.rows.item(4).u1).toBe('1234567890123');
               expect(rs.rows.item(5).d1).toBe(-1234567890123);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(5).t1).toBe('real');
               else
                 expect(rs.rows.item(5).t1).toBe('integer');
               expect(rs.rows.item(5).a1).toBe(1234567890123);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(5).u1).toBe('-1234567890123.0');
               else
                 expect(rs.rows.item(5).u1).toBe('-1234567890123');
               expect(rs.rows.item(6).d1).toBe(0);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(6).t1).toBe('real');
               else
                 expect(rs.rows.item(6).t1).toBe('integer');
               expect(rs.rows.item(6).a1).toBe(0);
-              if (isMac || isWKWebView)
+              if (isMac || hasMobileWKWebView)
                 expect(rs.rows.item(6).u1).toBe('0.0');
               else
                 expect(rs.rows.item(6).u1).toBe('0');
@@ -182,7 +187,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Single-column batch sql test values: INSERT null/undefined values and check stored data', function(done) {
-          var db = openDatabase('Single-column-batch-sql-test-null-undefined-values.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Single-column-batch-sql-test-null-undefined-values.db');
           expect(db).toBeDefined();
 
           db.sqlBatch([
@@ -213,10 +218,9 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Single-column batch sql test values: INSERT +/- Infinity & NaN values and check stored data [TBD Android/iOS/macOS plugin result for +/- Infinity]', function(done) {
-          if (isWP8) pending('SKIP for WP8'); // SKIP for now
           if (isMac) pending('SKIP for macOS [CRASH]'); // FUTURE TBD
 
-          var db = openDatabase('Single-column-batch-sql-test-infinity-nan-values.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Single-column-batch-sql-test-infinity-nan-values.db');
           expect(db).toBeDefined();
 
           db.sqlBatch([
@@ -263,7 +267,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Single-column batch sql test values: INSERT true/false values and check stored data [stored as strings]', function(done) {
-          var db = openDatabase('Single-column-batch-sql-test-true-false-values.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Single-column-batch-sql-test-true-false-values.db');
 
           db.sqlBatch([
             'DROP TABLE IF EXISTS MyTable',
@@ -292,6 +296,54 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
+        it(suiteName + 'sql batch with changing SQL element [TBD POSSIBLY INCONSISTENT BEHAVIOR]', function(done) {
+          var db = openDatabase('sql-batch-with-changing-sql-test.db');
+
+          var mybatch = [
+            'DROP TABLE IF EXISTS MyTable',
+            'CREATE TABLE MyTable (data)',
+            "INSERT INTO MyTable VALUES ('Alice')"
+          ];
+
+          db.sqlBatch(mybatch, function() {
+            db.executeSql('SELECT * FROM MyTable', [], function (rs) {
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).data).toBe('Alice');
+              db.close(done, done);
+            });
+          }, function(error) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            db.close(done, done);
+          });
+          mybatch[2] = "INSERT INTO MyTable VALUES ('Betty')";
+        }, MYTIMEOUT);
+
+        it(suiteName + 'sql batch with changing argument value [TBD POSSIBLY INCONSISTENT BEHAVIOR]', function(done) {
+          var db = openDatabase('sql-batch-with-changing-argument-value-test.db');
+
+          var mybatch = [
+            'DROP TABLE IF EXISTS MyTable',
+            'CREATE TABLE MyTable (data)',
+            ['INSERT INTO MyTable VALUES (?)', ['Alice']]
+          ];
+
+          db.sqlBatch(mybatch, function() {
+            db.executeSql('SELECT * FROM MyTable', [], function (rs) {
+              expect(rs.rows.length).toBe(1);
+              expect(rs.rows.item(0).data).toBe('Betty');
+              db.close(done, done);
+            });
+          }, function(error) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            db.close(done, done);
+          });
+          mybatch[2][1][0] = 'Betty';
+        }, MYTIMEOUT);
+
         it(suiteName + 'batch sql with dynamic object for SQL [INCONSISTENT BEHAVIOR]', function(done) {
           // MyDynamicObject "class":
           function MyDynamicObject() { this.name = 'Alice'; };
@@ -301,7 +353,7 @@ var mytests = function() {
           // Check myObject:
           expect(myObject.toString()).toBe("INSERT INTO MyTable VALUES ('Alice')");
 
-          var db = openDatabase('batch-sql-with-dynamic-object-for-sql.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-with-dynamic-object-for-sql.db');
 
           expect(db).toBeDefined();
 
@@ -334,7 +386,7 @@ var mytests = function() {
           // Check myObject:
           expect(myObject.toString()).toBe('Alice');
 
-          var db = openDatabase('batch-sql-with-dynamic-object-for-sql-arg-value.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-with-dynamic-object-for-sql-arg-value.db');
 
           expect(db).toBeDefined();
 
@@ -358,9 +410,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'Multi-row INSERT with parameters in batch sql test', function(done) {
-          if (isWP8) pending('SKIP: NOT SUPPORTED for WP8');
-
-          var db = openDatabase('Multi-row-INSERT-with-parameters-batch-sql-test.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('Multi-row-INSERT-with-parameters-batch-sql-test.db');
 
           expect(db).toBeDefined();
 
@@ -386,8 +436,33 @@ var mytests = function() {
           });
         }, MYTIMEOUT);
 
+        it(suiteName + 'sqlBatch INSERT with numbered parameters (reversed)', function(done) {
+          var db = openDatabase('sqlBatch-INSERT-with-numbered-parameters-reversed-test.db');
+
+          expect(db).toBeDefined();
+
+          db.sqlBatch([
+            'DROP TABLE IF EXISTS MyTable',
+            'CREATE TABLE MyTable (x,y)',
+            [ 'INSERT INTO MyTable VALUES (?2,?1)', ['a',1] ],
+          ], function() {
+            db.executeSql('SELECT * FROM MyTable', [], function (resultSet) {
+              // EXPECTED: CORRECT RESULT:
+              expect(resultSet.rows.length).toBe(1);
+              expect(resultSet.rows.item(0).x).toBe(1);
+              expect(resultSet.rows.item(0).y).toBe('a');
+              db.close(done, done);
+            });
+          }, function(error) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(error.message).toBe('--');
+            db.close(done, done);
+          });
+        }, MYTIMEOUT);
+
         it(suiteName + 'batch sql with syntax error', function(done) {
-          var db = openDatabase('batch-sql-syntax-error-test.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-syntax-error-test.db');
 
           expect(db).toBeDefined();
 
@@ -406,16 +481,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows || (isAndroid && isImpl2))
+            if (isWindows || (isAndroid && isImpl2))
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(5);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/a statement with no error handler failed: Error preparing an SQLite statement/);
             else
               expect(error.message).toMatch(/a statement with no error handler failed.*near \"CRETE\": syntax error/);
@@ -425,7 +496,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'batch sql with constraint violation (check error code & basic error message pattern)', function(done) {
-          var db = openDatabase('batch-sql-constraint-violation-test.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-constraint-violation-test.db');
 
           expect(db).toBeDefined();
 
@@ -445,16 +516,12 @@ var mytests = function() {
             expect(error.code).toBeDefined();
             expect(error.message).toBeDefined();
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.code).toBe(0);
             else
               expect(error.code).toBe(6);
 
-            if (isWP8)
-              expect(true).toBe(true); // SKIP for now
-            else if (isWindows)
+            if (isWindows)
               expect(error.message).toMatch(/a statement with no error handler failed: SQLite3 step error result code: 1/);
             else
               expect(error.message).toMatch(/a statement with no error handler failed.*constraint fail/);
@@ -463,7 +530,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'batch sql failure-safe semantics', function(done) {
-          var db = openDatabase('batch-sql-failure-safe-test.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-failure-safe-test.db');
 
           expect(db).toBeDefined();
 
@@ -495,7 +562,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch() with no arguments (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-no-arguments.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-no-arguments.db');
 
           try {
             db.sqlBatch();
@@ -509,8 +576,34 @@ var mytests = function() {
           };
         }, MYTIMEOUT);
 
+        it(suiteName + 'sqlBatch([]) (empty array) - reports success', function(done) {
+          var db = openDatabase('sql-batch-with-empty-array-argument-test.db');
+          expect(db).toBeDefined();
+
+          try {
+            db.sqlBatch([], function() {
+              // EXPECTED RESULT:
+              db.close(done, done);
+            }, function(error) {
+              // NOT EXPECTED:
+              expect(false).toBe(true);
+              expect(error).toBeDefined();
+              expect(error.message).toBeDefined();
+              expect(error.message).toBe('--');
+              db.close(done, done);
+            });
+          } catch(e) {
+            // NOT EXPECTED:
+            expect(false).toBe(true);
+            expect(e).toBeDefined();
+            expect(e.message).toBeDefined();
+            expect(e.message).toBe('--');
+            db.close(done, done);
+          };
+        }, MYTIMEOUT);
+
         it(suiteName + 'sqlBatch with [] for sql batch item (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-empty-array-for-batch-item.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-empty-array-for-batch-item.db');
 
           try {
             db.sqlBatch(['SELECT 1', []], function() {
@@ -532,7 +625,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with true for SQL statements (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-true-for-sql-statements.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-true-for-sql-statements.db');
 
           try {
             db.sqlBatch(true, function() {
@@ -554,7 +647,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'batch sql with batch item with false for arguments array (BOGUS)', function(done) {
-          var db = openDatabase('batch-sql-with-false-for-args-array.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-with-false-for-args-array.db');
 
           var check1 = false;
           try {
@@ -589,7 +682,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'batch sql with batch item with "string-value" for arguments array (BOGUS)', function(done) {
-          var db = openDatabase('batch-sql-with-false-for-args-array.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('batch-sql-with-false-for-args-array.db');
 
           var check1 = false;
           try {
@@ -624,7 +717,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with single SELECT statement, false for error callback (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-select-false-for-error-cb.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-select-false-for-error-cb.db');
 
           try {
             db.sqlBatch(['SELECT 1'], function() {
@@ -639,7 +732,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with single SELECT statement, string-value for error callback (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-select-string-value-for-error-cb.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-select-string-value-for-error-cb.db');
 
           try {
             db.sqlBatch(['SELECT 1'], function() {
@@ -654,7 +747,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with error, false for success callback (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-select-false-for-success-cb.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-select-false-for-success-cb.db');
 
           try {
             db.sqlBatch(['SLCT 1'], false, function(e) {
@@ -670,7 +763,7 @@ var mytests = function() {
         }, MYTIMEOUT);
 
         it(suiteName + 'sqlBatch with error, string-value for success callback (BOGUS)', function(done) {
-          var db = openDatabase('sql-batch-with-select-string-value-for-success-cb.db', '1.0', 'Test', DEFAULT_SIZE);
+          var db = openDatabase('sql-batch-with-select-string-value-for-success-cb.db');
 
           try {
             db.sqlBatch(['SLCT 1'], 'string-value', function(e) {
