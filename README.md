@@ -253,7 +253,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 - The **macOS** platform version (**"osx" platform**) is not tested in a release build and should be considered pre-alpha with known issues:
   - `cordova prepare osx` is needed before building and running from Xcode
   - known issue between `cordova-osx` and Cordova CLI `10.0.0`: <https://github.com/apache/cordova-osx/issues/106>
-- Android versions supported: 3.0 - 9.0 (API level 11 - 28), depending on Cordova version ref: <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
+- Android versions supported: _minimum 5.1; see also_ <https://cordova.apache.org/docs/en/latest/guide/platforms/android/>
 - iOS versions supported: 8.x / 9.x / 10.x / 11.x / 12.x (see [deviations section](#deviations) below for differences in case of WKWebView)
 - FTS3, FTS4, and R-Tree are fully tested and supported for all target platforms in this version branch.
 - Default `PRAGMA journal_mode` setting (*tested*):
